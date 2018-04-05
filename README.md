@@ -1,5 +1,10 @@
-# DDS Analytics
+# DDS Analytics & Talent Management
 
+### Research Data Scientists
+- Olha Tanyuk
+- Sita Daggubati
+- Tosin Akinpelu
+- Quentin Thomas
 
 ### Introduction
 
