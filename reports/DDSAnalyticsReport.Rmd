@@ -27,6 +27,7 @@ DDS Analytics is a analytics company that specializes in talent management solut
 
 ## III.  Methodology
 
+### Data Cleaning & Preparation
 
 ```{r}
 #a.	Read the csv into R and take a look at the data set.  Output how many rows and columns the data.frame is.
@@ -61,6 +62,45 @@ unique(talentMgmtData$Department)
 
 unique(talentMgmtData$EduField)
 
+
+library(dplyr)
+
+#Get an Idea of the current format of the colums we are currently using.
+glimpse(talentMgmtData)
+
+# Factor appropriate columns 
+talentMgmtData$Department <- as.factor(talentMgmtData$Department)
+talentMgmtData$BusinessTrvl <- as.factor(talentMgmtData$BusinessTrvl)
+talentMgmtData$OverTime <- as.factor(talentMgmtData$OverTime)
+talentMgmtData$EduField <- as.factor(talentMgmtData$EduField)
+talentMgmtData$Gender <- as.factor(talentMgmtData$Gender)
+talentMgmtData$Attrition <- as.factor(talentMgmtData$Attrition)
+talentMgmtData$MaritalStat <- as.factor(talentMgmtData$MaritalStat)
+talentMgmtData$JobRole <- as.factor(talentMgmtData$JobRole)
+talentMgmtData$EnvSatfctn <- as.factor(talentMgmtData$EnvSatfctn)
+talentMgmtData$JobLevel <- as.factor(talentMgmtData$JobLevel)
+talentMgmtData$StockOptLvl <- as.factor(talentMgmtData$StockOptLvl)
+talentMgmtData$PerfRating <- as.factor(talentMgmtData$PerfRating)
+talentMgmtData$EmployeeCnt <- as.factor(talentMgmtData$EmployeeCnt)
+talentMgmtData$JobInvolmnt <- as.factor(talentMgmtData$JobInvolmnt)
+talentMgmtData$RlnSatfctn <- as.factor(talentMgmtData$RlnSatfctn)
+talentMgmtData$WrkLifeBal <- as.factor(talentMgmtData$WrkLifeBal)
+talentMgmtData$JobSatfctn <- as.factor(talentMgmtData$JobSatfctn)
+# handle numeric based columns to show as double or integer if need be.
+talentMgmtData$Age <- as.integer(talentMgmtData$Age)
+talentMgmtData$EmployeeNum <- as.integer(talentMgmtData$EmployeeNum)
+talentMgmtData$DistFromHome <- as.integer(talentMgmtData$DistFromHome)
+talentMgmtData$YrsOfEdu <- as.integer(talentMgmtData$YrsOfEdu)
+talentMgmtData$DailyRate <- as.numeric(talentMgmtData$DailyRate)
+talentMgmtData$TtlWrkngYrs <- as.integer(talentMgmtData$TtlWrkngYrs)
+talentMgmtData$YrsAtCompany <- as.integer(talentMgmtData$YrsAtCompany)
+talentMgmtData$NumCmpWorked <- as.integer(talentMgmtData$NumCmpWorked)
+talentMgmtData$YrsInCrntRl <- as.integer(talentMgmtData$YrsInCrntRl)
+talentMgmtData$YrsSncLstPrn <- as.integer(talentMgmtData$YrsSncLstPrn)
+talentMgmtData$YrsWthCurMgr <- as.integer(talentMgmtData$YrsWthCurMgr)
+talentMgmtData$TrngTmsLstYr <- as.integer(talentMgmtData$TrngTmsLstYr)
+#Take a look at data after type conversions are applied to the appropriate columns
+glimpse(talentMgmtData)
 ```
 
 
