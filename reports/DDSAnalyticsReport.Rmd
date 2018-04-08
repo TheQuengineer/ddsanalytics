@@ -43,7 +43,9 @@ names(talentMgmtData)
 
 # c	Some columns are, due to Qualtrics, malfunctioning.
 
-# TODO: Discuss with team, remove Over18 and StandardHrs columns
+# TODO: Discuss with team, delete Over18 and StandardHrs(80hrs) columns
+talentMgmtData$Over18 <- NULL
+talentMgmtData <- subset(talentMgmtData, select = -c(StandardHrs))
 
 # d	Make sure your columns are the proper data types (i.e., numeric, character, etc.).  If they are incorrect, convert them. 
 str(talentMgmtData)
