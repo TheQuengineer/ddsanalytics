@@ -2,7 +2,9 @@
 title: "DDSAnalyticsReport"
 author: "Quentin,Sita,Olha,Tosin"
 date: "4/4/2018"
-output: pdf_document
+output: 
+  html_document:
+    keep_md: true
 ---
 
 ```{r setup, include=FALSE}
@@ -25,6 +27,39 @@ DDS Analytics is a analytics company that specializes in talent management solut
 
 ## III.  Methodology
 
+
+```{r}
+#a.	Read the csv into R and take a look at the data set.  Output how many rows and columns the data.frame is.
+library(readxl)
+talentMgmtData <- read_excel("datasets/CaseStudy2-data.xlsx")
+dim(talentMgmtData)
+
+#b	The column names are either too much or not enough.  Change the column names so that they do not have spaces, underscores, slashes, and the like. All column names should be under 12 characters. TODO: Make sure you're updating your codebook with information on the tidied data set as well.
+
+names(talentMgmtData) <- c("Age","Attrition","BusinessTrvl","DailyRate","Department","DistFromHome","YrsOfEdu","EduField","EmployeeCnt","EmployeeNum","EnvSatfctn","Gender","HourlyRate","JobInvolmnt","JobLevel","JobRole","JobSatfctn","MaritalStat","MonthlyIncm","MonthlyRate","NumCmpWorked","Over18","OverTime","PrcntSalHike","PerfRating","RlnSatfctn","StandardHrs","StockOptLvl","TtlWrkngYrs","TrngTmsLstYr","WrkLifeBal","YrsAtCompany","YrsInCrntRl","YrsSncLstPrn","YrsWthCurMgr")
+
+names(talentMgmtData)
+
+
+# c	Some columns are, due to Qualtrics, malfunctioning.
+
+# TODO: Discuss with team, remove Over18 and StandardHrs columns
+
+# d	Make sure your columns are the proper data types (i.e., numeric, character, etc.).  If they are incorrect, convert them. 
+str(talentMgmtData)
+
+#TODO: Discuss with team foll. factor levels of dataset
+unique(talentMgmtData$BusinessTrvl)
+
+unique(talentMgmtData$JobRole)
+
+unique(talentMgmtData$Attrition)
+
+unique(talentMgmtData$Department)
+
+unique(talentMgmtData$EduField)
+
+```
 
 
 ## IV. Results
