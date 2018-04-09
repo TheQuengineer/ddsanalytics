@@ -17,18 +17,45 @@ DDS Analytics is a analytics company that specializes in talent management solut
 
 ## I. Introduction
 
-
+Talent is a precious commodity, especially in the corporate sector. Every organization no matter how big or small seeks not only to hire, but also to retain the best talent possible. Employee retention however, is much easier said than done these days, especially when the average amount of years an employee is likely to remain at a specific place of employment is [4.5 years](https://www.forbes.com/sites/davidsturt/2016/01/13/true-or-false-employees-today-only-stay-one-or-two-years/#6736606b6b4c) as of 2014. What are the factors that lead to employee attrition? This is an age old question that most companies continue to try to answer. Can employee attrition be slowed, or avoided all together? Is there any data to support that job satisfaction is the main cause for an employee remaining at a job? All these questions and more will be explored in this study. Our goal is to find sound answers to these questions rooted in strong statistical analysis of a dataset we have gathered from some of the most influential companies in the world.
 
 
 
 ## II. Background
 
+As a Talent Management organization we set out to leverage the strength of Data Science in order to maintain the best employees at our organization DDS Analytics. In order for the organization to move forward in this endeavor it was neccessary to study the key factors in maintaining the best employees. As a result this study was launched by the management team in order to gain more insight into this arena.
 
 
 ## III.  Methodology
 
 ### Data Cleaning & Preparation
 
+In order to make sure our data was ready for proper analysis we had to go through a series of steps in order to prepare the data. These steps include the following...
+
+1. Data Import
+2. Data Type Conversion
+3. Factorization For Catagorical Variables
+4. Handling of Missing or Inaccurate Values
+
+We will discuss the process of each step below.
+
+#### Data Import
+
+We have obtained a dataset which incldudes 35 variables with 1470 observations. The dataset is will be referred to as `talentMgmtData`. In order to better understand our data we needed to proceed with cleaning it appropriately.
+
+#### Data Type Conversion
+
+Analysis could not be done properly if our variables are not in the correct type. Several of the numerical based variables showed up as doubles which was not neccessarily appropriate for research and analysis. For example, the years of experience for specfic employees needed to be converted to integer types, and Standard Working hours had no reason to show as a double, so it to was converted to an integer. This process was followed for each one of the 35 variables on order to ensure each columns assigned data type made sense for the context of the study.
+
+#### Factorization For Catagorical Variables
+
+Within our `talentMgmtData` we noticed that there were several columns that were improperly listed as integers when they were simply catagories. In order for us to be able to do factor analysis we picked out the columns that would be better suited to be catagories instead of integers so that we could get a better understanding of how our talent was spread out over different situations. For example, Columns like Department, BusinessTravel, Over18, & Jobsatisfaction to name a few, are all better suited to be treated as catagorical variables for our research purposes. As a result, we have converted the appropriate columns that explained how our data points were separated by making them factors instead of numerical values.
+
+#### Handling of Missing or Inaccurate Values
+
+In order for our mathematical calculations to work we had to convert many of our data points into numerical values so that our regression analysis would be more accurate. For example, DailyRate, Total Working Years, Years with Current Manager, are all examples of numerical based data points that can have mathematical operations performed on them. As a result we located variables like these and made sure the data type was appropriate giving us more flexibility during analysis.
+
+#### DATA CLEANING
 ```{r}
 #a.	Read the csv into R and take a look at the data set.  Output how many rows and columns the data.frame is.
 library(readxl)
@@ -103,6 +130,28 @@ talentMgmtData$TrngTmsLstYr <- as.integer(talentMgmtData$TrngTmsLstYr)
 glimpse(talentMgmtData)
 ```
 
+### Exploratory Data Analysis
+
+Now that the data has been prepared and formatted accordingly it is neccessary to explore it to its depths. For a dataset this large we will start off taking a look at some of the variables of interests and how they relate to each other.
+
+When it comes to jobs the first thing that we want to look at is our age distribution. This is an imporatant step in our EDA process as we would like to get an idea of how old or young our these individuals in our entire dataset as it might give us a good place to start.
+
+```{r}
+par(mfrow=c(1,2))
+hist(talentMgmtData$Age, xlab= "Ages",
+     ylab="Frequency Of Occurrence",
+     main= "Age Distribution Frequency",
+     col = "blue")
+hist(talentMgmtData$Age,
+     xlab= "Ages",
+     col="green",
+     freq= FALSE,  ylab= "Density of Ages", main= "Age Distribution Density")
+lines(density(talentMgmtData$Age), lty="dotted", lwd=4)
+
+
+```
+
+Based on the chart above we can see that our age range is between 20 and 60 with a large portion of ages being between 25 and 45. This is insightful as it might help us with interpretation of our findings moving forward. It is also worth noting that  between 30 and 35  is the most occurring age of all the age groups with over 350 recorded ages within this group! 
 
 ## IV. Results
 
