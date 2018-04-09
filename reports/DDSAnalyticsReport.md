@@ -323,25 +323,37 @@ glimpse(talentMgmtData)
 
 Now that the data has been prepared and formatted accordingly it is neccessary to explore it to its depths. For a dataset this large we will start off taking a look at some of the variables of interests and how they relate to each other.
 
-When it comes to jobs the first thing that we want to look at is our age distribution. This is an imporatant step in our EDA process as we would like to get an idea of how old or young our these individuals in our entire dataset as it might give us a good place to start.
+When it comes to jobs the first thing that we want to look at is our age distribution. This is an imporatant step in our EDA process as we would like to get an idea of how old or young our these individuals in our entire dataset as it might give us a good place to start. We are only interested in exploring individuals in the workforce that are older than 18, so all of the forward analysis will take this constraint into consideration.
+
+
+```r
+talentData <- talentMgmtData[talentMgmtData$Age > 18, ]
+range(talentData$Age)
+```
+
+```
+## [1] 19 60
+```
+
+As we can see above, only Ages 19 to 60 exists within our dataset.
 
 
 ```r
 par(mfrow=c(1,2))
-hist(talentMgmtData$Age, xlab= "Ages",
+hist(talentData$Age, xlab= "Ages",
      ylab="Frequency Of Occurrence",
      main= "Age Distribution Frequency",
      col = "blue")
-hist(talentMgmtData$Age,
+hist(talentData$Age,
      xlab= "Ages",
      col="green",
      freq= FALSE,  ylab= "Density of Ages", main= "Age Distribution Density")
 lines(density(talentMgmtData$Age), lty="dotted", lwd=4)
 ```
 
-![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
 
-Based on the chart above we can see that our age range is between 20 and 60 with a large portion of ages being between 25 and 45. This is insightful as it might help us with interpretation of our findings moving forward. It is also worth noting that  between 30 and 35  is the most occurring age of all the age groups with over 350 recorded ages within this group! 
+Based on the chart above we can see that our age range is between 20 and 60 with a large portion of ages being between 25 and 45. This is insightful as it might help us with interpretation of our findings moving forward. It is also worth noting that  between 30 and 35  is the most occurring age of all the age groups with over 350 recorded ages within this group!
 
 ## IV. Results
 
