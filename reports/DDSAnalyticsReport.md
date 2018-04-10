@@ -367,6 +367,9 @@ Another thing that we would like to explore is whether or not there is a relatio
 library(ggplot2)
 
 ggplot(talentData, aes(x=Age, y=YrsAtCompany)) +
+  ggtitle("Years at Company vs Age") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(x= "Age", y="Years") +
   geom_point(shape=1, col = "purple") +
   geom_smooth(method = "gam")
 ```
@@ -399,6 +402,88 @@ cor.test(x=talentData$Age, y=talentData$YrsAtCompany,
 ```
 
 Based on the results of our correlation test we have a pearsons correlation value of `0.302989` (95% CI: 0.25 to 0.34) which is more evidence of a positive linear relationship between Age and Years at a specific company. It is important for us to keep this relationship in mind moving forward for the rest of the study.
+
+##### Understaning Incomes in the dataset
+
+The next important thing we want to explore is our income distribution. Income is a major factor in employment. Without income, there is no reason for anyone worker to make effort to join a company in the first place. We would like to get an Idea of how the income distribution looks within our dataset. We would also like to understand the relationship between our income and our age as this might give us more insight as to whether or not these two factors influence employee retention overall.
+
+
+```r
+par(mfrow=c(1,2))
+hist(talentData$MonthlyIncm,
+     xlab="Monthly Income",
+     ylab="Frequency Of Occurrence",
+     main= "Income Distribution Frequency",
+     col= "grey")
+hist(talentData$MonthlyIncm,
+     xlab= "Monthly Income",
+     col="grey",
+     freq= FALSE,
+     ylab= "Density of Monthly Incomes",
+     main="Income Distribution Density")
+lines(density(talentData$MonthlyIncm), lty="dotted", lwd=4)
+```
+
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+
+If we examine the Monthly Income of our talent datapoints we can see a right skewed distribution for the monthly salaries. It is also clear that a large amount of the incomes here are clustered from appropximately \$1000 to \$6,000 per month. Now that we have have an understanding of how incomes are distributed we will examine the relationship between age and income to see if a relationship exists.
+
+
+```r
+library(ggplot2)
+
+ggplot(talentData, aes(x=MonthlyIncm, y=Age)) +
+  ggtitle("Monthly Income vs Age") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(x= "Income", y="Age") +
+  geom_point(shape=1, col = "orange") +
+  geom_smooth(method = "gam")
+```
+
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
+
+```r
+cor.test(x=talentData$MonthlyIncm, y=talentData$Age,
+         alternative = "two.sided",
+         method="pearson",
+         conf.level = 0.95,
+         exact = TRUE)
+```
+
+```
+## 
+## 	Pearson's product-moment correlation
+## 
+## data:  talentData$MonthlyIncm and talentData$Age
+## t = 21.662, df = 1460, p-value < 2.2e-16
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.4533721 0.5310174
+## sample estimates:
+##       cor 
+## 0.4931764
+```
+
+
+There is no surprise here as both the chart and a pearson's correlation test confirms that there is a positive linear relationship between `MonthlyIncome` and `Age` `r=0.49`(95% CI: 0.45 to 0.53). This suggests that the older someone is it could affect both their salary and years at a company in a positive way. This finding also might suggest that we could consider age as a factor in employee retention as it seems to be closely related to Income as well as the number of years at a company. Perhaps older employees will stay at a company longer because they make more money making them less likely to leave. We continue to search for evidence to help us answer this question of employee attrition, but for now it is clear that Age is definately a variable we want to factor into our analysis given its influence on both Monthly Income and years spent at a company.
+
+##### Exploring the Relationship between Years At a company and Satisfaction
+
+Now that we know that Age, and Income have a positive impact on employee retention we would like to visually confirm our assumption that Job Satisfaction also contributes in a major way to someone remaining at a company. We can do this by examining our different levels of employee satisfaction and their Years they have remained at a particular company.
+
+
+```r
+ggplot(talentData, aes(YrsAtCompany)) +
+  geom_density(aes(fill=JobSatfctn), alpha=0.8) +
+  labs(title= "Years At Company Density Plot",
+       subtitle="Years at Company grouped by Job Satisfaction",
+       x="Years at Company",
+       y="Density")
+```
+
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
+
+The Chart above is very telling. We take a look at our probability distribution across different Job Satisfaction levels. 1 indicates that there is low employee job satisfaction, and 4 represents that there is really high employee job satisfaction. If we examine the probability of each within the context of the years an individual stays at a company it becomes clear that lower job satisfaction indicates that this catagory has the lowest number of years spent at a company. This is no surprise, but it does give us more infomration regarding negative factors to employee attrition.
 
 
 ## IV. Results
