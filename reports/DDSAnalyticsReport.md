@@ -485,6 +485,43 @@ ggplot(talentData, aes(YrsAtCompany)) +
 
 The Chart above is very telling. We take a look at our probability distribution across different Job Satisfaction levels. 1 indicates that there is low employee job satisfaction, and 4 represents that there is really high employee job satisfaction. If we examine the probability of each within the context of the years an individual stays at a company it becomes clear that lower job satisfaction indicates that this catagory has the lowest number of years spent at a company. This is no surprise, but it does give us more infomration regarding negative factors to employee attrition.
 
+##### Correlation Plot of TalentData
+
+In our data set there are a large number of numerical based values. We would like to get an idea of the relationship of those variables relate to one another in one glance. Below is a comprised chart of all the correlations regarding our talent data.
+
+
+```r
+library(ggcorrplot)
+
+continuous_vars <- talentData[, c("YrsWthCurMgr",
+                                  "YrsSncLstPrn",
+                                  "YrsInCrntRl",
+                                  "YrsAtCompany",
+                                  "TrngTmsLstYr",
+                                  "TtlWrkngYrs",
+                                  "PrcntSalHike",
+                                  "MonthlyIncm",
+                                  "HourlyRate",
+                                  "DailyRate",
+                                  "Age",
+                                  "DistFromHome",
+                                  "YrsOfEdu")]
+
+correlations <- round(cor(continuous_vars), 1)
+
+ggcorrplot(correlations, hc.order = TRUE,
+           type = "lower",
+           lab = TRUE,
+           lab_size = 4,
+           method="circle",
+           colors= c("tomato2", "white", "springgreen3"),
+           title = "Correlation Chart For TalentData",
+           ggtheme=theme_bw)
+```
+
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
+
+The chart above shows us that there are no negative linear relationships in our data between our variables. We can also see that there are some positive relationships between variables that are linearly correlated and we have now been able to narrow these down so they can be examined in depth.
 
 ## IV. Results
 
