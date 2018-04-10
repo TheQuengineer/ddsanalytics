@@ -307,6 +307,14 @@ table %>%
   kable("html") %>%
   kable_styling()
 ```
+The average Hourly rate is $65.88/hour, the average Monthly Rate is $14,312.21/month, the average Monthly Income is $6,530.21/month, average Total Worked Years is 11.34 years, average Worked years at the company is 7.04 years, average Age of the employees is 37 years and average Years of Education of the employees is 2.9 years ('Bachelor' degree).
+
+Lets check histograms of Hourly Rate and Monthly income.
+
+```{r}
+hist(talentData$HourlyRate, col = "darkred", xlab="Hourly Rate", main="Histogram of Hourly Rate")
+hist(talentData$MonthlyIncm, col = "darkgreen", xlab="Monthly Income", main="Histogram of Monthly Income")
+```
 
 ## IV. Deeper Analysis and Visualization
 
