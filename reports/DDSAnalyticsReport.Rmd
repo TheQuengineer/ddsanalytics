@@ -132,6 +132,11 @@ glimpse(talentMgmtData)
 
 ### Exploratory Data Analysis
 
+
+##### Understanding our Ages and its' Relationships with other Factors.
+
+---
+
 Now that the data has been prepared and formatted accordingly it is neccessary to explore it to its depths. For a dataset this large we will start off taking a look at some of the variables of interests and how they relate to each other.
 
 When it comes to jobs the first thing that we want to look at is our age distribution. This is an imporatant step in our EDA process as we would like to get an idea of how old or young our these individuals in our entire dataset as it might give us a good place to start. We are only interested in exploring individuals in the workforce that are older than 18, so all of the forward analysis will take this constraint into consideration.
@@ -158,6 +163,30 @@ lines(density(talentMgmtData$Age), lty="dotted", lwd=4)
 ```
 
 Based on the chart above we can see that our age range is between 20 and 60 with a large portion of ages being between 25 and 45. This is insightful as it might help us with interpretation of our findings moving forward. It is also worth noting that  between 30 and 35  is the most occurring age of all the age groups with over 350 recorded ages within this group!
+
+Another thing that we would like to explore is whether or not there is a relationship between our Ages and the number of years they have spent at a specific company. If there is a relationship, we would like to understand whether or not the relationship is positive or negatively correlated.
+
+```{r}
+library(ggplot2)
+
+ggplot(talentData, aes(x=Age, y=YrsAtCompany)) +
+  geom_point(shape=1, col = "purple") +
+  geom_smooth(method = "gam")
+
+```
+
+Our findings here are not surprising. We notice that visually there might be evidence of a positive linear relationship between age and years at a specific company. This finding suggests that the older you are the more likely you are to have a greater number of years at a specific company. To know for sure we examine pearson correlation between `YrsAtCompany` and `Age`.
+
+```{r}
+cor.test(x=talentData$Age, y=talentData$YrsAtCompany,
+         alternative = "two.sided",
+         method="pearson",
+         conf.level = 0.95,
+         exact = TRUE)
+```
+
+Based on the results of our correlation test we have a pearsons correlation value of `0.302989` (95% CI: 0.25 to 0.34) which is more evidence of a positive linear relationship between Age and Years at a specific company. It is important for us to keep this relationship in mind moving forward for the rest of the study.
+
 
 ## IV. Results
 
