@@ -319,7 +319,7 @@ glimpse(talentMgmtData)
 ## $ YrsWthCurMgr <int> 5, 7, 0, 0, 2, 6, 0, 0, 8, 7, 3, 8, 3, 2, 3, 8, 5...
 ```
 
-### Exploratory Data Analysis
+### Preliminary Analysis
 
 
 ##### Understanding our Ages and its' Relationships with other Factors.
@@ -523,7 +523,135 @@ ggcorrplot(correlations, hc.order = TRUE,
 
 The chart above shows us that there are no negative linear relationships in our data between our variables. We can also see that there are some positive relationships between variables that are linearly correlated and we have now been able to narrow these down so they can be examined in depth.
 
-## IV. Results
+#### Descriptive statistics
+
+Lets check descriptive statistics for some of the data we have
+
+```r
+library(knitr)
+library(kableExtra)
+DescriptiveStatistics<-c("min", "max", "mean", "sd")
+HourlyRate <- c(min(talentData$HourlyRate), max(talentData$HourlyRate), mean(talentData$HourlyRate), sd(talentData$HourlyRate))
+talentData$YrsOfEdu
+```
+
+```
+##    [1] 2 1 2 4 1 2 3 1 3 3 3 2 1 2 3 4 2 2 4 3 2 4 4 2 1 3 1 4 4 4 3 4 2 3
+##   [35] 3 2 2 3 4 3 2 4 3 3 2 3 4 2 4 1 2 4 5 2 3 2 5 4 4 4 3 5 2 3 3 3 3 3
+##   [69] 3 3 1 3 4 3 3 4 4 4 4 2 1 3 2 3 2 3 1 4 3 2 4 4 2 3 4 4 2 3 4 3 4 1
+##  [103] 3 4 2 4 3 3 1 3 4 3 3 1 4 3 3 2 2 2 3 2 4 3 4 3 4 1 1 4 3 3 3 1 1 2
+##  [137] 4 4 3 3 3 3 5 3 2 3 1 3 4 1 3 5 2 3 3 1 4 3 4 4 1 3 3 2 3 3 3 3 4 5
+##  [171] 3 1 2 3 2 3 3 3 2 2 1 2 2 3 2 3 1 4 1 3 4 3 2 3 2 3 3 2 4 3 1 4 4 2
+##  [205] 1 3 3 1 5 4 4 1 3 4 3 3 4 3 3 3 2 4 3 3 4 3 4 1 3 1 3 2 2 4 3 3 2 4
+##  [239] 2 3 4 4 2 2 3 4 4 4 2 4 3 4 3 2 2 3 3 2 3 2 3 2 1 3 4 3 3 2 2 3 3 4
+##  [273] 3 4 2 4 3 2 3 1 4 1 2 2 2 3 3 4 4 2 4 3 3 4 3 3 3 4 3 4 2 3 3 4 3 2
+##  [307] 4 4 3 3 4 4 1 4 2 4 3 2 3 3 4 4 2 2 2 2 3 5 4 1 4 3 4 2 4 5 3 4 2 2
+##  [341] 4 1 4 1 3 1 5 3 1 3 1 3 2 3 4 1 5 4 4 4 2 3 3 4 3 3 2 4 3 3 4 2 4 3
+##  [375] 2 3 3 3 4 1 1 3 2 3 3 2 4 4 3 3 2 4 2 3 4 2 5 2 1 3 3 3 2 3 3 2 2 2
+##  [409] 3 3 3 4 1 2 2 4 3 3 4 5 2 4 3 4 3 3 2 3 3 4 4 3 1 1 1 1 3 3 3 2 4 1
+##  [443] 5 5 2 3 3 1 1 3 3 4 3 5 3 3 4 2 3 4 3 3 1 5 4 2 4 3 3 4 4 3 2 2 3 1
+##  [477] 3 4 2 4 2 4 4 3 3 4 4 1 5 4 4 3 1 1 4 1 4 4 3 1 5 4 3 3 2 4 3 4 2 4
+##  [511] 1 3 3 3 3 4 4 1 1 2 1 3 2 4 3 2 4 2 2 4 4 3 4 4 2 3 4 2 3 3 3 3 5 3
+##  [545] 3 3 2 1 3 3 1 3 3 3 4 4 5 5 4 4 1 2 1 2 3 3 4 4 2 3 3 4 4 1 1 4 4 4
+##  [579] 3 2 2 3 3 3 4 3 2 3 3 2 3 2 4 4 2 4 3 3 4 3 3 3 3 4 3 1 2 1 3 4 2 2
+##  [613] 3 4 3 1 3 1 2 4 4 2 3 2 4 4 2 2 4 1 3 1 3 4 3 1 3 1 2 3 3 4 3 3 3 2
+##  [647] 4 3 2 2 4 3 2 4 1 2 4 1 3 3 1 1 4 1 4 3 3 3 3 2 4 3 4 1 2 4 2 4 3 3
+##  [681] 2 4 3 3 4 3 3 3 4 4 1 3 4 2 3 3 2 3 2 2 3 4 5 3 4 4 2 3 3 1 4 2 4 3
+##  [715] 4 2 2 3 3 1 2 1 4 1 3 4 2 3 3 2 1 3 4 2 1 4 3 2 3 3 2 4 1 4 2 1 3 3
+##  [749] 4 3 1 2 4 4 2 4 3 3 3 4 1 4 4 3 3 1 4 4 3 5 1 3 3 3 4 4 2 2 3 2 1 4
+##  [783] 5 1 3 2 3 3 4 2 1 4 1 3 3 2 3 4 3 4 4 4 4 4 4 3 1 2 3 3 3 1 3 4 3 1
+##  [817] 2 4 2 3 3 1 3 3 4 4 3 2 3 1 4 1 4 3 4 4 3 1 4 3 2 3 3 4 3 1 4 1 2 3
+##  [851] 3 3 4 2 1 4 3 3 3 2 4 4 3 4 2 4 2 3 4 4 4 3 4 5 4 3 2 3 3 3 4 3 5 2
+##  [885] 3 4 1 3 3 3 2 3 3 3 2 3 2 2 3 3 3 3 3 5 3 2 1 2 3 1 2 2 3 3 4 3 4 2
+##  [919] 3 1 4 4 4 3 3 2 2 3 3 3 3 3 4 4 2 3 3 4 2 3 3 4 3 4 2 4 2 3 3 1 2 4
+##  [953] 2 3 3 3 4 3 2 2 1 4 4 3 3 3 2 3 1 4 3 1 1 3 3 4 3 4 3 4 4 3 3 1 1 1
+##  [987] 2 1 2 3 3 4 1 3 4 3 2 3 3 3 2 1 3 3 4 4 4 4 5 4 3 1 4 4 3 2 2 2 4 1
+## [1021] 5 3 5 4 2 3 3 5 3 2 3 3 3 4 1 3 3 3 4 3 3 3 3 1 2 5 3 2 4 3 3 3 4 1
+## [1055] 3 2 1 3 3 4 4 3 2 3 3 2 1 1 5 3 4 4 3 3 3 3 1 4 3 3 5 2 3 3 1 3 3 3
+## [1089] 2 4 2 2 2 4 4 2 4 4 3 4 3 4 3 4 3 5 3 4 4 4 5 4 3 3 3 4 1 4 3 1 3 3
+## [1123] 4 2 3 4 2 3 2 4 3 2 5 4 3 3 5 3 4 4 4 4 5 3 5 3 1 4 2 3 4 3 3 2 2 3
+## [1157] 3 3 5 5 2 1 3 3 3 3 4 1 3 4 5 3 3 3 1 4 2 5 2 4 3 3 4 3 4 3 3 4 3 2
+## [1191] 1 3 4 3 1 2 4 2 4 3 3 2 4 3 4 3 3 3 4 3 3 3 4 4 1 1 3 4 2 3 4 3 2 1
+## [1225] 4 4 1 4 3 5 2 1 1 3 3 4 3 4 3 3 3 3 3 3 2 4 3 4 3 2 4 3 3 4 3 3 3 3
+## [1259] 3 4 3 4 3 2 1 2 1 4 3 2 4 3 2 2 3 4 3 1 2 2 3 2 3 4 4 3 3 3 1 3 2 2
+## [1293] 3 2 3 4 3 3 4 4 3 4 3 4 5 3 4 4 4 2 1 4 4 4 2 2 1 3 4 3 1 1 3 3 2 3
+## [1327] 3 4 4 3 3 1 4 3 3 3 4 2 2 1 4 2 2 3 4 4 2 2 3 3 2 1 3 3 4 4 2 3 4 4
+## [1361] 4 2 4 5 2 3 3 2 2 1 4 3 4 3 2 4 3 4 3 3 4 3 3 3 4 3 4 4 4 2 2 3 4 4
+## [1395] 1 4 2 3 3 2 2 3 2 3 2 1 3 2 4 2 4 4 3 1 4 2 4 2 4 4 4 1 3 4 3 2 4 3
+## [1429] 1 3 3 3 2 4 4 3 2 4 3 4 3 3 4 2 4 4 3 4 4 4 4 2 4 3 1 3 3 2 1 3 3 3
+```
+
+```r
+MonthlyIncome <- c(min(talentData$MonthlyIncm), max(talentData$MonthlyIncm), mean(talentData$MonthlyIncm), sd(talentData$MonthlyIncm))
+TotalWorkYears <- c(min(talentData$TtlWrkngYrs), max(talentData$TtlWrkngYrs), mean(talentData$TtlWrkngYrs), sd(talentData$TtlWrkngYrs))
+Age <- c(min(talentData$Age), max(talentData$Age), mean(talentData$Age), sd(talentData$Age)) 
+YearsAtCompany <-c(min(talentData$YrsAtCompany), max(talentData$YrsAtCompany), mean(talentData$YrsAtCompany), sd(talentData$YrsAtCompany))
+MonthlyRate <- c(min(talentData$MonthlyRate), max(talentData$MonthlyRate), mean(talentData$MonthlyRate), sd(talentData$MonthlyRate))
+YrsOfEdu <- c(min(talentData$YrsOfEdu), max(talentData$YrsOfEdu), mean(talentData$YrsOfEdu), sd(talentData$YrsOfEdu))
+table <- data.frame(DescriptiveStatistics, HourlyRate, MonthlyRate, MonthlyIncome, TotalWorkYears, YearsAtCompany, Age,  YrsOfEdu)
+table %>%
+  kable("html") %>%
+  kable_styling()
+```
+
+<table class="table" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> DescriptiveStatistics </th>
+   <th style="text-align:right;"> HourlyRate </th>
+   <th style="text-align:right;"> MonthlyRate </th>
+   <th style="text-align:right;"> MonthlyIncome </th>
+   <th style="text-align:right;"> TotalWorkYears </th>
+   <th style="text-align:right;"> YearsAtCompany </th>
+   <th style="text-align:right;"> Age </th>
+   <th style="text-align:right;"> YrsOfEdu </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> min </td>
+   <td style="text-align:right;"> 30.00000 </td>
+   <td style="text-align:right;"> 2094.000 </td>
+   <td style="text-align:right;"> 1009.000 </td>
+   <td style="text-align:right;"> 0.000000 </td>
+   <td style="text-align:right;"> 0.000000 </td>
+   <td style="text-align:right;"> 19.000000 </td>
+   <td style="text-align:right;"> 1.000000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> max </td>
+   <td style="text-align:right;"> 100.00000 </td>
+   <td style="text-align:right;"> 26999.000 </td>
+   <td style="text-align:right;"> 19999.000 </td>
+   <td style="text-align:right;"> 40.000000 </td>
+   <td style="text-align:right;"> 40.000000 </td>
+   <td style="text-align:right;"> 60.000000 </td>
+   <td style="text-align:right;"> 5.000000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> mean </td>
+   <td style="text-align:right;"> 65.87893 </td>
+   <td style="text-align:right;"> 14312.212 </td>
+   <td style="text-align:right;"> 6530.207 </td>
+   <td style="text-align:right;"> 11.341313 </td>
+   <td style="text-align:right;"> 7.046512 </td>
+   <td style="text-align:right;"> 37.027360 </td>
+   <td style="text-align:right;"> 2.915185 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> sd </td>
+   <td style="text-align:right;"> 20.34338 </td>
+   <td style="text-align:right;"> 7124.669 </td>
+   <td style="text-align:right;"> 4706.273 </td>
+   <td style="text-align:right;"> 7.757034 </td>
+   <td style="text-align:right;"> 6.121228 </td>
+   <td style="text-align:right;"> 9.052093 </td>
+   <td style="text-align:right;"> 1.025173 </td>
+  </tr>
+</tbody>
+</table>
+
+## IV. Deeper Analysis and Visualization
 
 
 

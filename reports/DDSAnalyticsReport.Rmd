@@ -130,7 +130,7 @@ talentMgmtData$TrngTmsLstYr <- as.integer(talentMgmtData$TrngTmsLstYr)
 glimpse(talentMgmtData)
 ```
 
-### Exploratory Data Analysis
+### Preliminary Analysis
 
 
 ##### Understanding our Ages and its' Relationships with other Factors.
@@ -287,7 +287,28 @@ ggcorrplot(correlations, hc.order = TRUE,
 
 The chart above shows us that there are no negative linear relationships in our data between our variables. We can also see that there are some positive relationships between variables that are linearly correlated and we have now been able to narrow these down so they can be examined in depth.
 
-## IV. Results
+#### Descriptive statistics
+
+Lets check descriptive statistics for some of the data we have
+```{r}
+library(knitr)
+library(kableExtra)
+DescriptiveStatistics<-c("min", "max", "mean", "sd")
+HourlyRate <- c(min(talentData$HourlyRate), max(talentData$HourlyRate), mean(talentData$HourlyRate), sd(talentData$HourlyRate))
+talentData$YrsOfEdu
+MonthlyIncome <- c(min(talentData$MonthlyIncm), max(talentData$MonthlyIncm), mean(talentData$MonthlyIncm), sd(talentData$MonthlyIncm))
+TotalWorkYears <- c(min(talentData$TtlWrkngYrs), max(talentData$TtlWrkngYrs), mean(talentData$TtlWrkngYrs), sd(talentData$TtlWrkngYrs))
+Age <- c(min(talentData$Age), max(talentData$Age), mean(talentData$Age), sd(talentData$Age)) 
+YearsAtCompany <-c(min(talentData$YrsAtCompany), max(talentData$YrsAtCompany), mean(talentData$YrsAtCompany), sd(talentData$YrsAtCompany))
+MonthlyRate <- c(min(talentData$MonthlyRate), max(talentData$MonthlyRate), mean(talentData$MonthlyRate), sd(talentData$MonthlyRate))
+YrsOfEdu <- c(min(talentData$YrsOfEdu), max(talentData$YrsOfEdu), mean(talentData$YrsOfEdu), sd(talentData$YrsOfEdu))
+table <- data.frame(DescriptiveStatistics, HourlyRate, MonthlyRate, MonthlyIncome, TotalWorkYears, YearsAtCompany, Age,  YrsOfEdu)
+table %>%
+  kable("html") %>%
+  kable_styling()
+```
+
+## IV. Deeper Analysis and Visualization
 
 
 
