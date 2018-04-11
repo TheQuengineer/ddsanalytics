@@ -368,6 +368,20 @@ Our next section will use all of our recent discoveries about the `talentData` t
 
 ## IV. Deeper Analysis and Visualization
 
+Let's check if there is any relationship between Age and Income. Does Gender makes any effect on the Monthly income?
+
+```{r}
+MonthlyIncm <- talentData$MonthlyIncm
+Age <- talentData$Age
+Gender <- talentData$Gender
+ggplot(talentData, aes(MonthlyIncm, Age, color = Gender, shape=Gender))+geom_point()+ggtitle("Correlation between Monthly income and Ages")
+model_AgeIncome <- lm(MonthlyIncm ~ Age+Gender, data = talentData)
+summary(model_AgeIncome)
+
+```
+###4.C###
+From regression analysis above we can say that Gender does not make significant change in the Monthly employee income. But Age is indeed significant variable (p<0.0001), it can explain 24% of monthly income change.
+
 #### What Factor Causes Employee Attrition?
 
 
