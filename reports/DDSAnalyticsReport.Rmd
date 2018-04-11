@@ -315,12 +315,63 @@ hist(talentData$HourlyRate, col = "darkred", xlab="Hourly Rate", main="Histogram
 hist(talentData$MonthlyIncm, col = "darkgreen", xlab="Monthly Income", main="Histogram of Monthly Income")
 ```
 
+##### Understanding Gender, Education, & Occupations
+
+Next we explore how Gender, Education and Occupation is broken down within our dataset. To get a good idea of how these factors might or might not play into attrition we need to first determine what these factors initally look like and how they are spread out.
+
+First we examine the frequency for gender and how it is distributed across job roles.
+
+```{r}
+demographics <- talentData[,c("JobRole", "Gender", "EduField")]
+
+
+theme_set(theme_light())
+
+ggplot(demographics, aes(demographics$JobRole)) + 
+  geom_bar(aes(fill=Gender), width = 0.5) +
+  labs(title = "Gender by Job Role",
+       subtitle = "Men & Women in Specific JobRole",
+       x = "Job Role",
+       y = "Frequency") +
+  coord_flip()
+
+
+```
+
+Our chart shows a bimodal distribution of our job roles. What is interesting here is we can see that sales executive is the most commonly occuring job in our dataset with more than 300 people represented in that category. It is also interesting to note that the spread between male and female in that job catagory looks almost equally represented. Our Lowest category is Human Resources Which has partitioned of mostly males even though there are just under 50 people in this catagory as a whole.
+
+What about Education? How is education represented across the genders. We take a look at that distribution next.
+
+```{r}
+
+theme_set(theme_dark())
+
+ggplot(demographics, aes(demographics$EduField)) + 
+  geom_bar(aes(fill=Gender), width = 0.5) +
+  labs(title = "Gender by Field Of Education",
+       subtitle = "A breakdown in what fields of education was explored by the genders",
+       x = "Field Of Study",
+       y = "Frequency") +
+  coord_flip()
+
+```
+
+We can see from this chart that Human Resources has the lowest participation in terms of education which actually makes sense given that it is our lowest filled job role. Life Science seems to be the most popular field of study between all the listed education choices with 600 different people in our dataset who studied in this field. This does not neccesarily match with our discovery regarding our popular job role. Life Science skills can translate into making great Sales Executives, but this educational field of study does not seem to be directly related to the Sales Executive.
+
+Now that we have an overall view of our data now we can begin to try to answer our questions of interest regarding our dataset. Our questions of interest are simply the following...
+
+1. What are the factors that lead to employee attrition?
+2. Can employee attrition be slowed, or avoided all together?
+3. Is there any data to support that job satisfaction is the main cause for an employee remaining at a job?
+
+Our next section will use all of our recent discoveries about the `talentData` to answer these inquiries.
+
 ## IV. Deeper Analysis and Visualization
 
 
 
 
-## IV. Discussion And Conclusions
+## V. Discussion And Conclusions
 
 
 

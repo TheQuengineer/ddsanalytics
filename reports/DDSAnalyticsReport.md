@@ -532,56 +532,6 @@ library(knitr)
 library(kableExtra)
 DescriptiveStatistics<-c("min", "max", "mean", "sd")
 HourlyRate <- c(min(talentData$HourlyRate), max(talentData$HourlyRate), mean(talentData$HourlyRate), sd(talentData$HourlyRate))
-talentData$YrsOfEdu
-```
-
-```
-##    [1] 2 1 2 4 1 2 3 1 3 3 3 2 1 2 3 4 2 2 4 3 2 4 4 2 1 3 1 4 4 4 3 4 2 3
-##   [35] 3 2 2 3 4 3 2 4 3 3 2 3 4 2 4 1 2 4 5 2 3 2 5 4 4 4 3 5 2 3 3 3 3 3
-##   [69] 3 3 1 3 4 3 3 4 4 4 4 2 1 3 2 3 2 3 1 4 3 2 4 4 2 3 4 4 2 3 4 3 4 1
-##  [103] 3 4 2 4 3 3 1 3 4 3 3 1 4 3 3 2 2 2 3 2 4 3 4 3 4 1 1 4 3 3 3 1 1 2
-##  [137] 4 4 3 3 3 3 5 3 2 3 1 3 4 1 3 5 2 3 3 1 4 3 4 4 1 3 3 2 3 3 3 3 4 5
-##  [171] 3 1 2 3 2 3 3 3 2 2 1 2 2 3 2 3 1 4 1 3 4 3 2 3 2 3 3 2 4 3 1 4 4 2
-##  [205] 1 3 3 1 5 4 4 1 3 4 3 3 4 3 3 3 2 4 3 3 4 3 4 1 3 1 3 2 2 4 3 3 2 4
-##  [239] 2 3 4 4 2 2 3 4 4 4 2 4 3 4 3 2 2 3 3 2 3 2 3 2 1 3 4 3 3 2 2 3 3 4
-##  [273] 3 4 2 4 3 2 3 1 4 1 2 2 2 3 3 4 4 2 4 3 3 4 3 3 3 4 3 4 2 3 3 4 3 2
-##  [307] 4 4 3 3 4 4 1 4 2 4 3 2 3 3 4 4 2 2 2 2 3 5 4 1 4 3 4 2 4 5 3 4 2 2
-##  [341] 4 1 4 1 3 1 5 3 1 3 1 3 2 3 4 1 5 4 4 4 2 3 3 4 3 3 2 4 3 3 4 2 4 3
-##  [375] 2 3 3 3 4 1 1 3 2 3 3 2 4 4 3 3 2 4 2 3 4 2 5 2 1 3 3 3 2 3 3 2 2 2
-##  [409] 3 3 3 4 1 2 2 4 3 3 4 5 2 4 3 4 3 3 2 3 3 4 4 3 1 1 1 1 3 3 3 2 4 1
-##  [443] 5 5 2 3 3 1 1 3 3 4 3 5 3 3 4 2 3 4 3 3 1 5 4 2 4 3 3 4 4 3 2 2 3 1
-##  [477] 3 4 2 4 2 4 4 3 3 4 4 1 5 4 4 3 1 1 4 1 4 4 3 1 5 4 3 3 2 4 3 4 2 4
-##  [511] 1 3 3 3 3 4 4 1 1 2 1 3 2 4 3 2 4 2 2 4 4 3 4 4 2 3 4 2 3 3 3 3 5 3
-##  [545] 3 3 2 1 3 3 1 3 3 3 4 4 5 5 4 4 1 2 1 2 3 3 4 4 2 3 3 4 4 1 1 4 4 4
-##  [579] 3 2 2 3 3 3 4 3 2 3 3 2 3 2 4 4 2 4 3 3 4 3 3 3 3 4 3 1 2 1 3 4 2 2
-##  [613] 3 4 3 1 3 1 2 4 4 2 3 2 4 4 2 2 4 1 3 1 3 4 3 1 3 1 2 3 3 4 3 3 3 2
-##  [647] 4 3 2 2 4 3 2 4 1 2 4 1 3 3 1 1 4 1 4 3 3 3 3 2 4 3 4 1 2 4 2 4 3 3
-##  [681] 2 4 3 3 4 3 3 3 4 4 1 3 4 2 3 3 2 3 2 2 3 4 5 3 4 4 2 3 3 1 4 2 4 3
-##  [715] 4 2 2 3 3 1 2 1 4 1 3 4 2 3 3 2 1 3 4 2 1 4 3 2 3 3 2 4 1 4 2 1 3 3
-##  [749] 4 3 1 2 4 4 2 4 3 3 3 4 1 4 4 3 3 1 4 4 3 5 1 3 3 3 4 4 2 2 3 2 1 4
-##  [783] 5 1 3 2 3 3 4 2 1 4 1 3 3 2 3 4 3 4 4 4 4 4 4 3 1 2 3 3 3 1 3 4 3 1
-##  [817] 2 4 2 3 3 1 3 3 4 4 3 2 3 1 4 1 4 3 4 4 3 1 4 3 2 3 3 4 3 1 4 1 2 3
-##  [851] 3 3 4 2 1 4 3 3 3 2 4 4 3 4 2 4 2 3 4 4 4 3 4 5 4 3 2 3 3 3 4 3 5 2
-##  [885] 3 4 1 3 3 3 2 3 3 3 2 3 2 2 3 3 3 3 3 5 3 2 1 2 3 1 2 2 3 3 4 3 4 2
-##  [919] 3 1 4 4 4 3 3 2 2 3 3 3 3 3 4 4 2 3 3 4 2 3 3 4 3 4 2 4 2 3 3 1 2 4
-##  [953] 2 3 3 3 4 3 2 2 1 4 4 3 3 3 2 3 1 4 3 1 1 3 3 4 3 4 3 4 4 3 3 1 1 1
-##  [987] 2 1 2 3 3 4 1 3 4 3 2 3 3 3 2 1 3 3 4 4 4 4 5 4 3 1 4 4 3 2 2 2 4 1
-## [1021] 5 3 5 4 2 3 3 5 3 2 3 3 3 4 1 3 3 3 4 3 3 3 3 1 2 5 3 2 4 3 3 3 4 1
-## [1055] 3 2 1 3 3 4 4 3 2 3 3 2 1 1 5 3 4 4 3 3 3 3 1 4 3 3 5 2 3 3 1 3 3 3
-## [1089] 2 4 2 2 2 4 4 2 4 4 3 4 3 4 3 4 3 5 3 4 4 4 5 4 3 3 3 4 1 4 3 1 3 3
-## [1123] 4 2 3 4 2 3 2 4 3 2 5 4 3 3 5 3 4 4 4 4 5 3 5 3 1 4 2 3 4 3 3 2 2 3
-## [1157] 3 3 5 5 2 1 3 3 3 3 4 1 3 4 5 3 3 3 1 4 2 5 2 4 3 3 4 3 4 3 3 4 3 2
-## [1191] 1 3 4 3 1 2 4 2 4 3 3 2 4 3 4 3 3 3 4 3 3 3 4 4 1 1 3 4 2 3 4 3 2 1
-## [1225] 4 4 1 4 3 5 2 1 1 3 3 4 3 4 3 3 3 3 3 3 2 4 3 4 3 2 4 3 3 4 3 3 3 3
-## [1259] 3 4 3 4 3 2 1 2 1 4 3 2 4 3 2 2 3 4 3 1 2 2 3 2 3 4 4 3 3 3 1 3 2 2
-## [1293] 3 2 3 4 3 3 4 4 3 4 3 4 5 3 4 4 4 2 1 4 4 4 2 2 1 3 4 3 1 1 3 3 2 3
-## [1327] 3 4 4 3 3 1 4 3 3 3 4 2 2 1 4 2 2 3 4 4 2 2 3 3 2 1 3 3 4 4 2 3 4 4
-## [1361] 4 2 4 5 2 3 3 2 2 1 4 3 4 3 2 4 3 4 3 3 4 3 3 3 4 3 4 4 4 2 2 3 4 4
-## [1395] 1 4 2 3 3 2 2 3 2 3 2 1 3 2 4 2 4 4 3 1 4 2 4 2 4 4 4 1 3 4 3 2 4 3
-## [1429] 1 3 3 3 2 4 4 3 2 4 3 4 3 3 4 2 4 4 3 4 4 4 4 2 4 3 1 3 3 2 1 3 3 3
-```
-
-```r
 MonthlyIncome <- c(min(talentData$MonthlyIncm), max(talentData$MonthlyIncm), mean(talentData$MonthlyIncm), sd(talentData$MonthlyIncm))
 TotalWorkYears <- c(min(talentData$TtlWrkngYrs), max(talentData$TtlWrkngYrs), mean(talentData$TtlWrkngYrs), sd(talentData$TtlWrkngYrs))
 Age <- c(min(talentData$Age), max(talentData$Age), mean(talentData$Age), sd(talentData$Age)) 
@@ -650,13 +600,82 @@ table %>%
   </tr>
 </tbody>
 </table>
+The average Hourly rate is $65.88/hour, the average Monthly Rate is $14,312.21/month, the average Monthly Income is $6,530.21/month, average Total Worked Years is 11.34 years, average Worked years at the company is 7.04 years, average Age of the employees is 37 years and average Years of Education of the employees is 2.9 years ('Bachelor' degree).
+
+Lets check histograms of Hourly Rate and Monthly income.
+
+
+```r
+hist(talentData$HourlyRate, col = "darkred", xlab="Hourly Rate", main="Histogram of Hourly Rate")
+```
+
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
+
+```r
+hist(talentData$MonthlyIncm, col = "darkgreen", xlab="Monthly Income", main="Histogram of Monthly Income")
+```
+
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-11-2.png)<!-- -->
+
+##### Understanding Gender, Education, & Occupations
+
+Next we explore how Gender, Education and Occupation is broken down within our dataset. To get a good idea of how these factors might or might not play into attrition we need to first determine what these factors initally look like and how they are spread out.
+
+First we examine the frequency for gender and how it is distributed across job roles.
+
+
+```r
+demographics <- talentData[,c("JobRole", "Gender", "EduField")]
+
+
+theme_set(theme_light())
+
+ggplot(demographics, aes(demographics$JobRole)) + 
+  geom_bar(aes(fill=Gender), width = 0.5) +
+  labs(title = "Gender by Job Role",
+       subtitle = "Men & Women in Specific JobRole",
+       x = "Job Role",
+       y = "Frequency") +
+  coord_flip()
+```
+
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
+
+Our chart shows a bimodal distribution of our job roles. What is interesting here is we can see that sales executive is the most commonly occuring job in our dataset with more than 300 people represented in that category. It is also interesting to note that the spread between male and female in that job catagory looks almost equally represented. Our Lowest category is Human Resources Which has partitioned of mostly males even though there are just under 50 people in this catagory as a whole.
+
+What about Education? How is education represented across the genders. We take a look at that distribution next.
+
+
+```r
+theme_set(theme_dark())
+
+ggplot(demographics, aes(demographics$EduField)) + 
+  geom_bar(aes(fill=Gender), width = 0.5) +
+  labs(title = "Gender by Field Of Education",
+       subtitle = "A breakdown in what fields of education was explored by the genders",
+       x = "Field Of Study",
+       y = "Frequency") +
+  coord_flip()
+```
+
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
+
+We can see from this chart that Human Resources has the lowest participation in terms of education which actually makes sense given that it is our lowest filled job role. Life Science seems to be the most popular field of study between all the listed education choices with 600 different people in our dataset who studied in this field. This does not neccesarily match with our discovery regarding our popular job role. Life Science skills can translate into making great Sales Executives, but this educational field of study does not seem to be directly related to the Sales Executive.
+
+Now that we have an overall view of our data now we can begin to try to answer our questions of interest regarding our dataset. Our questions of interest are simply the following...
+
+1. What are the factors that lead to employee attrition?
+2. Can employee attrition be slowed, or avoided all together?
+3. Is there any data to support that job satisfaction is the main cause for an employee remaining at a job?
+
+Our next section will use all of our recent discoveries about the `talentData` to answer these inquiries.
 
 ## IV. Deeper Analysis and Visualization
 
 
 
 
-## IV. Discussion And Conclusions
+## V. Discussion And Conclusions
 
 
 
