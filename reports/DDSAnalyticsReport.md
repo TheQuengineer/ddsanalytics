@@ -666,14 +666,15 @@ Now that we have an overall view of our data now we can begin to try to answer o
 
 1. What are the factors that lead to employee attrition?
 2. Can employee attrition be slowed, or avoided all together?
-3. Is there any data to support that job satisfaction is the main cause for an employee remaining at a job?
 
 Our next section will use all of our recent discoveries about the `talentData` to answer these inquiries.
 
 ## IV. Deeper Analysis and Visualization
 
+#### What Factor Causes Employee Attrition?
 
 
+#### Can This be stopped?
 
 ## V. Discussion And Conclusions
 
