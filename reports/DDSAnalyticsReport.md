@@ -600,6 +600,7 @@ table %>%
   </tr>
 </tbody>
 </table>
+####3.B####
 The average Hourly rate is $65.88/hour, the average Monthly Rate is $14,312.21/month, the average Monthly Income is $6,530.21/month, average Total Worked Years is 11.34 years, average Worked years at the company is 7.04 years, average Age of the employees is 37 years and average Years of Education of the employees is 2.9 years ('Bachelor' degree).
 
 Lets check histograms of Hourly Rate and Monthly income.
@@ -616,6 +617,10 @@ hist(talentData$MonthlyIncm, col = "darkgreen", xlab="Monthly Income", main="His
 ```
 
 ![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-11-2.png)<!-- -->
+
+#### 3.B####
+
+On the histograms we can see almost equal spread of hourly rates within the company, but we can not say the same about monthly income, it means that employees work different amount of hours (some of them are part time, and some of them work with overtime (more then 40hours), we do not have information if any bonuses were paid in the company, so it does not make sense to continue analize working hours). 
 
 ##### Understanding Gender, Education, & Occupations
 
@@ -670,6 +675,47 @@ Now that we have an overall view of our data now we can begin to try to answer o
 Our next section will use all of our recent discoveries about the `talentData` to answer these inquiries.
 
 ## IV. Deeper Analysis and Visualization
+
+Let's check if there is any relationship between Age and Income. Does Gender makes any effect on the Monthly income?
+
+
+```r
+MonthlyIncm <- talentData$MonthlyIncm
+Age <- talentData$Age
+Gender <- talentData$Gender
+ggplot(talentData, aes(MonthlyIncm, Age, color = Gender, shape=Gender))+geom_point()+ggtitle("Correlation between Monthly income and Ages")
+```
+
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
+
+```r
+model_AgeIncome <- lm(MonthlyIncm ~ Age+Gender, data = talentData)
+summary(model_AgeIncome)
+```
+
+```
+## 
+## Call:
+## lm(formula = MonthlyIncm ~ Age + Gender, data = talentData)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -9927.2 -2623.9  -711.1  1817.3 12595.1 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) -2872.67     475.14  -6.046 1.88e-09 ***
+## Age           256.12      11.85  21.616  < 2e-16 ***
+## GenderMale   -134.31     218.91  -0.614     0.54    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 4096 on 1459 degrees of freedom
+## Multiple R-squared:  0.2434,	Adjusted R-squared:  0.2424 
+## F-statistic: 234.7 on 2 and 1459 DF,  p-value: < 2.2e-16
+```
+####4.C####
+From regression analysis above we can say that Gender does not make significant change in the Monthly employee income. But Age is indeed significant variable (p<0.0001), it can explain 24% of monthly income change.
 
 #### What Factor Causes Employee Attrition?
 

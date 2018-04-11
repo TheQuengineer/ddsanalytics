@@ -315,7 +315,9 @@ Lets check histograms of Hourly Rate and Monthly income.
 hist(talentData$HourlyRate, col = "darkred", xlab="Hourly Rate", main="Histogram of Hourly Rate")
 hist(talentData$MonthlyIncm, col = "darkgreen", xlab="Monthly Income", main="Histogram of Monthly Income")
 ```
-####3.B####
+
+#### 3.B####
+
 On the histograms we can see almost equal spread of hourly rates within the company, but we can not say the same about monthly income, it means that employees work different amount of hours (some of them are part time, and some of them work with overtime (more then 40hours), we do not have information if any bonuses were paid in the company, so it does not make sense to continue analize working hours). 
 
 ##### Understanding Gender, Education, & Occupations
