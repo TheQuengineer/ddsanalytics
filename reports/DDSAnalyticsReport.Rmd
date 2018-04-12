@@ -133,13 +133,10 @@ glimpse(talentMgmtData)
 ### Preliminary Analysis
 
 
-##### Understanding our Ages and its' Relationships with other Factors.
 
 ---
 
-Now that the data has been prepared and formatted accordingly it is neccessary to explore it to its depths. For a dataset this large we will start off taking a look at some of the variables of interests and how they relate to each other.
-
-When it comes to jobs the first thing that we want to look at is our age distribution. This is an imporatant step in our EDA process as we would like to get an idea of how old or young our these individuals in our entire dataset as it might give us a good place to start. We are only interested in exploring individuals in the workforce that are older than 18, so all of the forward analysis will take this constraint into consideration.
+####3.A####
 
 ```{r}
 talentData <- talentMgmtData[talentMgmtData$Age > 18, ]
@@ -148,16 +145,123 @@ range(talentData$Age)
 
 As we can see above, only Ages 19 to 60 exists within our dataset.
 
+Now that the data has been prepared and formatted accordingly it is neccessary to explore it to its depths.
+
+#### Descriptive statistics
+
+Lets check descriptive statistics for some of the data we have
 ```{r}
-par(mfrow=c(1,2))
+library(knitr)
+library(kableExtra)
+DescriptiveStatistics<-c("min", "max", "mean", "sd")
+HourlyRate <- c(min(talentData$HourlyRate), max(talentData$HourlyRate), mean(talentData$HourlyRate), sd(talentData$HourlyRate))
+MonthlyIncome <- c(min(talentData$MonthlyIncm), max(talentData$MonthlyIncm), mean(talentData$MonthlyIncm), sd(talentData$MonthlyIncm))
+TotalWorkYears <- c(min(talentData$TtlWrkngYrs), max(talentData$TtlWrkngYrs), mean(talentData$TtlWrkngYrs), sd(talentData$TtlWrkngYrs))
+Age <- c(min(talentData$Age), max(talentData$Age), mean(talentData$Age), sd(talentData$Age)) 
+YearsAtCompany <-c(min(talentData$YrsAtCompany), max(talentData$YrsAtCompany), mean(talentData$YrsAtCompany), sd(talentData$YrsAtCompany))
+MonthlyRate <- c(min(talentData$MonthlyRate), max(talentData$MonthlyRate), mean(talentData$MonthlyRate), sd(talentData$MonthlyRate))
+YrsOfEdu <- c(min(talentData$YrsOfEdu), max(talentData$YrsOfEdu), mean(talentData$YrsOfEdu), sd(talentData$YrsOfEdu))
+table <- data.frame(DescriptiveStatistics, HourlyRate, MonthlyRate, MonthlyIncome, TotalWorkYears, YearsAtCompany, Age,  YrsOfEdu)
+table %>%
+  kable("html") %>%
+  kable_styling()
+```
+
+####3.B####
+The average Hourly rate is $65.88/hour, the average Monthly Rate is $14,312.21/month, the average Monthly Income is $6,530.21/month, average Total Worked Years is 11.34 years, average Worked years at the company is 7.04 years, average Age of the employees is 37 years and average Years of Education of the employees is 2.9 years ('Bachelor' degree).
+
+Lets check histograms of Hourly Rate and Monthly income.
+
+```{r}
+hist(talentData$HourlyRate, col = "darkred", xlab="Hourly Rate", main="Histogram of Hourly Rate")
+hist(talentData$MonthlyIncm, col = "darkgreen", xlab="Monthly Income", main="Histogram of Monthly Income")
+```
+
+#### 3.B####
+
+On the histograms we can see almost equal spread of hourly rates within the company, but we can not say the same about monthly income, it means that employees work different amount of hours (some of them are part time, and some of them work with overtime (more then 40hours), we do not have information if any bonuses were paid in the company, so it does not make sense to continue analize working hours). 
+
+#### 3.C####
+
+##### Understanding Gender, Education, & Occupations
+
+Next we explore how Gender, Education and Job Role is broken down within our dataset. Below are frequency tables of our findings for these three catagories...
+
+```{r}
+library(ggplot2)
+
+demographics <- talentData[,c("JobRole", "Gender", "EduField")]
+
+build_table <- function(column_name, title) {
+  t <- as.data.frame(table(column_name))
+  names(t) <- c(title, "Frequency")
+  t %>%
+    kable("html") %>%
+    kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+}
+
+build_table(demographics$Gender, "Gender")
+
+build_table(demographics$EduField, "Education")
+
+build_table(demographics$JobRole, "Job Role")
+```
+
+
+Next, we examine the frequency for gender and how it is distributed across job roles visually.
+
+```{r}
+
+theme_set(theme_light())
+
+ggplot(demographics, aes(demographics$JobRole)) + 
+  geom_bar(aes(fill=Gender), width = 0.5) +
+  labs(title = "Gender by Job Role",
+       subtitle = "Men & Women in Specific JobRole",
+       x = "Job Role",
+       y = "Frequency") +
+  coord_flip()
+
+
+```
+
+Our chart shows a bimodal distribution of our job roles. What is interesting here is we can see that sales executive is the most commonly occuring job in our dataset with more than 300 people represented in that category. It is also interesting to note that the spread between male and female in that job catagory looks almost equally represented. Our Lowest category is Human Resources Which has partitioned of mostly males even though there are just under 50 people in this catagory as a whole.
+
+What about Education? How is education represented across the genders. We take a look at that distribution next.
+
+```{r}
+
+theme_set(theme_dark())
+
+ggplot(demographics, aes(demographics$EduField)) + 
+  geom_bar(aes(fill=Gender), width = 0.5) +
+  labs(title = "Gender by Field Of Education",
+       subtitle = "A breakdown in what fields of education was explored by the genders",
+       x = "Field Of Study",
+       y = "Frequency") +
+  coord_flip()
+
+```
+
+We can see from this chart that Human Resources has the lowest participation in terms of education which actually makes sense given that it is our lowest filled job role. Life Science seems to be the most popular field of study between all the listed education choices with 600 different people in our dataset who studied in this field. This does not neccesarily match with our discovery regarding our popular job role. Life Science skills can translate into making great Sales Executives, but this educational field of study does not seem to be directly related to the Sales Executive.
+
+Now that we have an overall view of our data now we can begin to try to answer our questions of interest regarding our dataset. Our questions of interest are simply the following...
+
+1. What are the factors that lead to employee attrition?
+2. Can employee attrition be slowed, or avoided all together?
+
+Our next section will use all of our recent discoveries about the `talentData` to answer these inquiries.
+
+## IV. Deeper Analysis and Visualization
+
+
+When it comes to jobs the first thing that we want to look at is our age distribution. This is an imporatant step in our EDA process as we would like to get an idea of how old or young our these individuals in our entire dataset as it might give us a good place to start. We are only interested in exploring individuals in the workforce that are older than 18, so all of the forward analysis will take this constraint into consideration.
+
+```{r}
 hist(talentData$Age, xlab= "Ages",
      ylab="Frequency Of Occurrence",
      main= "Age Distribution Frequency",
      col = "blue")
-hist(talentData$Age,
-     xlab= "Ages",
-     col="green",
-     freq= FALSE,  ylab= "Density of Ages", main= "Age Distribution Density")
 lines(density(talentMgmtData$Age), lty="dotted", lwd=4)
 
 ```
@@ -168,6 +272,7 @@ Another thing that we would like to explore is whether or not there is a relatio
 
 ```{r}
 library(ggplot2)
+theme_set(theme_light())
 
 ggplot(talentData, aes(x=Age, y=YrsAtCompany)) +
   ggtitle("Years at Company vs Age") +
@@ -195,45 +300,13 @@ Based on the results of our correlation test we have a pearsons correlation valu
 The next important thing we want to explore is our income distribution. Income is a major factor in employment. Without income, there is no reason for anyone worker to make effort to join a company in the first place. We would like to get an Idea of how the income distribution looks within our dataset. We would also like to understand the relationship between our income and our age as this might give us more insight as to whether or not these two factors influence employee retention overall.
 
 ```{r}
-par(mfrow=c(1,2))
 hist(talentData$MonthlyIncm,
      xlab="Monthly Income",
      ylab="Frequency Of Occurrence",
      main= "Income Distribution Frequency",
      col= "grey")
-hist(talentData$MonthlyIncm,
-     xlab= "Monthly Income",
-     col="grey",
-     freq= FALSE,
-     ylab= "Density of Monthly Incomes",
-     main="Income Distribution Density")
-lines(density(talentData$MonthlyIncm), lty="dotted", lwd=4)
-
 ```
 
-If we examine the Monthly Income of our talent datapoints we can see a right skewed distribution for the monthly salaries. It is also clear that a large amount of the incomes here are clustered from appropximately \$1000 to \$6,000 per month. Now that we have have an understanding of how incomes are distributed we will examine the relationship between age and income to see if a relationship exists.
-
-```{r}
-library(ggplot2)
-
-ggplot(talentData, aes(x=MonthlyIncm, y=Age)) +
-  ggtitle("Monthly Income vs Age") +
-  theme(plot.title = element_text(hjust = 0.5)) +
-  labs(x= "Income", y="Age") +
-  geom_point(shape=1, col = "orange") +
-  geom_smooth(method = "gam")
-
-
-
-cor.test(x=talentData$MonthlyIncm, y=talentData$Age,
-         alternative = "two.sided",
-         method="pearson",
-         conf.level = 0.95,
-         exact = TRUE)
-```
-
-
-There is no surprise here as both the chart and a pearson's correlation test confirms that there is a positive linear relationship between `MonthlyIncome` and `Age` `r=0.49`(95% CI: 0.45 to 0.53). This suggests that the older someone is it could affect both their salary and years at a company in a positive way. This finding also might suggest that we could consider age as a factor in employee retention as it seems to be closely related to Income as well as the number of years at a company. Perhaps older employees will stay at a company longer because they make more money making them less likely to leave. We continue to search for evidence to help us answer this question of employee attrition, but for now it is clear that Age is definately a variable we want to factor into our analysis given its influence on both Monthly Income and years spent at a company.
 
 ##### Exploring the Relationship between Years At a company and Satisfaction
 
@@ -287,90 +360,6 @@ ggcorrplot(correlations, hc.order = TRUE,
 
 The chart above shows us that there are no negative linear relationships in our data between our variables. We can also see that there are some positive relationships between variables that are linearly correlated and we have now been able to narrow these down so they can be examined in depth.
 
-#### Descriptive statistics
-
-Lets check descriptive statistics for some of the data we have
-```{r}
-library(knitr)
-library(kableExtra)
-DescriptiveStatistics<-c("min", "max", "mean", "sd")
-HourlyRate <- c(min(talentData$HourlyRate), max(talentData$HourlyRate), mean(talentData$HourlyRate), sd(talentData$HourlyRate))
-MonthlyIncome <- c(min(talentData$MonthlyIncm), max(talentData$MonthlyIncm), mean(talentData$MonthlyIncm), sd(talentData$MonthlyIncm))
-TotalWorkYears <- c(min(talentData$TtlWrkngYrs), max(talentData$TtlWrkngYrs), mean(talentData$TtlWrkngYrs), sd(talentData$TtlWrkngYrs))
-Age <- c(min(talentData$Age), max(talentData$Age), mean(talentData$Age), sd(talentData$Age)) 
-YearsAtCompany <-c(min(talentData$YrsAtCompany), max(talentData$YrsAtCompany), mean(talentData$YrsAtCompany), sd(talentData$YrsAtCompany))
-MonthlyRate <- c(min(talentData$MonthlyRate), max(talentData$MonthlyRate), mean(talentData$MonthlyRate), sd(talentData$MonthlyRate))
-YrsOfEdu <- c(min(talentData$YrsOfEdu), max(talentData$YrsOfEdu), mean(talentData$YrsOfEdu), sd(talentData$YrsOfEdu))
-table <- data.frame(DescriptiveStatistics, HourlyRate, MonthlyRate, MonthlyIncome, TotalWorkYears, YearsAtCompany, Age,  YrsOfEdu)
-table %>%
-  kable("html") %>%
-  kable_styling()
-```
-####3.B####
-The average Hourly rate is $65.88/hour, the average Monthly Rate is $14,312.21/month, the average Monthly Income is $6,530.21/month, average Total Worked Years is 11.34 years, average Worked years at the company is 7.04 years, average Age of the employees is 37 years and average Years of Education of the employees is 2.9 years ('Bachelor' degree).
-
-Lets check histograms of Hourly Rate and Monthly income.
-
-```{r}
-hist(talentData$HourlyRate, col = "darkred", xlab="Hourly Rate", main="Histogram of Hourly Rate")
-hist(talentData$MonthlyIncm, col = "darkgreen", xlab="Monthly Income", main="Histogram of Monthly Income")
-```
-
-#### 3.B####
-
-On the histograms we can see almost equal spread of hourly rates within the company, but we can not say the same about monthly income, it means that employees work different amount of hours (some of them are part time, and some of them work with overtime (more then 40hours), we do not have information if any bonuses were paid in the company, so it does not make sense to continue analize working hours). 
-
-##### Understanding Gender, Education, & Occupations
-
-Next we explore how Gender, Education and Occupation is broken down within our dataset. To get a good idea of how these factors might or might not play into attrition we need to first determine what these factors initally look like and how they are spread out.
-
-First we examine the frequency for gender and how it is distributed across job roles.
-
-```{r}
-demographics <- talentData[,c("JobRole", "Gender", "EduField")]
-
-
-theme_set(theme_light())
-
-ggplot(demographics, aes(demographics$JobRole)) + 
-  geom_bar(aes(fill=Gender), width = 0.5) +
-  labs(title = "Gender by Job Role",
-       subtitle = "Men & Women in Specific JobRole",
-       x = "Job Role",
-       y = "Frequency") +
-  coord_flip()
-
-
-```
-
-Our chart shows a bimodal distribution of our job roles. What is interesting here is we can see that sales executive is the most commonly occuring job in our dataset with more than 300 people represented in that category. It is also interesting to note that the spread between male and female in that job catagory looks almost equally represented. Our Lowest category is Human Resources Which has partitioned of mostly males even though there are just under 50 people in this catagory as a whole.
-
-What about Education? How is education represented across the genders. We take a look at that distribution next.
-
-```{r}
-
-theme_set(theme_dark())
-
-ggplot(demographics, aes(demographics$EduField)) + 
-  geom_bar(aes(fill=Gender), width = 0.5) +
-  labs(title = "Gender by Field Of Education",
-       subtitle = "A breakdown in what fields of education was explored by the genders",
-       x = "Field Of Study",
-       y = "Frequency") +
-  coord_flip()
-
-```
-
-We can see from this chart that Human Resources has the lowest participation in terms of education which actually makes sense given that it is our lowest filled job role. Life Science seems to be the most popular field of study between all the listed education choices with 600 different people in our dataset who studied in this field. This does not neccesarily match with our discovery regarding our popular job role. Life Science skills can translate into making great Sales Executives, but this educational field of study does not seem to be directly related to the Sales Executive.
-
-Now that we have an overall view of our data now we can begin to try to answer our questions of interest regarding our dataset. Our questions of interest are simply the following...
-
-1. What are the factors that lead to employee attrition?
-2. Can employee attrition be slowed, or avoided all together?
-
-Our next section will use all of our recent discoveries about the `talentData` to answer these inquiries.
-
-## IV. Deeper Analysis and Visualization
 
 Let's check if there is any relationship between Age and Income. Does Gender makes any effect on the Monthly income?
 
