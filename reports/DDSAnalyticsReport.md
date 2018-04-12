@@ -832,6 +832,34 @@ From regression analysis above we can say that Gender does not make significant 
 
 #### What Factor Causes Employee Attrition?
 
+Our goal is to determine which indicators might lead to employee attrition. The best way for us to achieve this is to locate the most significant variables that could likely separate those in the data set that had an Attrition value of `Yes` from those that had an Attrition value of `No`. This means that we want to determine the values and the coefficients for the variables that would lead to this outcome based on the data. As a result we decided to explore this using One Way ANOVA between these two groups just to detect if there is even a difference. If there is a difference, we will then be able to narrow down exactly what those differences are.
+
+##### Determine Sample Size
+
+First, we want to get a good idea of the sample size needed in order to lower the chances of a Type I or Type II error.
+
+
+```r
+library(pwr)
+
+pwr.anova.test(k=2, f=0.5, sig.level=0.05, power=0.8)
+```
+
+```
+## 
+##      Balanced one-way analysis of variance power calculation 
+## 
+##               k = 2
+##               n = 16.71472
+##               f = 0.5
+##       sig.level = 0.05
+##           power = 0.8
+## 
+## NOTE: n is number in each group
+```
+
+We decided to go with a comparison for two groups with an effect size of `0.5` because we are dealing with a medium size dataset. In addition to that we want to use a significance level of `0.05` which will be based on a 95% confidence level. Finally, the power level we set is `0.8`. Based on our calculation we will need at least 17 samples from each group to have good results that will limit our Type I and Type II error Types.
+
 
 #### Can This be stopped?
 
