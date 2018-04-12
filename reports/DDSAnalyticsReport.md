@@ -454,11 +454,11 @@ library(ggplot2)
 demographics <- talentData[,c("JobRole", "Gender", "EduField")]
 
 build_table <- function(column_name, title) {
-  t <- as.data.frame(table(column_name))
-  names(t) <- c(title, "Frequency")
-  t %>%
-    kable("html") %>%
-    kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+  
+   t <- as.data.frame(table(column_name))
+    names(t) <- c(title, "Frequency")
+      t %>% kable("html") %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) 
+
 }
 
 build_table(demographics$Gender, "Gender")
@@ -612,6 +612,41 @@ ggplot(demographics, aes(demographics$EduField)) +
 
 We can see from this chart that Human Resources has the lowest participation in terms of education which actually makes sense given that it is our lowest filled job role. Life Science seems to be the most popular field of study between all the listed education choices with 600 different people in our dataset who studied in this field. This does not neccesarily match with our discovery regarding our popular job role. Life Science skills can translate into making great Sales Executives, but this educational field of study does not seem to be directly related to the Sales Executive.
 
+#### 3.D####
+
+Finally, we take a look at a frequency Table for all the different management positions.
+
+
+```r
+t <- droplevels(filter(demographics, JobRole == "Manager" | JobRole == "Manufacturing Director" | JobRole == "Research Director"))
+
+build_table(t$JobRole, "ManagementOnly")
+```
+
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> ManagementOnly </th>
+   <th style="text-align:right;"> Frequency </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> Manager </td>
+   <td style="text-align:right;"> 102 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Manufacturing Director </td>
+   <td style="text-align:right;"> 145 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Research Director </td>
+   <td style="text-align:right;"> 80 </td>
+  </tr>
+</tbody>
+</table>
+
+
 Now that we have an overall view of our data now we can begin to try to answer our questions of interest regarding our dataset. Our questions of interest are simply the following...
 
 1. What are the factors that lead to employee attrition?
@@ -633,7 +668,7 @@ hist(talentData$Age, xlab= "Ages",
 lines(density(talentMgmtData$Age), lty="dotted", lwd=4)
 ```
 
-![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
 
 Based on the chart above we can see that our age range is between 20 and 60 with a large portion of ages being between 25 and 45. This is insightful as it might help us with interpretation of our findings moving forward. It is also worth noting that  between 30 and 35  is the most occurring age of all the age groups with over 350 recorded ages within this group!
 
@@ -652,7 +687,7 @@ ggplot(talentData, aes(x=Age, y=YrsAtCompany)) +
   geom_smooth(method = "gam")
 ```
 
-![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
 
 Our findings here are not surprising. We notice that visually there might be evidence of a positive linear relationship between age and years at a specific company. This finding suggests that the older you are the more likely you are to have a greater number of years at a specific company. To know for sure we examine pearson correlation between `YrsAtCompany` and `Age`.
 
@@ -694,8 +729,9 @@ hist(talentData$MonthlyIncm,
      col= "grey")
 ```
 
-![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
 
+From the above chart we can see that there is a right skewed distribution for our Monthly Income in our dataset. It is also clear that the majority of the population in this dataset makes between \$1000 and $6000 per month. The higher we go out in income the more the distribution becomes narrower.
 
 ##### Exploring the Relationship between Years At a company and Satisfaction
 
@@ -711,7 +747,7 @@ ggplot(talentData, aes(YrsAtCompany)) +
        y="Density")
 ```
 
-![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
 
 The Chart above is very telling. We take a look at our probability distribution across different Job Satisfaction levels. 1 indicates that there is low employee job satisfaction, and 4 represents that there is really high employee job satisfaction. If we examine the probability of each within the context of the years an individual stays at a company it becomes clear that lower job satisfaction indicates that this catagory has the lowest number of years spent at a company. This is no surprise, but it does give us more infomration regarding negative factors to employee attrition.
 
@@ -749,7 +785,7 @@ ggcorrplot(correlations, hc.order = TRUE,
            ggtheme=theme_bw)
 ```
 
-![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
 
 The chart above shows us that there are no negative linear relationships in our data between our variables. We can also see that there are some positive relationships between variables that are linearly correlated and we have now been able to narrow these down so they can be examined in depth.
 
@@ -764,7 +800,7 @@ Gender <- talentData$Gender
 ggplot(talentData, aes(MonthlyIncm, Age, color = Gender, shape=Gender))+geom_point()+ggtitle("Correlation between Monthly income and Ages")
 ```
 
-![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
 
 ```r
 model_AgeIncome <- lm(MonthlyIncm ~ Age+Gender, data = talentData)

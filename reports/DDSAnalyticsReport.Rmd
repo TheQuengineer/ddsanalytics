@@ -193,11 +193,11 @@ library(ggplot2)
 demographics <- talentData[,c("JobRole", "Gender", "EduField")]
 
 build_table <- function(column_name, title) {
-  t <- as.data.frame(table(column_name))
-  names(t) <- c(title, "Frequency")
-  t %>%
-    kable("html") %>%
-    kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+  
+   t <- as.data.frame(table(column_name))
+    names(t) <- c(title, "Frequency")
+      t %>% kable("html") %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) 
+
 }
 
 build_table(demographics$Gender, "Gender")
@@ -244,6 +244,18 @@ ggplot(demographics, aes(demographics$EduField)) +
 ```
 
 We can see from this chart that Human Resources has the lowest participation in terms of education which actually makes sense given that it is our lowest filled job role. Life Science seems to be the most popular field of study between all the listed education choices with 600 different people in our dataset who studied in this field. This does not neccesarily match with our discovery regarding our popular job role. Life Science skills can translate into making great Sales Executives, but this educational field of study does not seem to be directly related to the Sales Executive.
+
+#### 3.D####
+
+Finally, we take a look at a frequency Table for all the different management positions.
+
+```{r}
+t <- droplevels(filter(demographics, JobRole == "Manager" | JobRole == "Manufacturing Director" | JobRole == "Research Director"))
+
+build_table(t$JobRole, "ManagementOnly")
+
+```
+
 
 Now that we have an overall view of our data now we can begin to try to answer our questions of interest regarding our dataset. Our questions of interest are simply the following...
 
@@ -307,6 +319,7 @@ hist(talentData$MonthlyIncm,
      col= "grey")
 ```
 
+From the above chart we can see that there is a right skewed distribution for our Monthly Income in our dataset. It is also clear that the majority of the population in this dataset makes between \$1000 and $6000 per month. The higher we go out in income the more the distribution becomes narrower.
 
 ##### Exploring the Relationship between Years At a company and Satisfaction
 
