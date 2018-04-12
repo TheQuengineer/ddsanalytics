@@ -665,7 +665,6 @@ hist(talentData$Age, xlab= "Ages",
      ylab="Frequency Of Occurrence",
      main= "Age Distribution Frequency",
      col = "blue")
-lines(density(talentMgmtData$Age), lty="dotted", lwd=4)
 ```
 
 ![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-9-1.png)<!-- -->

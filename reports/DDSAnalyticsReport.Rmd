@@ -274,8 +274,6 @@ hist(talentData$Age, xlab= "Ages",
      ylab="Frequency Of Occurrence",
      main= "Age Distribution Frequency",
      col = "blue")
-lines(density(talentMgmtData$Age), lty="dotted", lwd=4)
-
 ```
 
 Based on the chart above we can see that our age range is between 20 and 60 with a large portion of ages being between 25 and 45. This is insightful as it might help us with interpretation of our findings moving forward. It is also worth noting that  between 30 and 35  is the most occurring age of all the age groups with over 350 recorded ages within this group!
