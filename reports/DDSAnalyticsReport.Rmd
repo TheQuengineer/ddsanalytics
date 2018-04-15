@@ -521,7 +521,22 @@ df$variables <- factor(variables, levels = df$variables[order(df$Teta)])
 ggplot(data = df, aes(x = df$variables, y = df$Teta), horis=TRUE)+geom_bar(stat = "identity")+labs(title = "Attrition influential factors", x="Variables",y="Influential Percent")+mytheme+coord_flip()
 ```
 As we we can see from the histogram above, the most influential factor for Attrition is DailyRate, it can explain 59% of the Attrition Variation, Total working hours and Age can explain 8% the Attrition Variation. In order to keep percent of the attrrition in the company low, managers should maintain competitive avarage payroll daily rates, provide enough of working hours and do not hire too young employees.
-
+Lets figure out in what department the company has the highest attrition percent.
+```{r}
+plot(talentData$Department, talentData$Attrition, xlab = "name of the department", ylab="Attrition")
+```
+We can see on a plot above that Sales and Human Resources departments have 20% of employee attrition, and around 14% at Research & Development depatment.
+```{r}
+demographics <- talentData[,c("JobRole", "Gender", "EduField")]
+theme_set(theme_light())
+ggplot(talentData, aes(talentData$JobRole)) + 
+  geom_bar(aes(fill=Attrition), width = 0.5) +
+  labs(title = "Attrition by Job Role",
+       x = "Job Role",
+       y = "Frequency") +
+  coord_flip()
+```
+Laboratory technician has the highest percent of Attrition. Our suggestion to review their daily rates and provide enough working hours. 
 
 
 ## V. Discussion And Conclusions
