@@ -449,8 +449,17 @@ encoded_dataset <- dummy.data.frame(as.data.frame(talentData), names=c("Business
 encoded_dataset <- encoded_dataset %>% mutate(Attrition = ifelse(Attrition == "Yes", 1 , 0))
 ```
 
+Above we generated encoded factors for all of our different factor levels. We also want to get some insight into our predicted variable Attrition so therefore we encoded all of our Attrition results to be as...
 
-Now that our data is encoded properly we will try locating the significant variables using the General Linear Model approach
+\[
+  Attrition
+  \begin{cases}
+    0 , \text{if No}  \\ 
+    1 , \text{otherwise}
+  \end{cases}
+\]
+
+Now that our data is encoded properly we will try locating the significant variables using the General Linear Model approach. Our Explanatory variables will be all of the variables in the dataset so that we can locate the most significant ones.
 
 
 ```{r}

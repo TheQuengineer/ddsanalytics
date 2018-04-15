@@ -893,9 +893,9 @@ summary(model)
 ```
 
 ```
-##             Df    Sum Sq  Mean Sq F value Pr(>F)
-## Attrition    1 3.749e+07 37489141   0.739  0.397
-## Residuals   30 1.522e+09 50743941
+##             Df    Sum Sq   Mean Sq F value Pr(>F)
+## Attrition    1 9.589e+07  95890476   0.843  0.366
+## Residuals   30 3.414e+09 113791491
 ```
 
 If we check for differnces in each group of those that experienced Attrition and those that did not we can see that there is no significant difference between the groups based on the `Daily Rate`, `YearsAtCompany`, `YrsInCorntRl`, `YrsWithCurMgr`, `MonthlyRate` , `DistFromHome` and `Age`!. None of these variables showed any type of difference between the two groups at the 0.05 level of significance. Therefore we can fail to reject the hypothesis that there is some kind of a differnece in those that experienced attrition over those that did not.
@@ -921,8 +921,17 @@ encoded_dataset <- dummy.data.frame(as.data.frame(talentData), names=c("Business
 encoded_dataset <- encoded_dataset %>% mutate(Attrition = ifelse(Attrition == "Yes", 1 , 0))
 ```
 
+Above we generated encoded factors for all of our different factor levels. We also want to get some insight into our predicted variable Attrition so therefore we encoded all of our Attrition results to be as...
 
-Now that our data is encoded properly we will try locating the significant variables using the General Linear Model approach
+\[
+  Attrition
+  \begin{cases}
+    0 , \text{if No}  \\ 
+    1 , \text{otherwise}
+  \end{cases}
+\]
+
+Now that our data is encoded properly we will try locating the significant variables using the General Linear Model approach. Our Explanatory variables will be all of the variables in the dataset so that we can locate the most significant ones.
 
 
 
