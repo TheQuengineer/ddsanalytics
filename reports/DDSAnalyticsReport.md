@@ -893,9 +893,9 @@ summary(model)
 ```
 
 ```
-##             Df    Sum Sq   Mean Sq F value Pr(>F)
-## Attrition    1 1.149e+08 114931751   0.928  0.343
-## Residuals   30 3.714e+09 123816500
+##             Df    Sum Sq  Mean Sq F value Pr(>F)
+## Attrition    1 1.540e+07 15399863   0.193  0.664
+## Residuals   30 2.397e+09 79911658
 ```
 
 If we check for differnces in each group of those that experienced Attrition and those that did not we can see that there is no significant difference between the groups based on the `Daily Rate`, `YearsAtCompany`, `YrsInCorntRl`, `YrsWithCurMgr`, `MonthlyRate` , `DistFromHome` and `Age`!. None of these variables showed any type of difference between the two groups at the 0.05 level of significance. Therefore we can fail to reject the hypothesis that there is some kind of a differnece in those that experienced attrition over those that did not.
@@ -1108,22 +1108,20 @@ summary(glm_model)
 ## Number of Fisher Scoring iterations: 2
 ```
 
-Based on a 0.05 level of significance the top factors contributing to customer churn in the data set are listed in the table below
+Based on a 0.05 level of significance the top factors contributing to Attrition in the data set are listed in the table below
 
-| Significant Variables at 0.05 Alpha           | P-value |
-|-----------------------------------------------|----------|
-| BusinessTrvlTravel_Frequently                 | 5.41e-05 |
-| DistFromHome                                  | 6.12e-05 |
-| EduFieldMedical                               | 0.000605 |
-| EnvSatfctn1                                   | 2.49e-07 |
-| JobInvolmnt1                                  | 3.64e-07 |
-| JobSatfctn1                                   | 5.84e-07 |
-| NumCmpWorked                                  | 8.58e-07 |
-| OverTimeNo                                    | < 2e-16  |
-| RlnSatfctn1                                   | 0.000226 |
+| Significant Variables at 0.05 Alpha           | P-value  | 95% ConfidenceInterval |
+|-----------------------------------------------|----------|------------------------|
+| BusinessTrvlTravel_Frequently                 | 5.41e-05 | None As it is a Factor |
+| DistFromHome                                  | 6.12e-05 | 2.13 to 6.16           |
+| EduFieldMedical                               | 0.000605 | None As it is a Factor |
+| EnvSatfctn1                                   | 2.49e-07 | None As it is a Factor |
+| JobInvolmnt1                                  | 3.64e-07 | None As it is a Factor |
+| JobSatfctn1                                   | 5.84e-07 | None As it is a Factor |
+| NumCmpWorked                                  | 8.58e-07 | 1.1 to 2.6             |
+| OverTimeNo                                    | < 2e-16  | None As it is a Factor |
+| RlnSatfctn1                                   | 0.000226 | None As it is a Factor |
 
-
-#### Can This be stopped?
 
 ## V. Discussion And Conclusions
 

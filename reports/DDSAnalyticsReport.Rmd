@@ -459,22 +459,20 @@ glm_model <- glm(formula=Attrition~.,data=encoded_dataset)
 summary(glm_model)
 ```
 
-Based on a 0.05 level of significance the top factors contributing to customer churn in the data set are listed in the table below
+Based on a 0.05 level of significance the top factors contributing to Attrition in the data set are listed in the table below
 
-| Significant Variables at 0.05 Alpha           | P-value |
-|-----------------------------------------------|----------|
-| BusinessTrvlTravel_Frequently                 | 5.41e-05 |
-| DistFromHome                                  | 6.12e-05 |
-| EduFieldMedical                               | 0.000605 |
-| EnvSatfctn1                                   | 2.49e-07 |
-| JobInvolmnt1                                  | 3.64e-07 |
-| JobSatfctn1                                   | 5.84e-07 |
-| NumCmpWorked                                  | 8.58e-07 |
-| OverTimeNo                                    | < 2e-16  |
-| RlnSatfctn1                                   | 0.000226 |
+| Significant Variables at 0.05 Alpha           | P-value  | 95% ConfidenceInterval |
+|-----------------------------------------------|----------|------------------------|
+| BusinessTrvlTravel_Frequently                 | 5.41e-05 | None As it is a Factor |
+| DistFromHome                                  | 6.12e-05 | 2.13 to 6.16           |
+| EduFieldMedical                               | 0.000605 | None As it is a Factor |
+| EnvSatfctn1                                   | 2.49e-07 | None As it is a Factor |
+| JobInvolmnt1                                  | 3.64e-07 | None As it is a Factor |
+| JobSatfctn1                                   | 5.84e-07 | None As it is a Factor |
+| NumCmpWorked                                  | 8.58e-07 | 1.1 to 2.6             |
+| OverTimeNo                                    | < 2e-16  | None As it is a Factor |
+| RlnSatfctn1                                   | 0.000226 | None As it is a Factor |
 
-
-#### Can This be stopped?
 
 ## V. Discussion And Conclusions
 

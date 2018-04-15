@@ -980,9 +980,9 @@ study_set &lt;- rbind(group1, group2)</code></pre>
 </ol>
 <pre class="r"><code>model &lt;- aov(DailyRate + MonthlyIncm + YrsAtCompany + YrsInCrntRl + YrsWthCurMgr + MonthlyRate + DistFromHome + Age ~ Attrition, data = study_set)
 summary(model)</code></pre>
-<pre><code>##             Df    Sum Sq   Mean Sq F value Pr(&gt;F)
-## Attrition    1 1.149e+08 114931751   0.928  0.343
-## Residuals   30 3.714e+09 123816500</code></pre>
+<pre><code>##             Df    Sum Sq  Mean Sq F value Pr(&gt;F)
+## Attrition    1 1.540e+07 15399863   0.193  0.664
+## Residuals   30 2.397e+09 79911658</code></pre>
 <p>If we check for differnces in each group of those that experienced Attrition and those that did not we can see that there is no significant difference between the groups based on the <code>Daily Rate</code>, <code>YearsAtCompany</code>, <code>YrsInCorntRl</code>, <code>YrsWithCurMgr</code>, <code>MonthlyRate</code> , <code>DistFromHome</code> and <code>Age</code>!. None of these variables showed any type of difference between the two groups at the 0.05 level of significance. Therefore we can fail to reject the hypothesis that there is some kind of a differnece in those that experienced attrition over those that did not.</p>
 <p>Now that we know there is no difference between the two groups we will proceed to try finding the most relevant variables in finding employee attrition another way. Next we prepare our data for use in a general linear model. We take this approach because we would like to see what the variables are that might help us with determining the outcome of what makes an employee decide to leave his or her job at a higher rate than others.</p>
 <pre class="r"><code>library(dummies)</code></pre>
@@ -1171,57 +1171,64 @@ summary(glm_model)</code></pre>
 ## AIC: 819.68
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
-<p>Based on a 0.05 level of significance the top factors contributing to customer churn in the data set are listed in the table below</p>
+<p>Based on a 0.05 level of significance the top factors contributing to Attrition in the data set are listed in the table below</p>
 <table>
 <thead>
 <tr class="header">
 <th>Significant Variables at 0.05 Alpha</th>
 <th>P-value</th>
+<th>95% ConfidenceInterval</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td>BusinessTrvlTravel_Frequently</td>
 <td>5.41e-05</td>
+<td>None As it is a Factor</td>
 </tr>
 <tr class="even">
 <td>DistFromHome</td>
 <td>6.12e-05</td>
+<td>2.13 to 6.16</td>
 </tr>
 <tr class="odd">
 <td>EduFieldMedical</td>
 <td>0.000605</td>
+<td>None As it is a Factor</td>
 </tr>
 <tr class="even">
 <td>EnvSatfctn1</td>
 <td>2.49e-07</td>
+<td>None As it is a Factor</td>
 </tr>
 <tr class="odd">
 <td>JobInvolmnt1</td>
 <td>3.64e-07</td>
+<td>None As it is a Factor</td>
 </tr>
 <tr class="even">
 <td>JobSatfctn1</td>
 <td>5.84e-07</td>
+<td>None As it is a Factor</td>
 </tr>
 <tr class="odd">
 <td>NumCmpWorked</td>
 <td>8.58e-07</td>
+<td>1.1 to 2.6</td>
 </tr>
 <tr class="even">
 <td>OverTimeNo</td>
 <td>&lt; 2e-16</td>
+<td>None As it is a Factor</td>
 </tr>
 <tr class="odd">
 <td>RlnSatfctn1</td>
 <td>0.000226</td>
+<td>None As it is a Factor</td>
 </tr>
 </tbody>
 </table>
 </div>
-</div>
-<div id="can-this-be-stopped" class="section level4">
-<h4>Can This be stopped?</h4>
 </div>
 </div>
 <div id="v.-discussion-and-conclusions" class="section level2">
