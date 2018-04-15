@@ -980,11 +980,9 @@ study_set &lt;- rbind(group1, group2)</code></pre>
 </ol>
 <pre class="r"><code>model &lt;- aov(DailyRate + MonthlyIncm + YrsAtCompany + YrsInCrntRl + YrsWthCurMgr + MonthlyRate + DistFromHome + Age ~ Attrition, data = study_set)
 summary(model)</code></pre>
-<pre><code>##             Df    Sum Sq   Mean Sq F value  Pr(&gt;F)   
-## Attrition    1 4.380e+08 438035601   9.156 0.00505 **
-## Residuals   30 1.435e+09  47843433                   
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+<pre><code>##             Df    Sum Sq  Mean Sq F value Pr(&gt;F)
+## Attrition    1 3.749e+07 37489141   0.739  0.397
+## Residuals   30 1.522e+09 50743941</code></pre>
 <p>If we check for differnces in each group of those that experienced Attrition and those that did not we can see that there is no significant difference between the groups based on the <code>Daily Rate</code>, <code>YearsAtCompany</code>, <code>YrsInCorntRl</code>, <code>YrsWithCurMgr</code>, <code>MonthlyRate</code> , <code>DistFromHome</code> and <code>Age</code>!. None of these variables showed any type of difference between the two groups at the 0.05 level of significance. Therefore we can fail to reject the hypothesis that there is some kind of a differnece in those that experienced attrition over those that did not.</p>
 <p>Now that we know there is no difference between the two groups we will proceed to try finding the most relevant variables in finding employee attrition another way. Next we prepare our data for use in a general linear model. We take this approach because we would like to see what the variables are that might help us with determining the outcome of what makes an employee decide to leave his or her job at a higher rate than others.</p>
 <pre class="r"><code>library(dummies)</code></pre>
@@ -1256,9 +1254,9 @@ summary(glm_model)</code></pre>
 <h4>Understand How workers feel about Overtime</h4>
 <p>We found that Not having overtime was very significant in determining employee attrition. This might indicate that management should limit the amount of times they ask employees to pick up extra hours, or only consider asking those that need the extra hours for personal reasons. This can go a long way into contributing to employee attrition.</p>
 </div>
-<div id="relationships-must-be-maintained" class="section level4">
-<h4>Relationships must be maintained</h4>
-<p>Employees consider relationships to be an extremeley important factor and it also contributes to employee attrition. It probably makes sense to make sure individuals are not being over worked so that they can spend more time with their families. Management should also consider offering relationship counsling as a part of employee benefits, as there is evidence to suggest a healthy relationship influences Attrition.</p>
+<div id="work-relationships-must-be-maintained" class="section level4">
+<h4>Work relationships must be maintained</h4>
+<p>Employees consider work relationships to be an extremeley important factor and it also contributes to employee attrition. It makes sense to have relationship building events that improves ties within employee to employee relationships. People generally have to like who they work with, and management can improve this by tracking how their employees are relating to each other on the job. Management should consider improving situations that cause bad relationships between workers.</p>
 </div>
 </div>
 <div id="references" class="section level2">

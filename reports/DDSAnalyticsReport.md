@@ -893,11 +893,9 @@ summary(model)
 ```
 
 ```
-##             Df    Sum Sq   Mean Sq F value  Pr(>F)   
-## Attrition    1 4.380e+08 438035601   9.156 0.00505 **
-## Residuals   30 1.435e+09  47843433                   
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+##             Df    Sum Sq  Mean Sq F value Pr(>F)
+## Attrition    1 3.749e+07 37489141   0.739  0.397
+## Residuals   30 1.522e+09 50743941
 ```
 
 If we check for differnces in each group of those that experienced Attrition and those that did not we can see that there is no significant difference between the groups based on the `Daily Rate`, `YearsAtCompany`, `YrsInCorntRl`, `YrsWithCurMgr`, `MonthlyRate` , `DistFromHome` and `Age`!. None of these variables showed any type of difference between the two groups at the 0.05 level of significance. Therefore we can fail to reject the hypothesis that there is some kind of a differnece in those that experienced attrition over those that did not.
@@ -1149,9 +1147,9 @@ We found that Environment Satisfaction Level 1, Job Invovlment Level 1, and Job 
 
 We found that Not having overtime was very significant in determining employee attrition. This might indicate that management should limit the amount of times they ask employees to pick up extra hours, or only consider asking those that need the extra hours for personal reasons. This can go a long way into contributing to employee attrition.
 
-#### Relationships must be maintained
+#### Work relationships must be maintained
 
-Employees consider relationships to be an extremeley important factor and it also contributes to employee attrition. It probably makes sense to make sure individuals are not being over worked so that they can spend more time with their families. Management should also consider offering relationship counsling as a part of employee benefits, as there is evidence to suggest a healthy relationship influences Attrition.
+Employees consider work relationships to be an extremeley important factor and it also contributes to employee attrition. It makes sense to have relationship building events that improves ties within employee to employee relationships. People generally have to like who they work with, and management can improve this by tracking how their employees are relating to each other on the job. Management should consider improving situations that cause bad relationships between workers.
 
 ## References
 
