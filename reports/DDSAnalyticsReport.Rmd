@@ -484,6 +484,7 @@ Based on a 0.05 level of significance the top factors contributing to Attrition 
 ## 4D. Attrition influential factors##
 Let's use stepwise selection method to come up with the model which has only significat variables.
 ```{r}
+library(MASS)
 full<- glm(Attrition~Age+BusinessTrvl+DailyRate+Department+DistFromHome+YrsOfEdu+EduField	+EnvSatfctn+Gender+HourlyRate+JobInvolmnt+JobLevel+JobRole+JobSatfctn+MaritalStat+MonthlyIncm+MonthlyRate+ NumCmpWorked+OverTime+PrcntSalHike+PerfRating+RlnSatfctn+StockOptLvl+TtlWrkngYrs+TrngTmsLstYr+WrkLifeBal+	YrsAtCompany+YrsInCrntRl+YrsSncLstPrn+YrsWthCurMgr, family = binomial, data=talentData)
 step<- stepAIC(full,trace=FALSE)
 step$anova
@@ -496,9 +497,7 @@ summary(model_Attrition)
 ```
 AIC of the model is 874.95.
 ```{r}
-
 library(GoodmanKruskal)
-library(MASS)
 #frame1<-ts(talentData)
 #View(frame1)
 #matrix <- GKtauDataframe(frame1[,8:16])
