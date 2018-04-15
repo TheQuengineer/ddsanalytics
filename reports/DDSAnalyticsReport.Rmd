@@ -476,9 +476,33 @@ Based on a 0.05 level of significance the top factors contributing to Attrition 
 
 ## V. Discussion And Conclusions
 
+After extensive statistical analysis we have been able to conclude that there are indeed several factors that lead to the attrition of employees. Based on what these factors are there are things the business can do to make it much harder for someone to decide if they want to leave a company. We have compiled a list of recommendations that DDSAnalytics can follow to help reduce Attrition. It should be stated that the following factors below will not guarantee employee Attrition will stop, but it will increase the chances of slowing Attrition at an organization.
 
+#### Limit Business Travel
+
+We found that Frequent business travel was a major contributor to churn in the dataset. If a company wants to reduce the the chances of someone wanting to leave a specific job they should make sure that worker has a reduced responsiblity to travel as it could make all the difference in deciding whether to change companies.
+
+#### Consider Remote Work
+
+Based on studying the significance of the distance traveled from home to get to work i.e. commuting we found that this is an extremely significant factor. Based on a 95% confidence Interval the optimal distance is somewhere between 2 miles to 6 miles. If an employee has to travel more than that one should consider offering a remote option in order to limit attrition due to the Distance from Home.
+
+#### Consider Hiring people that worked for less Companies
+
+After studying the data we found that the ideal number of companies worked for those that did experience  attrition was 1 to 3 companies on a 95% confidence interval. This indicates that people that work for multiple companies are more likely to contribute to the Attrition rate. This is an extreme solution, but one should consider the amount of companies a potential employee worked before hiring them, as it might be a key predictor as to whether or not that individual will stay or leave.
+
+#### Satisfaction Indicators
+
+We found that Environment Satisfaction Level 1, Job Invovlment Level 1, and Job Satisfaction Level 1 all contributed to employee churn in a major way. This indicates that management should consider doing things to make the work environment more comfortable so that the employees feel great about going to work every day. Employees also need to feel heavily involved in their job in as well as be satisfied doing it. It is important to conduct reviews and surveys to find out how employees feel in these areas so that an overall general pulse can be gathered on how the company is performing here.
+
+#### Understand How workers feel about Overtime
+
+We found that Not having overtime was very significant in determining employee attrition. This might indicate that management should limit the amount of times they ask employees to pick up extra hours, or only consider asking those that need the extra hours for personal reasons. This can go a long way into contributing to employee attrition.
+
+#### Relationships must be maintained
+
+Employees consider relationships to be an extremeley important factor and it also contributes to employee attrition. It probably makes sense to make sure individuals are not being over worked so that they can spend more time with their families. Management should also consider offering relationship counsling as a part of employee benefits, as there is evidence to suggest a healthy relationship influences Attrition.
 
 ## References
 
-
+[Forbes "True Or False Employees Today only stay one or Two Years : David Sturt and Todd Nordstrom "](https://www.forbes.com/sites/davidsturt/2016/01/13/true-or-false-employees-today-only-stay-one-or-two-years/#6736606b6b4c)
 

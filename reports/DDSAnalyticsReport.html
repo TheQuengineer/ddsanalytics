@@ -980,9 +980,11 @@ study_set &lt;- rbind(group1, group2)</code></pre>
 </ol>
 <pre class="r"><code>model &lt;- aov(DailyRate + MonthlyIncm + YrsAtCompany + YrsInCrntRl + YrsWthCurMgr + MonthlyRate + DistFromHome + Age ~ Attrition, data = study_set)
 summary(model)</code></pre>
-<pre><code>##             Df    Sum Sq  Mean Sq F value Pr(&gt;F)
-## Attrition    1 1.540e+07 15399863   0.193  0.664
-## Residuals   30 2.397e+09 79911658</code></pre>
+<pre><code>##             Df    Sum Sq   Mean Sq F value  Pr(&gt;F)   
+## Attrition    1 4.380e+08 438035601   9.156 0.00505 **
+## Residuals   30 1.435e+09  47843433                   
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <p>If we check for differnces in each group of those that experienced Attrition and those that did not we can see that there is no significant difference between the groups based on the <code>Daily Rate</code>, <code>YearsAtCompany</code>, <code>YrsInCorntRl</code>, <code>YrsWithCurMgr</code>, <code>MonthlyRate</code> , <code>DistFromHome</code> and <code>Age</code>!. None of these variables showed any type of difference between the two groups at the 0.05 level of significance. Therefore we can fail to reject the hypothesis that there is some kind of a differnece in those that experienced attrition over those that did not.</p>
 <p>Now that we know there is no difference between the two groups we will proceed to try finding the most relevant variables in finding employee attrition another way. Next we prepare our data for use in a general linear model. We take this approach because we would like to see what the variables are that might help us with determining the outcome of what makes an employee decide to leave his or her job at a higher rate than others.</p>
 <pre class="r"><code>library(dummies)</code></pre>
@@ -1233,9 +1235,35 @@ summary(glm_model)</code></pre>
 </div>
 <div id="v.-discussion-and-conclusions" class="section level2">
 <h2>V. Discussion And Conclusions</h2>
+<p>After extensive statistical analysis we have been able to conclude that there are indeed several factors that lead to the attrition of employees. Based on what these factors are there are things the business can do to make it much harder for someone to decide if they want to leave a company. We have compiled a list of recommendations that DDSAnalytics can follow to help reduce Attrition. It should be stated that the following factors below will not guarantee employee Attrition will stop, but it will increase the chances of slowing Attrition at an organization.</p>
+<div id="limit-business-travel" class="section level4">
+<h4>Limit Business Travel</h4>
+<p>We found that Frequent business travel was a major contributor to churn in the dataset. If a company wants to reduce the the chances of someone wanting to leave a specific job they should make sure that worker has a reduced responsiblity to travel as it could make all the difference in deciding whether to change companies.</p>
+</div>
+<div id="consider-remote-work" class="section level4">
+<h4>Consider Remote Work</h4>
+<p>Based on studying the significance of the distance traveled from home to get to work i.e. commuting we found that this is an extremely significant factor. Based on a 95% confidence Interval the optimal distance is somewhere between 2 miles to 6 miles. If an employee has to travel more than that one should consider offering a remote option in order to limit attrition due to the Distance from Home.</p>
+</div>
+<div id="consider-hiring-people-that-worked-for-less-companies" class="section level4">
+<h4>Consider Hiring people that worked for less Companies</h4>
+<p>After studying the data we found that the ideal number of companies worked for those that did experience attrition was 1 to 3 companies on a 95% confidence interval. This indicates that people that work for multiple companies are more likely to contribute to the Attrition rate. This is an extreme solution, but one should consider the amount of companies a potential employee worked before hiring them, as it might be a key predictor as to whether or not that individual will stay or leave.</p>
+</div>
+<div id="satisfaction-indicators" class="section level4">
+<h4>Satisfaction Indicators</h4>
+<p>We found that Environment Satisfaction Level 1, Job Invovlment Level 1, and Job Satisfaction Level 1 all contributed to employee churn in a major way. This indicates that management should consider doing things to make the work environment more comfortable so that the employees feel great about going to work every day. Employees also need to feel heavily involved in their job in as well as be satisfied doing it. It is important to conduct reviews and surveys to find out how employees feel in these areas so that an overall general pulse can be gathered on how the company is performing here.</p>
+</div>
+<div id="understand-how-workers-feel-about-overtime" class="section level4">
+<h4>Understand How workers feel about Overtime</h4>
+<p>We found that Not having overtime was very significant in determining employee attrition. This might indicate that management should limit the amount of times they ask employees to pick up extra hours, or only consider asking those that need the extra hours for personal reasons. This can go a long way into contributing to employee attrition.</p>
+</div>
+<div id="relationships-must-be-maintained" class="section level4">
+<h4>Relationships must be maintained</h4>
+<p>Employees consider relationships to be an extremeley important factor and it also contributes to employee attrition. It probably makes sense to make sure individuals are not being over worked so that they can spend more time with their families. Management should also consider offering relationship counsling as a part of employee benefits, as there is evidence to suggest a healthy relationship influences Attrition.</p>
+</div>
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>
+<p><a href="https://www.forbes.com/sites/davidsturt/2016/01/13/true-or-false-employees-today-only-stay-one-or-two-years/#6736606b6b4c">Forbes “True Or False Employees Today only stay one or Two Years : David Sturt and Todd Nordstrom”</a></p>
 </div>
 
 
