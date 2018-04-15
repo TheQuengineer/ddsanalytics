@@ -341,7 +341,7 @@ As we can see above, only Ages 19 to 60 exists within our dataset.
 
 Now that the data has been prepared and formatted accordingly it is neccessary to explore it to its depths.
 
-#### Descriptive statistics
+####3.B Descriptive statistics####
 
 Lets check descriptive statistics for some of the data we have
 
@@ -418,8 +418,6 @@ table %>%
   </tr>
 </tbody>
 </table>
-
-####3.B####
 The average Hourly rate is $65.88/hour, the average Monthly Rate is $14,312.21/month, the average Monthly Income is $6,530.21/month, average Total Worked Years is 11.34 years, average Worked years at the company is 7.04 years, average Age of the employees is 37 years and average Years of Education of the employees is 2.9 years ('Bachelor' degree).
 
 Lets check histograms of Hourly Rate and Monthly income.
@@ -436,9 +434,6 @@ hist(talentData$MonthlyIncm, col = "darkgreen", xlab="Monthly Income", main="His
 ```
 
 ![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-4-2.png)<!-- -->
-
-#### 3.B####
-
 On the histograms we can see almost equal spread of hourly rates within the company, but we can not say the same about monthly income, it means that employees work different amount of hours (some of them are part time, and some of them work with overtime (more then 40hours), we do not have information if any bonuses were paid in the company, so it does not make sense to continue analize working hours). 
 
 #### 3.C####
@@ -788,7 +783,7 @@ ggcorrplot(correlations, hc.order = TRUE,
 
 The chart above shows us that there are no negative linear relationships in our data between our variables. We can also see that there are some positive relationships between variables that are linearly correlated and we have now been able to narrow these down so they can be examined in depth.
 
-
+####4.C####
 Let's check if there is any relationship between Age and Income. Does Gender makes any effect on the Monthly income?
 
 
@@ -827,7 +822,6 @@ summary(model_AgeIncome)
 ## Multiple R-squared:  0.2434,	Adjusted R-squared:  0.2424 
 ## F-statistic: 234.7 on 2 and 1459 DF,  p-value: < 2.2e-16
 ```
-####4.C####
 From regression analysis above we can say that Gender does not make significant change in the Monthly employee income. But Age is indeed significant variable (p<0.0001), it can explain 24% of monthly income change.
 
 #### What Factors Cause Employee Turnover?
@@ -893,9 +887,11 @@ summary(model)
 ```
 
 ```
-##             Df    Sum Sq   Mean Sq F value Pr(>F)
-## Attrition    1 9.589e+07  95890476   0.843  0.366
-## Residuals   30 3.414e+09 113791491
+##             Df    Sum Sq   Mean Sq F value Pr(>F)  
+## Attrition    1 2.910e+08 290953534   3.474 0.0721 .
+## Residuals   30 2.512e+09  83743823                 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
 If we check for differnces in each group of those that experienced Attrition and those that did not we can see that there is no significant difference between the groups based on the `Daily Rate`, `YearsAtCompany`, `YrsInCorntRl`, `YrsWithCurMgr`, `MonthlyRate` , `DistFromHome` and `Age`!. None of these variables showed any type of difference between the two groups at the 0.05 level of significance. Therefore we can fail to reject the hypothesis that there is some kind of a differnece in those that experienced attrition over those that did not.
@@ -1131,6 +1127,219 @@ Based on a 0.05 level of significance the top factors contributing to Attrition 
 | OverTimeNo                                    | < 2e-16  | None As it is a Factor |
 | RlnSatfctn1                                   | 0.000226 | None As it is a Factor |
 
+
+
+
+
+
+## 4D. Attrition influential factors##
+Let's use stepwise selection method to come up with the model which has only significat variables.
+
+```r
+library(MASS)
+```
+
+```
+## 
+## Attaching package: 'MASS'
+```
+
+```
+## The following object is masked from 'package:dplyr':
+## 
+##     select
+```
+
+```r
+full<- glm(Attrition~Age+BusinessTrvl+DailyRate+Department+DistFromHome+YrsOfEdu+EduField	+EnvSatfctn+Gender+HourlyRate+JobInvolmnt+JobLevel+JobRole+JobSatfctn+MaritalStat+MonthlyIncm+MonthlyRate+ NumCmpWorked+OverTime+PrcntSalHike+PerfRating+RlnSatfctn+StockOptLvl+TtlWrkngYrs+TrngTmsLstYr+WrkLifeBal+	YrsAtCompany+YrsInCrntRl+YrsSncLstPrn+YrsWthCurMgr, family = binomial, data=talentData)
+step<- stepAIC(full,trace=FALSE)
+step$anova
+```
+
+```
+## Stepwise Model Path 
+## Analysis of Deviance Table
+## 
+## Initial Model:
+## Attrition ~ Age + BusinessTrvl + DailyRate + Department + DistFromHome + 
+##     YrsOfEdu + EduField + EnvSatfctn + Gender + HourlyRate + 
+##     JobInvolmnt + JobLevel + JobRole + JobSatfctn + MaritalStat + 
+##     MonthlyIncm + MonthlyRate + NumCmpWorked + OverTime + PrcntSalHike + 
+##     PerfRating + RlnSatfctn + StockOptLvl + TtlWrkngYrs + TrngTmsLstYr + 
+##     WrkLifeBal + YrsAtCompany + YrsInCrntRl + YrsSncLstPrn + 
+##     YrsWthCurMgr
+## 
+## Final Model:
+## Attrition ~ Age + BusinessTrvl + DailyRate + DistFromHome + EduField + 
+##     EnvSatfctn + Gender + JobInvolmnt + JobLevel + JobRole + 
+##     JobSatfctn + NumCmpWorked + OverTime + RlnSatfctn + StockOptLvl + 
+##     TtlWrkngYrs + TrngTmsLstYr + WrkLifeBal + YrsAtCompany + 
+##     YrsInCrntRl + YrsSncLstPrn + YrsWthCurMgr
+## 
+## 
+##             Step Df   Deviance Resid. Df Resid. Dev      AIC
+## 1                                   1402   767.0627 887.0627
+## 2   - PerfRating  1 0.08283707      1403   767.1455 885.1455
+## 3 - PrcntSalHike  1 0.19333621      1404   767.3389 883.3389
+## 4  - MaritalStat  2 2.29885387      1406   769.6377 881.6377
+## 5   - Department  2 2.15967994      1408   771.7974 879.7974
+## 6  - MonthlyRate  1 0.30982273      1409   772.1072 878.1072
+## 7     - YrsOfEdu  1 0.49508930      1410   772.6023 876.6023
+## 8   - HourlyRate  1 0.62593017      1411   773.2282 875.2282
+## 9  - MonthlyIncm  1 1.72608005      1412   774.9543 874.9543
+```
+
+```r
+model_Attrition <- glm(Attrition ~ Age + BusinessTrvl + DailyRate + DistFromHome + EduField + 
+    EnvSatfctn + Gender + JobInvolmnt + JobLevel + JobRole + 
+    JobSatfctn + NumCmpWorked + OverTime + RlnSatfctn + StockOptLvl + 
+    TtlWrkngYrs + TrngTmsLstYr + WrkLifeBal + YrsAtCompany + 
+    YrsInCrntRl + YrsSncLstPrn + YrsWthCurMgr, family = binomial, data=talentData)
+summary(model_Attrition)
+```
+
+```
+## 
+## Call:
+## glm(formula = Attrition ~ Age + BusinessTrvl + DailyRate + DistFromHome + 
+##     EduField + EnvSatfctn + Gender + JobInvolmnt + JobLevel + 
+##     JobRole + JobSatfctn + NumCmpWorked + OverTime + RlnSatfctn + 
+##     StockOptLvl + TtlWrkngYrs + TrngTmsLstYr + WrkLifeBal + YrsAtCompany + 
+##     YrsInCrntRl + YrsSncLstPrn + YrsWthCurMgr, family = binomial, 
+##     data = talentData)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -1.7445  -0.4451  -0.2018  -0.0622   3.4579  
+## 
+## Coefficients:
+##                                 Estimate Std. Error z value Pr(>|z|)    
+## (Intercept)                    3.6181563  1.2706264   2.848 0.004406 ** 
+## Age                           -0.0260159  0.0141398  -1.840 0.065781 .  
+## BusinessTrvlTravel_Frequently  2.2155197  0.4504153   4.919 8.71e-07 ***
+## BusinessTrvlTravel_Rarely      1.1947786  0.4150545   2.879 0.003994 ** 
+## DailyRate                     -0.0004036  0.0002330  -1.733 0.083178 .  
+## DistFromHome                   0.0565932  0.0115241   4.911 9.07e-07 ***
+## EduFieldLife Sciences         -0.7714993  0.8046792  -0.959 0.337676    
+## EduFieldMarketing             -0.2933875  0.8518262  -0.344 0.730529    
+## EduFieldMedical               -0.7990737  0.8063506  -0.991 0.321698    
+## EduFieldOther                 -0.7016476  0.8824394  -0.795 0.426542    
+## EduFieldTechnical Degree       0.3523726  0.8278938   0.426 0.670381    
+## EnvSatfctn2                   -1.1018306  0.2921475  -3.771 0.000162 ***
+## EnvSatfctn3                   -1.2434005  0.2695765  -4.612 3.98e-06 ***
+## EnvSatfctn4                   -1.3715407  0.2689086  -5.100 3.39e-07 ***
+## GenderMale                     0.3754770  0.1951634   1.924 0.054366 .  
+## JobInvolmnt2                  -1.1922220  0.3705098  -3.218 0.001292 ** 
+## JobInvolmnt3                  -1.5416306  0.3499986  -4.405 1.06e-05 ***
+## JobInvolmnt4                  -2.1188441  0.4823939  -4.392 1.12e-05 ***
+## JobLevel2                     -1.6674659  0.4475994  -3.725 0.000195 ***
+## JobLevel3                     -0.4012516  0.5658105  -0.709 0.478224    
+## JobLevel4                     -1.6470379  0.9884982  -1.666 0.095673 .  
+## JobLevel5                      0.7434310  1.2848912   0.579 0.562863    
+## JobRoleHuman Resources         0.5335634  0.7531066   0.708 0.478645    
+## JobRoleLaboratory Technician   0.7308250  0.5930632   1.232 0.217841    
+## JobRoleManager                -0.9794199  1.0253470  -0.955 0.339472    
+## JobRoleManufacturing Director  0.4472787  0.5610328   0.797 0.425311    
+## JobRoleResearch Director      -2.1787101  1.0751884  -2.026 0.042729 *  
+## JobRoleResearch Scientist     -0.3235446  0.6129802  -0.528 0.597623    
+## JobRoleSales Executive         1.3251283  0.4753929   2.787 0.005313 ** 
+## JobRoleSales Representative    1.3392198  0.6642588   2.016 0.043788 *  
+## JobSatfctn2                   -0.6838494  0.2862798  -2.389 0.016906 *  
+## JobSatfctn3                   -0.6777859  0.2538438  -2.670 0.007583 ** 
+## JobSatfctn4                   -1.2901946  0.2699270  -4.780 1.75e-06 ***
+## NumCmpWorked                   0.2101087  0.0410569   5.117 3.10e-07 ***
+## OverTimeYes                    2.1658772  0.2095253  10.337  < 2e-16 ***
+## RlnSatfctn2                   -0.9841531  0.2974752  -3.308 0.000938 ***
+## RlnSatfctn3                   -1.0310791  0.2678812  -3.849 0.000119 ***
+## RlnSatfctn4                   -1.0356753  0.2682320  -3.861 0.000113 ***
+## StockOptLvl1                  -1.4613095  0.2185146  -6.687 2.27e-11 ***
+## StockOptLvl2                  -1.4527612  0.3754485  -3.869 0.000109 ***
+## StockOptLvl3                  -0.7644229  0.4069912  -1.878 0.060350 .  
+## TtlWrkngYrs                   -0.0688767  0.0306138  -2.250 0.024458 *  
+## TrngTmsLstYr                  -0.1707231  0.0762054  -2.240 0.025071 *  
+## WrkLifeBal2                   -0.9765924  0.3870782  -2.523 0.011636 *  
+## WrkLifeBal3                   -1.5026213  0.3646337  -4.121 3.77e-05 ***
+## WrkLifeBal4                   -1.0953274  0.4412842  -2.482 0.013060 *  
+## YrsAtCompany                   0.0988123  0.0427345   2.312 0.020765 *  
+## YrsInCrntRl                   -0.1460829  0.0511317  -2.857 0.004277 ** 
+## YrsSncLstPrn                   0.1664042  0.0454302   3.663 0.000249 ***
+## YrsWthCurMgr                  -0.1413055  0.0504870  -2.799 0.005128 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 1282.54  on 1461  degrees of freedom
+## Residual deviance:  774.95  on 1412  degrees of freedom
+## AIC: 874.95
+## 
+## Number of Fisher Scoring iterations: 7
+```
+AIC of the model is 874.95.
+
+```r
+library(GoodmanKruskal)
+#frame1<-ts(talentData)
+#View(frame1)
+#matrix <- GKtauDataframe(frame1[,8:16])
+talentDatanew<- as.data.frame(talentData)
+matrix1 <- GKtauDataframe(talentDatanew[,c(2,1,3,4,6,8,11,12,14)])
+matrix2 <- GKtauDataframe(talentDatanew[,c(2,15,16,17,21,22,25,26)])
+matrix3 <- GKtauDataframe(talentDatanew[,c(2,27:33)])
+plot(matrix1, diagSize = 0.8)
+```
+
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
+
+```r
+plot(matrix2, diagSize = 0.8)
+```
+
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-23-2.png)<!-- -->
+
+```r
+plot(matrix3, diagSize = 0.8)
+```
+
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-23-3.png)<!-- -->
+
+```r
+variables<-c("Age","BusinessTrvl","DailyRate","DistFromHome","EduField", 
+    "EnvSatfctn","Gender","JobInvolmnt","JobLevel","JobRole", 
+    "JobSatfctn","NumCmpWorked","OverTime","RlnSatfctn","StockOptLvl", 
+    "TtlWrkngYrs","TrngTmsLstYr","WrkLifeBal","YrsAtCompany", 
+    "YrsInCrntRl","YrsSncLstPrn","YrsWthCurMgr")
+Teta<-c(0.08,0.02,0.59,0.03,0.01,0.02,0,0.02,0.05,0.06,0.01,0.02,0.06,0,0.04,0.08,0.01,0.01,0.06,0.04,0.01,0.05)
+df <- data.frame(variables,Teta)
+mytheme <- theme(plot.title = element_text(face = "bold.italic",size= 14, color = "black"), axis.text.x = element_text(face ="bold.italic"), axis.text.y = element_text(face = "bold.italic", size = 7))
+df$variables <- factor(variables, levels = df$variables[order(df$Teta)])
+ggplot(data = df, aes(x = df$variables, y = df$Teta), horis=TRUE)+geom_bar(stat = "identity")+labs(title = "Attrition influential factors", x="Variables",y="Influential Percent")+mytheme+coord_flip()
+```
+
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-23-4.png)<!-- -->
+As we we can see from the histogram above, the most influential factor for Attrition is DailyRate, it can explain 59% of the Attrition Variation, Total working hours and Age can explain 8% the Attrition Variation. In order to keep percent of the attrrition in the company low, managers should maintain competitive avarage payroll daily rates, provide enough of working hours and do not hire too young employees.
+Lets figure out in what department the company has the highest attrition percent.
+
+```r
+plot(talentData$Department, talentData$Attrition, xlab = "name of the department", ylab="Attrition")
+```
+
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
+We can see on a plot above that Sales and Human Resources departments have 20% of employee attrition, and around 14% at Research & Development depatment.
+
+```r
+demographics <- talentData[,c("JobRole", "Gender", "EduField")]
+theme_set(theme_light())
+ggplot(talentData, aes(talentData$JobRole)) + 
+  geom_bar(aes(fill=Attrition), width = 0.5) +
+  labs(title = "Attrition by Job Role",
+       x = "Job Role",
+       y = "Frequency") +
+  coord_flip()
+```
+
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-25-1.png)<!-- -->
+Laboratory technician has the highest percent of Attrition. Our suggestion to review their daily rates and provide enough working hours. 
 
 ## V. Discussion And Conclusions
 

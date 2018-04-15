@@ -479,7 +479,7 @@ Based on a 0.05 level of significance the top factors contributing to Attrition 
 
 
 
-
+The AIC of the Model is 819.68
 
 ## 4D. Attrition influential factors##
 Let's use stepwise selection method to come up with the model which has only significat variables.
@@ -536,7 +536,6 @@ ggplot(talentData, aes(talentData$JobRole)) +
   coord_flip()
 ```
 Laboratory technician has the highest percent of Attrition. Our suggestion to review their daily rates and provide enough working hours. 
-
 
 ## V. Discussion And Conclusions
 
