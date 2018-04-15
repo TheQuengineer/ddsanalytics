@@ -830,9 +830,14 @@ summary(model_AgeIncome)
 ####4.C####
 From regression analysis above we can say that Gender does not make significant change in the Monthly employee income. But Age is indeed significant variable (p<0.0001), it can explain 24% of monthly income change.
 
-#### What Factor Causes Employee Attrition?
+#### What Factors Cause Employee Turnover?
 
-Our goal is to determine which indicators might lead to employee attrition. The best way for us to achieve this is to locate the most significant variables that could likely separate those in the data set that had an Attrition value of `Yes` from those that had an Attrition value of `No`. This means that we want to determine the values and the coefficients for the variables that would lead to this outcome based on the data. As a result we decided to explore this using One Way ANOVA between these two groups just to detect if there is even a difference. If there is a difference, we will then be able to narrow down exactly what those differences are.
+Our goal is to determine which indicators might lead to employee attrition. The best way for us to find what causes this is to study the subset of data points that have the flag `Yes` marked for attrition. Once we have our dataset we will need to determine an appropriate sample size from this population in order to perform ANOVA with a good statistical power.
+
+
+```r
+attrition_set <- filter(talentData, Attrition == "Yes")
+```
 
 ##### Determine Sample Size
 
@@ -858,7 +863,264 @@ pwr.anova.test(k=2, f=0.5, sig.level=0.05, power=0.8)
 ## NOTE: n is number in each group
 ```
 
-We decided to go with a comparison for two groups with an effect size of `0.5` because we are dealing with a medium size dataset. In addition to that we want to use a significance level of `0.05` which will be based on a 95% confidence level. Finally, the power level we set is `0.8`. Based on our calculation we will need at least 17 samples from each group to have good results that will limit our Type I and Type II error Types.
+We decided to go with a comparison for two groups with an effect size of `0.5` because we are dealing with a medium size dataset. In addition to that we want to use a significance level of `0.05` which will be based on a 95% confidence level. Finally, the power level we set is `0.8`. Based on our calculation we will need at least 17 samples from each group to have good results that will limit our Type I and Type II error types.
+
+Now that we know our sample size, we separate them into two groups. The two groups are randomly chosen observations that had an Attrition value of Yes and the other group are random samples that had an attrition value of No.
+
+
+```r
+group1 <- sample_n(filter(talentData, Attrition == "Yes"), size = 16)
+group2 <- sample_n(filter(talentData, Attrition == "No"), size = 16)
+
+
+study_set <- rbind(group1, group2)
+```
+
+##### Assumptions
+
+Below are a list of Assumptions we will proceed this test under
+
+1. `Random Sample`: Our Data was indeed sampled randomly from the dataset using computation, therefore every data point had equal opportunity of being chosen.
+2. `Independent Observations`: It is assumed that all the data points within the population are independent of each other. No employee data is assumed to affect the outcome of another employee based on the variables that are within our model. As a result we can assume this assumption has not been violated.
+3. `Equal Variances`: In order to determine whether or not the variances were equal we performed a lavene test on the logged incomes to be sure there is no difference
+4. `Normality` : Based on our EDA we have discovered that our data has come from a normaly distributed population due to a large sample size which allows for the central limit theorem to kick in..
+5. `Equal Sample Size`: Sample size is set at 16 for each group.
+
+
+```r
+model <- aov(DailyRate + MonthlyIncm + YrsAtCompany + YrsInCrntRl + YrsWthCurMgr + MonthlyRate + DistFromHome + Age ~ Attrition, data = study_set)
+summary(model)
+```
+
+```
+##             Df    Sum Sq   Mean Sq F value Pr(>F)
+## Attrition    1 1.149e+08 114931751   0.928  0.343
+## Residuals   30 3.714e+09 123816500
+```
+
+If we check for differnces in each group of those that experienced Attrition and those that did not we can see that there is no significant difference between the groups based on the `Daily Rate`, `YearsAtCompany`, `YrsInCorntRl`, `YrsWithCurMgr`, `MonthlyRate` , `DistFromHome` and `Age`!. None of these variables showed any type of difference between the two groups at the 0.05 level of significance. Therefore we can fail to reject the hypothesis that there is some kind of a differnece in those that experienced attrition over those that did not.
+
+Now that we know there is no difference between the two groups we will proceed to try finding the most relevant variables in finding employee attrition another way. Next we prepare our data for use in a general linear model. We take this approach because we would like to see what the variables are that might help us with determining the outcome of what makes an employee decide to leave his or her job at a higher rate than others.
+
+
+```r
+library(dummies)
+```
+
+```
+## dummies-1.5.6 provided by Decision Patterns
+```
+
+```r
+encoded_dataset <- dummy.data.frame(as.data.frame(talentData), names=c("BusinessTrvl", "Department", "EduField",
+                                                             "EmployeeCnt", "EnvSatfctn", "Gender",
+                                                             "JobInvolmnt", "JobLevel", "JobRole",
+                                                             "JobSatfctn", "MaritalStat", "OverTime",
+                                                             "PerfRating", "RlnSatfctn", "StockOptLvl",
+                                                             "WrkLifeBal"))
+encoded_dataset <- encoded_dataset %>% mutate(Attrition = ifelse(Attrition == "Yes", 1 , 0))
+```
+
+
+Now that our data is encoded properly we will try locating the significant variables using the General Linear Model approach
+
+
+
+```r
+glm_model <- glm(formula=Attrition~.,data=encoded_dataset)
+
+summary(glm_model)
+```
+
+```
+## 
+## Call:
+## glm(formula = Attrition ~ ., data = encoded_dataset)
+## 
+## Deviance Residuals: 
+##      Min        1Q    Median        3Q       Max  
+## -0.57128  -0.20363  -0.07768   0.09682   1.14256  
+## 
+## Coefficients: (15 not defined because of singularities)
+##                                      Estimate Std. Error t value Pr(>|t|)
+## (Intercept)                         7.773e-01  1.826e-01   4.256 2.22e-05
+## Age                                -3.204e-03  1.304e-03  -2.457 0.014121
+## `BusinessTrvlNon-Travel`           -6.689e-02  2.833e-02  -2.361 0.018340
+## BusinessTrvlTravel_Frequently       8.714e-02  2.152e-02   4.050 5.41e-05
+## BusinessTrvlTravel_Rarely                  NA         NA      NA       NA
+## DailyRate                          -3.087e-05  2.085e-05  -1.480 0.138977
+## `DepartmentHuman Resources`        -8.039e-02  1.190e-01  -0.675 0.499554
+## `DepartmentResearch & Development`  3.209e-02  6.936e-02   0.463 0.643655
+## DepartmentSales                            NA         NA      NA       NA
+## DistFromHome                        4.147e-03  1.032e-03   4.020 6.12e-05
+## YrsOfEdu                            5.067e-03  8.386e-03   0.604 0.545781
+## `EduFieldHuman Resources`           1.828e-02  8.581e-02   0.213 0.831374
+## `EduFieldLife Sciences`            -9.458e-02  3.056e-02  -3.095 0.002010
+## EduFieldMarketing                  -5.503e-02  4.122e-02  -1.335 0.182002
+## EduFieldMedical                    -1.087e-01  3.162e-02  -3.437 0.000605
+## EduFieldOther                      -1.091e-01  4.493e-02  -2.428 0.015293
+## `EduFieldTechnical Degree`                 NA         NA      NA       NA
+## EmployeeNum                        -7.759e-06  1.393e-05  -0.557 0.577757
+## EnvSatfctn1                         1.260e-01  2.430e-02   5.184 2.49e-07
+## EnvSatfctn2                         1.447e-02  2.439e-02   0.594 0.552917
+## EnvSatfctn3                        -7.351e-04  2.127e-02  -0.035 0.972436
+## EnvSatfctn4                                NA         NA      NA       NA
+## GenderFemale                       -2.785e-02  1.709e-02  -1.630 0.103381
+## GenderMale                                 NA         NA      NA       NA
+## HourlyRate                         -9.044e-05  4.110e-04  -0.220 0.825863
+## JobInvolmnt1                        2.250e-01  4.402e-02   5.111 3.64e-07
+## JobInvolmnt2                        7.582e-02  3.143e-02   2.412 0.015984
+## JobInvolmnt3                        3.728e-02  2.876e-02   1.296 0.195211
+## JobInvolmnt4                               NA         NA      NA       NA
+## JobLevel1                          -1.204e-01  1.187e-01  -1.014 0.310795
+## JobLevel2                          -2.481e-01  1.018e-01  -2.438 0.014908
+## JobLevel3                          -1.362e-01  7.925e-02  -1.718 0.086024
+## JobLevel4                          -1.124e-01  5.545e-02  -2.028 0.042779
+## JobLevel5                                  NA         NA      NA       NA
+## `JobRoleHealthcare Representative` -1.678e-01  8.737e-02  -1.921 0.054991
+## `JobRoleHuman Resources`           -4.825e-02  1.248e-01  -0.386 0.699230
+## `JobRoleLaboratory Technician`     -1.264e-01  8.004e-02  -1.579 0.114473
+## JobRoleManager                     -1.505e-01  8.916e-02  -1.688 0.091592
+## `JobRoleManufacturing Director`    -1.506e-01  8.699e-02  -1.731 0.083699
+## `JobRoleResearch Director`         -2.165e-01  1.030e-01  -2.103 0.035623
+## `JobRoleResearch Scientist`        -2.199e-01  7.973e-02  -2.758 0.005886
+## `JobRoleSales Executive`           -4.887e-02  5.036e-02  -0.970 0.331984
+## `JobRoleSales Representative`              NA         NA      NA       NA
+## JobSatfctn1                         1.201e-01  2.393e-02   5.020 5.84e-07
+## JobSatfctn2                         5.797e-02  2.431e-02   2.385 0.017210
+## JobSatfctn3                         5.360e-02  2.132e-02   2.514 0.012037
+## JobSatfctn4                                NA         NA      NA       NA
+## MaritalStatDivorced                -3.610e-02  3.673e-02  -0.983 0.325873
+## MaritalStatMarried                 -2.866e-02  2.966e-02  -0.966 0.334119
+## MaritalStatSingle                          NA         NA      NA       NA
+## MonthlyIncm                        -9.972e-06  7.913e-06  -1.260 0.207824
+## MonthlyRate                         7.034e-07  1.173e-06   0.600 0.548803
+## NumCmpWorked                        1.850e-02  3.742e-03   4.944 8.58e-07
+## OverTimeNo                         -2.099e-01  1.859e-02 -11.291  < 2e-16
+## OverTimeYes                                NA         NA      NA       NA
+## PrcntSalHike                       -6.310e-04  3.610e-03  -0.175 0.861264
+## PerfRating3                        -9.834e-03  3.637e-02  -0.270 0.786910
+## PerfRating4                                NA         NA      NA       NA
+## RlnSatfctn1                         9.118e-02  2.466e-02   3.698 0.000226
+## RlnSatfctn2                         2.191e-02  2.407e-02   0.910 0.362988
+## RlnSatfctn3                         1.611e-02  2.158e-02   0.746 0.455507
+## RlnSatfctn4                                NA         NA      NA       NA
+## StockOptLvl0                        4.542e-02  4.451e-02   1.020 0.307780
+## StockOptLvl1                       -5.806e-02  3.748e-02  -1.549 0.121574
+## StockOptLvl2                       -5.689e-02  4.317e-02  -1.318 0.187708
+## StockOptLvl3                               NA         NA      NA       NA
+## TtlWrkngYrs                        -3.505e-03  2.407e-03  -1.456 0.145576
+## TrngTmsLstYr                       -1.098e-02  6.515e-03  -1.685 0.092201
+## WrkLifeBal1                         1.066e-01  4.434e-02   2.403 0.016369
+## WrkLifeBal2                        -1.054e-02  3.121e-02  -0.338 0.735709
+## WrkLifeBal3                        -5.113e-02  2.803e-02  -1.824 0.068337
+## WrkLifeBal4                                NA         NA      NA       NA
+## YrsAtCompany                        5.286e-03  2.941e-03   1.797 0.072517
+## YrsInCrntRl                        -7.403e-03  3.835e-03  -1.931 0.053718
+## YrsSncLstPrn                        9.218e-03  3.362e-03   2.742 0.006191
+## YrsWthCurMgr                       -7.785e-03  3.918e-03  -1.987 0.047089
+##                                       
+## (Intercept)                        ***
+## Age                                *  
+## `BusinessTrvlNon-Travel`           *  
+## BusinessTrvlTravel_Frequently      ***
+## BusinessTrvlTravel_Rarely             
+## DailyRate                             
+## `DepartmentHuman Resources`           
+## `DepartmentResearch & Development`    
+## DepartmentSales                       
+## DistFromHome                       ***
+## YrsOfEdu                              
+## `EduFieldHuman Resources`             
+## `EduFieldLife Sciences`            ** 
+## EduFieldMarketing                     
+## EduFieldMedical                    ***
+## EduFieldOther                      *  
+## `EduFieldTechnical Degree`            
+## EmployeeNum                           
+## EnvSatfctn1                        ***
+## EnvSatfctn2                           
+## EnvSatfctn3                           
+## EnvSatfctn4                           
+## GenderFemale                          
+## GenderMale                            
+## HourlyRate                            
+## JobInvolmnt1                       ***
+## JobInvolmnt2                       *  
+## JobInvolmnt3                          
+## JobInvolmnt4                          
+## JobLevel1                             
+## JobLevel2                          *  
+## JobLevel3                          .  
+## JobLevel4                          *  
+## JobLevel5                             
+## `JobRoleHealthcare Representative` .  
+## `JobRoleHuman Resources`              
+## `JobRoleLaboratory Technician`        
+## JobRoleManager                     .  
+## `JobRoleManufacturing Director`    .  
+## `JobRoleResearch Director`         *  
+## `JobRoleResearch Scientist`        ** 
+## `JobRoleSales Executive`              
+## `JobRoleSales Representative`         
+## JobSatfctn1                        ***
+## JobSatfctn2                        *  
+## JobSatfctn3                        *  
+## JobSatfctn4                           
+## MaritalStatDivorced                   
+## MaritalStatMarried                    
+## MaritalStatSingle                     
+## MonthlyIncm                           
+## MonthlyRate                           
+## NumCmpWorked                       ***
+## OverTimeNo                         ***
+## OverTimeYes                           
+## PrcntSalHike                          
+## PerfRating3                           
+## PerfRating4                           
+## RlnSatfctn1                        ***
+## RlnSatfctn2                           
+## RlnSatfctn3                           
+## RlnSatfctn4                           
+## StockOptLvl0                          
+## StockOptLvl1                          
+## StockOptLvl2                          
+## StockOptLvl3                          
+## TtlWrkngYrs                           
+## TrngTmsLstYr                       .  
+## WrkLifeBal1                        *  
+## WrkLifeBal2                           
+## WrkLifeBal3                        .  
+## WrkLifeBal4                           
+## YrsAtCompany                       .  
+## YrsInCrntRl                        .  
+## YrsSncLstPrn                       ** 
+## YrsWthCurMgr                       *  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for gaussian family taken to be 0.09833113)
+## 
+##     Null deviance: 195.87  on 1461  degrees of freedom
+## Residual deviance: 137.76  on 1401  degrees of freedom
+## AIC: 819.68
+## 
+## Number of Fisher Scoring iterations: 2
+```
+
+Based on a 0.05 level of significance the top factors contributing to customer churn in the data set are listed in the table below
+
+| Significant Variables at 0.05 Alpha           | P-value |
+|-----------------------------------------------|----------|
+| BusinessTrvlTravel_Frequently                 | 5.41e-05 |
+| DistFromHome                                  | 6.12e-05 |
+| EduFieldMedical                               | 0.000605 |
+| EnvSatfctn1                                   | 2.49e-07 |
+| JobInvolmnt1                                  | 3.64e-07 |
+| JobSatfctn1                                   | 5.84e-07 |
+| NumCmpWorked                                  | 8.58e-07 |
+| OverTimeNo                                    | < 2e-16  |
+| RlnSatfctn1                                   | 0.000226 |
 
 
 #### Can This be stopped?

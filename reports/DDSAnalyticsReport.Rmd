@@ -386,9 +386,13 @@ summary(model_AgeIncome)
 ####4.C####
 From regression analysis above we can say that Gender does not make significant change in the Monthly employee income. But Age is indeed significant variable (p<0.0001), it can explain 24% of monthly income change.
 
-#### What Factor Causes Employee Attrition?
+#### What Factors Cause Employee Turnover?
 
-Our goal is to determine which indicators might lead to employee attrition. The best way for us to achieve this is to locate the most significant variables that could likely separate those in the data set that had an Attrition value of `Yes` from those that had an Attrition value of `No`. This means that we want to determine the values and the coefficients for the variables that would lead to this outcome based on the data. As a result we decided to explore this using One Way ANOVA between these two groups just to detect if there is even a difference. If there is a difference, we will then be able to narrow down exactly what those differences are.
+Our goal is to determine which indicators might lead to employee attrition. The best way for us to find what causes this is to study the subset of data points that have the flag `Yes` marked for attrition. Once we have our dataset we will need to determine an appropriate sample size from this population in order to perform ANOVA with a good statistical power.
+
+``` {r}
+attrition_set <- filter(talentData, Attrition == "Yes")
+```
 
 ##### Determine Sample Size
 
@@ -400,7 +404,74 @@ library(pwr)
 pwr.anova.test(k=2, f=0.5, sig.level=0.05, power=0.8)
 ```
 
-We decided to go with a comparison for two groups with an effect size of `0.5` because we are dealing with a medium size dataset. In addition to that we want to use a significance level of `0.05` which will be based on a 95% confidence level. Finally, the power level we set is `0.8`. Based on our calculation we will need at least 17 samples from each group to have good results that will limit our Type I and Type II error Types.
+We decided to go with a comparison for two groups with an effect size of `0.5` because we are dealing with a medium size dataset. In addition to that we want to use a significance level of `0.05` which will be based on a 95% confidence level. Finally, the power level we set is `0.8`. Based on our calculation we will need at least 17 samples from each group to have good results that will limit our Type I and Type II error types.
+
+Now that we know our sample size, we separate them into two groups. The two groups are randomly chosen observations that had an Attrition value of Yes and the other group are random samples that had an attrition value of No.
+
+```{r}
+
+group1 <- sample_n(filter(talentData, Attrition == "Yes"), size = 16)
+group2 <- sample_n(filter(talentData, Attrition == "No"), size = 16)
+
+
+study_set <- rbind(group1, group2)
+```
+
+##### Assumptions
+
+Below are a list of Assumptions we will proceed this test under
+
+1. `Random Sample`: Our Data was indeed sampled randomly from the dataset using computation, therefore every data point had equal opportunity of being chosen.
+2. `Independent Observations`: It is assumed that all the data points within the population are independent of each other. No employee data is assumed to affect the outcome of another employee based on the variables that are within our model. As a result we can assume this assumption has not been violated.
+3. `Equal Variances`: In order to determine whether or not the variances were equal we performed a lavene test on the logged incomes to be sure there is no difference
+4. `Normality` : Based on our EDA we have discovered that our data has come from a normaly distributed population due to a large sample size which allows for the central limit theorem to kick in..
+5. `Equal Sample Size`: Sample size is set at 16 for each group.
+
+``` {r}
+
+model <- aov(DailyRate + MonthlyIncm + YrsAtCompany + YrsInCrntRl + YrsWthCurMgr + MonthlyRate + DistFromHome + Age ~ Attrition, data = study_set)
+summary(model)
+```
+
+If we check for differnces in each group of those that experienced Attrition and those that did not we can see that there is no significant difference between the groups based on the `Daily Rate`, `YearsAtCompany`, `YrsInCorntRl`, `YrsWithCurMgr`, `MonthlyRate` , `DistFromHome` and `Age`!. None of these variables showed any type of difference between the two groups at the 0.05 level of significance. Therefore we can fail to reject the hypothesis that there is some kind of a differnece in those that experienced attrition over those that did not.
+
+Now that we know there is no difference between the two groups we will proceed to try finding the most relevant variables in finding employee attrition another way. Next we prepare our data for use in a general linear model. We take this approach because we would like to see what the variables are that might help us with determining the outcome of what makes an employee decide to leave his or her job at a higher rate than others.
+
+```{r}
+library(dummies)
+
+encoded_dataset <- dummy.data.frame(as.data.frame(talentData), names=c("BusinessTrvl", "Department", "EduField",
+                                                             "EmployeeCnt", "EnvSatfctn", "Gender",
+                                                             "JobInvolmnt", "JobLevel", "JobRole",
+                                                             "JobSatfctn", "MaritalStat", "OverTime",
+                                                             "PerfRating", "RlnSatfctn", "StockOptLvl",
+                                                             "WrkLifeBal"))
+encoded_dataset <- encoded_dataset %>% mutate(Attrition = ifelse(Attrition == "Yes", 1 , 0))
+```
+
+
+Now that our data is encoded properly we will try locating the significant variables using the General Linear Model approach
+
+
+```{r}
+glm_model <- glm(formula=Attrition~.,data=encoded_dataset)
+
+summary(glm_model)
+```
+
+Based on a 0.05 level of significance the top factors contributing to customer churn in the data set are listed in the table below
+
+| Significant Variables at 0.05 Alpha           | P-value |
+|-----------------------------------------------|----------|
+| BusinessTrvlTravel_Frequently                 | 5.41e-05 |
+| DistFromHome                                  | 6.12e-05 |
+| EduFieldMedical                               | 0.000605 |
+| EnvSatfctn1                                   | 2.49e-07 |
+| JobInvolmnt1                                  | 3.64e-07 |
+| JobSatfctn1                                   | 5.84e-07 |
+| NumCmpWorked                                  | 8.58e-07 |
+| OverTimeNo                                    | < 2e-16  |
+| RlnSatfctn1                                   | 0.000226 |
 
 
 #### Can This be stopped?
