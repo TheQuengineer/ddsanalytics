@@ -390,6 +390,7 @@ summary(model_AgeIncome)
 ```
 From regression analysis above we can say that Gender does not make significant change in the Monthly employee income. But Age is indeed significant variable (p<0.0001), it can explain 24% of monthly income change.
 
+
 #### What Factors Cause Employee Turnover?
 
 Our goal is to determine which indicators might lead to employee attrition. The best way for us to find what causes this is to study the subset of data points that have the flag `Yes` marked for attrition. Once we have our dataset we will need to determine an appropriate sample size from this population in order to perform ANOVA with a good statistical power.
@@ -423,6 +424,7 @@ study_set <- rbind(group1, group2)
 
 ##### Assumptions
 
+# This assumptions are not for reg.models but for comparing of the means between two samples (Anova test), we did not check 3d and 4th.plus reg.model has 15 not defined slopes because of singularities. Do not feel comfortable about this model. Need to discuss.
 Below are a list of Assumptions we will proceed this test under
 
 1. `Random Sample`: Our Data was indeed sampled randomly from the dataset using computation, therefore every data point had equal opportunity of being chosen.
