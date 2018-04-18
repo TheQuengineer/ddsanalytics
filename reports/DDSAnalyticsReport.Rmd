@@ -174,6 +174,7 @@ Lets check histograms of Hourly Rate and Monthly income.
 hist(talentData$HourlyRate, col = "darkred", xlab="Hourly Rate", main="Histogram of Hourly Rate")
 hist(talentData$MonthlyIncm, col = "darkgreen", xlab="Monthly Income", main="Histogram of Monthly Income")
 ```
+
 On the histograms we can see almost equal spread of hourly rates within the company, but we can not say the same about monthly income, it means that employees work different amount of hours (some of them are part time, and some of them work with overtime (more then 40hours), we do not have information if any bonuses were paid in the company, so it does not make sense to continue analize working hours). Histigram of income shows a right skewed distribution for our Monthly Income in our dataset. It is also clear that the majority of the population in this dataset makes between \$1000 and $6000 per month. The higher we go out in income the more the distribution becomes narrower.
 
 #### 3.C####
@@ -299,30 +300,6 @@ cor.test(x=talentData$Age, y=talentData$YrsAtCompany,
 ```
 
 Based on the results of our correlation test we have a pearsons correlation value of `0.302989` (95% CI: 0.25 to 0.34) which is more evidence of a positive linear relationship between Age and Years at a specific company. It is important for us to keep this relationship in mind moving forward for the rest of the study.
-
-
-
-
-
-
-# This one should be removed. Duplicated analysis from 3B.
-##### Understaning Incomes in the dataset
-
-The next important thing we want to explore is our income distribution. Income is a major factor in employment. Without income, there is no reason for anyone worker to make effort to join a company in the first place. We would like to get an Idea of how the income distribution looks within our dataset. We would also like to understand the relationship between our income and our age as this might give us more insight as to whether or not these two factors influence employee retention overall.
-
-```{r}
-hist(talentData$MonthlyIncm,
-     xlab="Monthly Income",
-     ylab="Frequency Of Occurrence",
-     main= "Income Distribution Frequency",
-     col= "grey")
-```
-
-From the above chart we can see that there is a right skewed distribution for our Monthly Income in our dataset. It is also clear that the majority of the population in this dataset makes between \$1000 and $6000 per month. The higher we go out in income the more the distribution becomes narrower.
-# stop
-
-
-
 
 #### Exploring the Relationship between Years At a the company and Satisfaction
 

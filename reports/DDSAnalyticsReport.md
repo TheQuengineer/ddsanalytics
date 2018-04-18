@@ -434,7 +434,8 @@ hist(talentData$MonthlyIncm, col = "darkgreen", xlab="Monthly Income", main="His
 ```
 
 ![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-4-2.png)<!-- -->
-On the histograms we can see almost equal spread of hourly rates within the company, but we can not say the same about monthly income, it means that employees work different amount of hours (some of them are part time, and some of them work with overtime (more then 40hours), we do not have information if any bonuses were paid in the company, so it does not make sense to continue analize working hours). 
+
+On the histograms we can see almost equal spread of hourly rates within the company, but we can not say the same about monthly income, it means that employees work different amount of hours (some of them are part time, and some of them work with overtime (more then 40hours), we do not have information if any bonuses were paid in the company, so it does not make sense to continue analize working hours). Histigram of income shows a right skewed distribution for our Monthly Income in our dataset. It is also clear that the majority of the population in this dataset makes between \$1000 and $6000 per month. The higher we go out in income the more the distribution becomes narrower.
 
 #### 3.C####
 
@@ -710,24 +711,7 @@ cor.test(x=talentData$Age, y=talentData$YrsAtCompany,
 
 Based on the results of our correlation test we have a pearsons correlation value of `0.302989` (95% CI: 0.25 to 0.34) which is more evidence of a positive linear relationship between Age and Years at a specific company. It is important for us to keep this relationship in mind moving forward for the rest of the study.
 
-##### Understaning Incomes in the dataset
-
-The next important thing we want to explore is our income distribution. Income is a major factor in employment. Without income, there is no reason for anyone worker to make effort to join a company in the first place. We would like to get an Idea of how the income distribution looks within our dataset. We would also like to understand the relationship between our income and our age as this might give us more insight as to whether or not these two factors influence employee retention overall.
-
-
-```r
-hist(talentData$MonthlyIncm,
-     xlab="Monthly Income",
-     ylab="Frequency Of Occurrence",
-     main= "Income Distribution Frequency",
-     col= "grey")
-```
-
-![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
-
-From the above chart we can see that there is a right skewed distribution for our Monthly Income in our dataset. It is also clear that the majority of the population in this dataset makes between \$1000 and $6000 per month. The higher we go out in income the more the distribution becomes narrower.
-
-##### Exploring the Relationship between Years At a company and Satisfaction
+#### Exploring the Relationship between Years At a the company and Satisfaction
 
 Now that we know that Age, and Income have a positive impact on employee retention we would like to visually confirm our assumption that Job Satisfaction also contributes in a major way to someone remaining at a company. We can do this by examining our different levels of employee satisfaction and their Years they have remained at a particular company.
 
@@ -735,13 +719,13 @@ Now that we know that Age, and Income have a positive impact on employee retenti
 ```r
 ggplot(talentData, aes(YrsAtCompany)) +
   geom_density(aes(fill=JobSatfctn), alpha=0.8) +
-  labs(title= "Years At Company Density Plot",
-       subtitle="Years at Company grouped by Job Satisfaction",
+  labs(title= "Years At the Company Density Plot",
+       subtitle="Years at the Company grouped by Job Satisfaction",
        x="Years at Company",
        y="Density")
 ```
 
-![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
 
 The Chart above is very telling. We take a look at our probability distribution across different Job Satisfaction levels. 1 indicates that there is low employee job satisfaction, and 4 represents that there is really high employee job satisfaction. If we examine the probability of each within the context of the years an individual stays at a company it becomes clear that lower job satisfaction indicates that this catagory has the lowest number of years spent at a company. This is no surprise, but it does give us more infomration regarding negative factors to employee attrition.
 
@@ -779,7 +763,7 @@ ggcorrplot(correlations, hc.order = TRUE,
            ggtheme=theme_bw)
 ```
 
-![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
 
 The chart above shows us that there are no negative linear relationships in our data between our variables. We can also see that there are some positive relationships between variables that are linearly correlated and we have now been able to narrow these down so they can be examined in depth.
 
@@ -794,7 +778,7 @@ Gender <- talentData$Gender
 ggplot(talentData, aes(MonthlyIncm, Age, color = Gender, shape=Gender))+geom_point()+ggtitle("Correlation between Monthly income and Ages")
 ```
 
-![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
 
 ```r
 model_AgeIncome <- lm(MonthlyIncm ~ Age+Gender, data = talentData)
@@ -823,6 +807,7 @@ summary(model_AgeIncome)
 ## F-statistic: 234.7 on 2 and 1459 DF,  p-value: < 2.2e-16
 ```
 From regression analysis above we can say that Gender does not make significant change in the Monthly employee income. But Age is indeed significant variable (p<0.0001), it can explain 24% of monthly income change.
+
 
 #### What Factors Cause Employee Turnover?
 
@@ -872,6 +857,7 @@ study_set <- rbind(group1, group2)
 
 ##### Assumptions
 
+# This assumptions are not for reg.models but for comparing of the means between two samples (Anova test), we did not check 3d and 4th.plus reg.model has 15 not defined slopes because of singularities. Do not feel comfortable about this model. Need to discuss.
 Below are a list of Assumptions we will proceed this test under
 
 1. `Random Sample`: Our Data was indeed sampled randomly from the dataset using computation, therefore every data point had equal opportunity of being chosen.
@@ -887,11 +873,9 @@ summary(model)
 ```
 
 ```
-##             Df    Sum Sq   Mean Sq F value Pr(>F)  
-## Attrition    1 2.910e+08 290953534   3.474 0.0721 .
-## Residuals   30 2.512e+09  83743823                 
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+##             Df    Sum Sq  Mean Sq F value Pr(>F)
+## Attrition    1 9.673e+06  9673401   0.138  0.712
+## Residuals   30 2.097e+09 69883499
 ```
 
 If we check for differnces in each group of those that experienced Attrition and those that did not we can see that there is no significant difference between the groups based on the `Daily Rate`, `YearsAtCompany`, `YrsInCorntRl`, `YrsWithCurMgr`, `MonthlyRate` , `DistFromHome` and `Age`!. None of these variables showed any type of difference between the two groups at the 0.05 level of significance. Therefore we can fail to reject the hypothesis that there is some kind of a differnece in those that experienced attrition over those that did not.
@@ -1130,7 +1114,7 @@ Based on a 0.05 level of significance the top factors contributing to Attrition 
 
 
 
-
+The AIC of the Model is 819.68
 
 ## 4D. Attrition influential factors##
 Let's use stepwise selection method to come up with the model which has only significat variables.
@@ -1190,12 +1174,12 @@ step$anova
 ```
 
 ```r
-model_Attrition <- glm(Attrition ~ Age + BusinessTrvl + DailyRate + DistFromHome + EduField + 
+StepwiseModel_Attrition <- glm(Attrition ~ Age + BusinessTrvl + DailyRate + DistFromHome + EduField + 
     EnvSatfctn + Gender + JobInvolmnt + JobLevel + JobRole + 
     JobSatfctn + NumCmpWorked + OverTime + RlnSatfctn + StockOptLvl + 
     TtlWrkngYrs + TrngTmsLstYr + WrkLifeBal + YrsAtCompany + 
     YrsInCrntRl + YrsSncLstPrn + YrsWthCurMgr, family = binomial, data=talentData)
-summary(model_Attrition)
+summary(StepwiseModel_Attrition)
 ```
 
 ```
@@ -1275,71 +1259,108 @@ summary(model_Attrition)
 ## 
 ## Number of Fisher Scoring iterations: 7
 ```
-AIC of the model is 874.95.
 
 ```r
-library(GoodmanKruskal)
-#frame1<-ts(talentData)
-#View(frame1)
-#matrix <- GKtauDataframe(frame1[,8:16])
-talentDatanew<- as.data.frame(talentData)
-matrix1 <- GKtauDataframe(talentDatanew[,c(2,1,3,4,6,8,11,12,14)])
-matrix2 <- GKtauDataframe(talentDatanew[,c(2,15,16,17,21,22,25,26)])
-matrix3 <- GKtauDataframe(talentDatanew[,c(2,27:33)])
-plot(matrix1, diagSize = 0.8)
+CustomModel_Attrition <- glm(Attrition ~ BusinessTrvl + DistFromHome + 
+    EnvSatfctn + JobInvolmnt + 
+    JobSatfctn + NumCmpWorked + OverTime + RlnSatfctn + 
+    TtlWrkngYrs + WrkLifeBal + YrsAtCompany + 
+    YrsInCrntRl + YrsSncLstPrn + YrsWthCurMgr, family = binomial, data=talentData)
+summary(CustomModel_Attrition)
 ```
 
-![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
-
-```r
-plot(matrix2, diagSize = 0.8)
 ```
-
-![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-23-2.png)<!-- -->
-
-```r
-plot(matrix3, diagSize = 0.8)
+## 
+## Call:
+## glm(formula = Attrition ~ BusinessTrvl + DistFromHome + EnvSatfctn + 
+##     JobInvolmnt + JobSatfctn + NumCmpWorked + OverTime + RlnSatfctn + 
+##     TtlWrkngYrs + WrkLifeBal + YrsAtCompany + YrsInCrntRl + YrsSncLstPrn + 
+##     YrsWthCurMgr, family = binomial, data = talentData)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -1.9744  -0.5218  -0.3133  -0.1402   3.5586  
+## 
+## Coefficients:
+##                                Estimate Std. Error z value Pr(>|z|)    
+## (Intercept)                    1.372745   0.609779   2.251 0.024372 *  
+## BusinessTrvlTravel_Frequently  1.947783   0.402503   4.839 1.30e-06 ***
+## BusinessTrvlTravel_Rarely      1.139439   0.376812   3.024 0.002495 ** 
+## DistFromHome                   0.039682   0.009983   3.975 7.03e-05 ***
+## EnvSatfctn2                   -1.069100   0.260644  -4.102 4.10e-05 ***
+## EnvSatfctn3                   -1.121141   0.232287  -4.827 1.39e-06 ***
+## EnvSatfctn4                   -1.214059   0.234053  -5.187 2.14e-07 ***
+## JobInvolmnt2                  -1.085428   0.327927  -3.310 0.000933 ***
+## JobInvolmnt3                  -1.532624   0.311002  -4.928 8.31e-07 ***
+## JobInvolmnt4                  -2.140413   0.437132  -4.896 9.76e-07 ***
+## JobSatfctn2                   -0.590929   0.253570  -2.330 0.019783 *  
+## JobSatfctn3                   -0.677072   0.224069  -3.022 0.002514 ** 
+## JobSatfctn4                   -1.293745   0.243731  -5.308 1.11e-07 ***
+## NumCmpWorked                   0.157428   0.035645   4.416 1.00e-05 ***
+## OverTimeYes                    1.791276   0.177999  10.063  < 2e-16 ***
+## RlnSatfctn2                   -0.725094   0.259866  -2.790 0.005267 ** 
+## RlnSatfctn3                   -0.688730   0.233335  -2.952 0.003161 ** 
+## RlnSatfctn4                   -0.888801   0.240851  -3.690 0.000224 ***
+## TtlWrkngYrs                   -0.129640   0.021205  -6.114 9.74e-10 ***
+## WrkLifeBal2                   -0.938501   0.331982  -2.827 0.004699 ** 
+## WrkLifeBal3                   -1.188394   0.307358  -3.866 0.000110 ***
+## WrkLifeBal4                   -0.791590   0.378381  -2.092 0.036435 *  
+## YrsAtCompany                   0.079836   0.036210   2.205 0.027467 *  
+## YrsInCrntRl                   -0.123868   0.043254  -2.864 0.004186 ** 
+## YrsSncLstPrn                   0.153451   0.039009   3.934 8.36e-05 ***
+## YrsWthCurMgr                  -0.113428   0.044172  -2.568 0.010233 *  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 1282.5  on 1461  degrees of freedom
+## Residual deviance:  944.9  on 1436  degrees of freedom
+## AIC: 996.9
+## 
+## Number of Fisher Scoring iterations: 6
 ```
+AIC of the StepwiseModel is 874.95 and R is 1 - (Residual Deviance/Null Deviance)= 1 - 774.95/1285.54 = 0.4. 
+AIC of the CustomModel is 996.9 and R is 1 - (Residual Deviance/Null Deviance)= 1 - 944.9/1285.54 = 0.26.
 
-![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-23-3.png)<!-- -->
+Model assamptions:
+Logistic regression does not make many of the key assumptions of linear regression and general linear models that are based on ordinary least squares algorithms – particularly regarding linearity, normality, homoscedasticity, and measurement level.
+First, binary logistic regression requires the dependent variable to be binary - Assamtion is met.
+Second, logistic regression requires the observations to be independent of each other.  In other words, the observations should not come from repeated measurements or matched data - Assamtion is met.
+Third, logistic regression requires there to be little or no multicollinearity among the independent variables.  This means that the independent variables should not be too highly correlated with each other - Assamtion is met.
+Fourth, logistic regression assumes linearity of independent variables - Assamtion is met.
+Finally, logistic regression typically requires a large sample size - Assamtion is met (1470 observations).
+
+#####Interpretation of Stepwise Model
+We definitely see that Stepwise Model is more predictive. Let's pick the most significant variables that may effect on attrition (positive slope will indicate icreasing of attrition chance additively):
+- Increasing of Overtime by 1 hour may predict that average attrition posibility will increase by 2.16
+- BusinessTrvlTravel_Frequently may predict that average attrition posibility will increase by 2.22
+- BusinessTrvlTravel_Rarely may predict that average attrition posibility will increase by 1.19
+- Increasing of DistFromHome for 1 mile (assuming that distance were given in miles) may predict that average attrition posibility will increase by 0.06
+- If employee has Technical Degree we may predict that average attrition posibility will increase by 0.35
+- If employee's gender is Male we may predict that average attrition posibility will increase by 0.37
+- If employee has Job level 5 (very hard)  we may predict that average attrition posibility will increase by 0.74
+- If employee has Job role Technician we may predict that average attrition posibility will increase by 0.73
+- If employee has Job role Human Resources we may predict that average attrition posibility will increase by 0.53
+- If employee has Job role Manufacturing Director we may predict that average attrition posibility will increase by 0.44
+- If employee has Job role Sales Executive we may predict that average attrition posibility will increase by 1.32
+- If employee has Job role Sales Representative we may predict that average attrition posibility will increase by 1.34
+- If number of companies where an employee worked increaes by 1, we may predict that average attrition posibility will increase by 0.2
+- Increasing of Years after last Promotion by 1 year may predict that average attrition posibility will increase by 0.16
+
 
 ```r
-variables<-c("Age","BusinessTrvl","DailyRate","DistFromHome","EduField", 
-    "EnvSatfctn","Gender","JobInvolmnt","JobLevel","JobRole", 
-    "JobSatfctn","NumCmpWorked","OverTime","RlnSatfctn","StockOptLvl", 
-    "TtlWrkngYrs","TrngTmsLstYr","WrkLifeBal","YrsAtCompany", 
-    "YrsInCrntRl","YrsSncLstPrn","YrsWthCurMgr")
-Teta<-c(0.08,0.02,0.59,0.03,0.01,0.02,0,0.02,0.05,0.06,0.01,0.02,0.06,0,0.04,0.08,0.01,0.01,0.06,0.04,0.01,0.05)
-df <- data.frame(variables,Teta)
+variables<-c("Overtime","BusinessTrvlTravel_Frequently", "BusinessTrvlTravel_Rarely", "DistFromHome", "Technical Degree", "gender Male", "Job level 5", "Job role Technician", "Job role Human Resources", "Job role Manufacturing Director", "Job role Sales Executive", "Job role Sales Representative", "NumCmpWorked", "YrsSncLstPrn")
+Effect<-c(2.16, 2.22, 1.19, 0.06, 0.35, 0.37, 0.74, 0.73, 0.53, 0.44, 1.32, 1.34, 0.2,0.16)
+df <- data.frame(variables,Effect)
 mytheme <- theme(plot.title = element_text(face = "bold.italic",size= 14, color = "black"), axis.text.x = element_text(face ="bold.italic"), axis.text.y = element_text(face = "bold.italic", size = 7))
-df$variables <- factor(variables, levels = df$variables[order(df$Teta)])
-ggplot(data = df, aes(x = df$variables, y = df$Teta), horis=TRUE)+geom_bar(stat = "identity")+labs(title = "Attrition influential factors", x="Variables",y="Influential Percent")+mytheme+coord_flip()
+df$variables <- factor(variables, levels = df$variables[order(df$Effect)])
+ggplot(data = df, aes(x = df$variables, y = df$Effect), horis=TRUE)+geom_bar(stat = "identity")+labs(title = "Attrition influential factors", x="Variables",y="Influential Percent")+mytheme+coord_flip()
 ```
 
-![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-23-4.png)<!-- -->
-As we we can see from the histogram above, the most influential factor for Attrition is DailyRate, it can explain 59% of the Attrition Variation, Total working hours and Age can explain 8% the Attrition Variation. In order to keep percent of the attrrition in the company low, managers should maintain competitive avarage payroll daily rates, provide enough of working hours and do not hire too young employees.
-Lets figure out in what department the company has the highest attrition percent.
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-22-1.png)<!-- -->
+As we can see from the histogram above, the most influential factor for Attrition is BusinessTrvlTravel_Frequently and Overtime. In order to reduce Attrition level at the company we need to advise review of business travel frequency and reducing overtime for some employees.
 
-```r
-plot(talentData$Department, talentData$Attrition, xlab = "name of the department", ylab="Attrition")
-```
-
-![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
-We can see on a plot above that Sales and Human Resources departments have 20% of employee attrition, and around 14% at Research & Development depatment.
-
-```r
-demographics <- talentData[,c("JobRole", "Gender", "EduField")]
-theme_set(theme_light())
-ggplot(talentData, aes(talentData$JobRole)) + 
-  geom_bar(aes(fill=Attrition), width = 0.5) +
-  labs(title = "Attrition by Job Role",
-       x = "Job Role",
-       y = "Frequency") +
-  coord_flip()
-```
-
-![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-25-1.png)<!-- -->
-Laboratory technician has the highest percent of Attrition. Our suggestion to review their daily rates and provide enough working hours. 
 
 ## V. Discussion And Conclusions
 
