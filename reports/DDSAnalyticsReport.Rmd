@@ -469,6 +469,43 @@ mytheme <- theme(plot.title = element_text(face = "bold.italic",size= 14, color 
 df$variables <- factor(variables, levels = df$variables[order(df$Effect)])
 ggplot(data = df, aes(x = df$variables, y = df$Effect), horis=TRUE)+geom_bar(stat = "identity", fill="#FF9999")+labs(title = "'Long stay' influential factors", x="Variables",y="Influential Percent")+mytheme+coord_flip()
 ```
+Lets confirm our findings with actual numbers.
+
+```{r}
+ggplot(talentData,aes(x=JobInvolmnt,fill = Attrition))+geom_bar()+ggtitle("Job Involment by Attrition factors")
+mytable3 <- xtabs(~JobInvolmnt+Attrition, data = talentData)
+tabl3<- data.frame(ftable(mytable3))
+tabl3
+percent31<- tabl3[5,3]/tabl3[1,3]*100
+percent32<- tabl3[6,3]/tabl3[2,3]*100
+percent33<- tabl3[7,3]/tabl3[3,3]*100
+percent34<- tabl3[8,3]/tabl3[4,3]*100
+Attrition_Percent <-round(c(0,0,0,0,percent31,percent32,percent33,percent34),2)
+df3 <- data.frame(tabl3,Attrition_Percent)
+df3 %>%
+  kable("html") %>%
+  kable_styling() %>%
+  row_spec(7:8, bold = T, color = "white", background = "#66CC99")
+```
+Average Attrition rate for those who has Job Involment level "high" and "very high" is smoller by 50% comparing with those who has Job Involment level "low" and "medium". 
+
+```{r}
+ggplot(talentData,aes(x=StockOptLvl,fill = Attrition))+geom_bar()+ggtitle("Job Involment by Attrition factors")
+mytable4 <- xtabs(~StockOptLvl+Attrition, data = talentData)
+tabl4<- data.frame(ftable(mytable4))
+tabl4
+percent41<- tabl4[5,3]/tabl4[1,3]*100
+percent42<- tabl4[6,3]/tabl4[2,3]*100
+percent43<- tabl4[7,3]/tabl4[3,3]*100
+percent44<- tabl4[8,3]/tabl4[4,3]*100
+Attrition_Percent <-round(c(0,0,0,0,percent41,percent42,percent43,percent44),2)
+df4 <- data.frame(tabl4,Attrition_Percent)
+df4 %>%
+  kable("html") %>%
+  kable_styling() %>%
+  row_spec(6:7, bold = T, color = "white", background = "#66CC99")
+```
+It is very interesting that employees prefer Stock Opt Level 1 and 2 verses Stock Opt Level 0 and 3. Average attrition rate is smoller by 67.5% for those who has Stock Opt Level 1 and 2.
 
 ## V. Discussion And Conclusions
 
