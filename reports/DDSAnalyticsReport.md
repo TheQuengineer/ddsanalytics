@@ -767,8 +767,7 @@ ggcorrplot(correlations, hc.order = TRUE,
 
 The chart above shows us that there are no negative linear relationships in our data between our variables. We can also see that there are some positive relationships between variables that are linearly correlated and we have now been able to narrow these down so they can be examined in depth.
 
-####4.C####
-Let's check if there is any relationship between Age and Income. Does Gender makes any effect on the Monthly income?
+### 4.C Let's check if there is any relationship between Age and Income. Does Gender makes any effect on the Monthly income?
 
 
 ```r
@@ -809,315 +808,12 @@ summary(model_AgeIncome)
 From regression analysis above we can say that Gender does not make significant change in the Monthly employee income. But Age is indeed significant variable (p<0.0001), it can explain 24% of monthly income change.
 
 
-#### What Factors Cause Employee Turnover?
+### 4D. What Factors Cause Employee Turnover?
 
-Our goal is to determine which indicators might lead to employee attrition. The best way for us to find what causes this is to study the subset of data points that have the flag `Yes` marked for attrition. Once we have our dataset we will need to determine an appropriate sample size from this population in order to perform ANOVA with a good statistical power.
+Our goal is to determine which indicators might lead to employee attrition. The best way for us to find those is to create a regression model for Attrition prediction.
 
-
-```r
-attrition_set <- filter(talentData, Attrition == "Yes")
-```
-
-##### Determine Sample Size
-
-First, we want to get a good idea of the sample size needed in order to lower the chances of a Type I or Type II error.
-
-
-```r
-library(pwr)
-
-pwr.anova.test(k=2, f=0.5, sig.level=0.05, power=0.8)
-```
-
-```
-## 
-##      Balanced one-way analysis of variance power calculation 
-## 
-##               k = 2
-##               n = 16.71472
-##               f = 0.5
-##       sig.level = 0.05
-##           power = 0.8
-## 
-## NOTE: n is number in each group
-```
-
-We decided to go with a comparison for two groups with an effect size of `0.5` because we are dealing with a medium size dataset. In addition to that we want to use a significance level of `0.05` which will be based on a 95% confidence level. Finally, the power level we set is `0.8`. Based on our calculation we will need at least 17 samples from each group to have good results that will limit our Type I and Type II error types.
-
-Now that we know our sample size, we separate them into two groups. The two groups are randomly chosen observations that had an Attrition value of Yes and the other group are random samples that had an attrition value of No.
-
-
-```r
-group1 <- sample_n(filter(talentData, Attrition == "Yes"), size = 16)
-group2 <- sample_n(filter(talentData, Attrition == "No"), size = 16)
-
-
-study_set <- rbind(group1, group2)
-```
-
-##### Assumptions
-
-# This assumptions are not for reg.models but for comparing of the means between two samples (Anova test), we did not check 3d and 4th.plus reg.model has 15 not defined slopes because of singularities. Do not feel comfortable about this model. Need to discuss.
-Below are a list of Assumptions we will proceed this test under
-
-1. `Random Sample`: Our Data was indeed sampled randomly from the dataset using computation, therefore every data point had equal opportunity of being chosen.
-2. `Independent Observations`: It is assumed that all the data points within the population are independent of each other. No employee data is assumed to affect the outcome of another employee based on the variables that are within our model. As a result we can assume this assumption has not been violated.
-3. `Equal Variances`: In order to determine whether or not the variances were equal we performed a lavene test on the logged incomes to be sure there is no difference
-4. `Normality` : Based on our EDA we have discovered that our data has come from a normaly distributed population due to a large sample size which allows for the central limit theorem to kick in..
-5. `Equal Sample Size`: Sample size is set at 16 for each group.
-
-
-```r
-model <- aov(DailyRate + MonthlyIncm + YrsAtCompany + YrsInCrntRl + YrsWthCurMgr + MonthlyRate + DistFromHome + Age ~ Attrition, data = study_set)
-summary(model)
-```
-
-```
-##             Df    Sum Sq  Mean Sq F value Pr(>F)
-## Attrition    1 9.673e+06  9673401   0.138  0.712
-## Residuals   30 2.097e+09 69883499
-```
-
-If we check for differnces in each group of those that experienced Attrition and those that did not we can see that there is no significant difference between the groups based on the `Daily Rate`, `YearsAtCompany`, `YrsInCorntRl`, `YrsWithCurMgr`, `MonthlyRate` , `DistFromHome` and `Age`!. None of these variables showed any type of difference between the two groups at the 0.05 level of significance. Therefore we can fail to reject the hypothesis that there is some kind of a differnece in those that experienced attrition over those that did not.
-
-Now that we know there is no difference between the two groups we will proceed to try finding the most relevant variables in finding employee attrition another way. Next we prepare our data for use in a general linear model. We take this approach because we would like to see what the variables are that might help us with determining the outcome of what makes an employee decide to leave his or her job at a higher rate than others.
-
-
-```r
-library(dummies)
-```
-
-```
-## dummies-1.5.6 provided by Decision Patterns
-```
-
-```r
-encoded_dataset <- dummy.data.frame(as.data.frame(talentData), names=c("BusinessTrvl", "Department", "EduField",
-                                                             "EmployeeCnt", "EnvSatfctn", "Gender",
-                                                             "JobInvolmnt", "JobLevel", "JobRole",
-                                                             "JobSatfctn", "MaritalStat", "OverTime",
-                                                             "PerfRating", "RlnSatfctn", "StockOptLvl",
-                                                             "WrkLifeBal"))
-encoded_dataset <- encoded_dataset %>% mutate(Attrition = ifelse(Attrition == "Yes", 1 , 0))
-```
-
-Above we generated encoded factors for all of our different factor levels. We also want to get some insight into our predicted variable Attrition so therefore we encoded all of our Attrition results to be as...
-
-\[
-  Attrition
-  \begin{cases}
-    0 , \text{if No}  \\ 
-    1 , \text{otherwise}
-  \end{cases}
-\]
-
-Now that our data is encoded properly we will try locating the significant variables using the General Linear Model approach. Our Explanatory variables will be all of the variables in the dataset so that we can locate the most significant ones.
-
-
-
-```r
-glm_model <- glm(formula=Attrition~.,data=encoded_dataset)
-
-summary(glm_model)
-```
-
-```
-## 
-## Call:
-## glm(formula = Attrition ~ ., data = encoded_dataset)
-## 
-## Deviance Residuals: 
-##      Min        1Q    Median        3Q       Max  
-## -0.57128  -0.20363  -0.07768   0.09682   1.14256  
-## 
-## Coefficients: (15 not defined because of singularities)
-##                                      Estimate Std. Error t value Pr(>|t|)
-## (Intercept)                         7.773e-01  1.826e-01   4.256 2.22e-05
-## Age                                -3.204e-03  1.304e-03  -2.457 0.014121
-## `BusinessTrvlNon-Travel`           -6.689e-02  2.833e-02  -2.361 0.018340
-## BusinessTrvlTravel_Frequently       8.714e-02  2.152e-02   4.050 5.41e-05
-## BusinessTrvlTravel_Rarely                  NA         NA      NA       NA
-## DailyRate                          -3.087e-05  2.085e-05  -1.480 0.138977
-## `DepartmentHuman Resources`        -8.039e-02  1.190e-01  -0.675 0.499554
-## `DepartmentResearch & Development`  3.209e-02  6.936e-02   0.463 0.643655
-## DepartmentSales                            NA         NA      NA       NA
-## DistFromHome                        4.147e-03  1.032e-03   4.020 6.12e-05
-## YrsOfEdu                            5.067e-03  8.386e-03   0.604 0.545781
-## `EduFieldHuman Resources`           1.828e-02  8.581e-02   0.213 0.831374
-## `EduFieldLife Sciences`            -9.458e-02  3.056e-02  -3.095 0.002010
-## EduFieldMarketing                  -5.503e-02  4.122e-02  -1.335 0.182002
-## EduFieldMedical                    -1.087e-01  3.162e-02  -3.437 0.000605
-## EduFieldOther                      -1.091e-01  4.493e-02  -2.428 0.015293
-## `EduFieldTechnical Degree`                 NA         NA      NA       NA
-## EmployeeNum                        -7.759e-06  1.393e-05  -0.557 0.577757
-## EnvSatfctn1                         1.260e-01  2.430e-02   5.184 2.49e-07
-## EnvSatfctn2                         1.447e-02  2.439e-02   0.594 0.552917
-## EnvSatfctn3                        -7.351e-04  2.127e-02  -0.035 0.972436
-## EnvSatfctn4                                NA         NA      NA       NA
-## GenderFemale                       -2.785e-02  1.709e-02  -1.630 0.103381
-## GenderMale                                 NA         NA      NA       NA
-## HourlyRate                         -9.044e-05  4.110e-04  -0.220 0.825863
-## JobInvolmnt1                        2.250e-01  4.402e-02   5.111 3.64e-07
-## JobInvolmnt2                        7.582e-02  3.143e-02   2.412 0.015984
-## JobInvolmnt3                        3.728e-02  2.876e-02   1.296 0.195211
-## JobInvolmnt4                               NA         NA      NA       NA
-## JobLevel1                          -1.204e-01  1.187e-01  -1.014 0.310795
-## JobLevel2                          -2.481e-01  1.018e-01  -2.438 0.014908
-## JobLevel3                          -1.362e-01  7.925e-02  -1.718 0.086024
-## JobLevel4                          -1.124e-01  5.545e-02  -2.028 0.042779
-## JobLevel5                                  NA         NA      NA       NA
-## `JobRoleHealthcare Representative` -1.678e-01  8.737e-02  -1.921 0.054991
-## `JobRoleHuman Resources`           -4.825e-02  1.248e-01  -0.386 0.699230
-## `JobRoleLaboratory Technician`     -1.264e-01  8.004e-02  -1.579 0.114473
-## JobRoleManager                     -1.505e-01  8.916e-02  -1.688 0.091592
-## `JobRoleManufacturing Director`    -1.506e-01  8.699e-02  -1.731 0.083699
-## `JobRoleResearch Director`         -2.165e-01  1.030e-01  -2.103 0.035623
-## `JobRoleResearch Scientist`        -2.199e-01  7.973e-02  -2.758 0.005886
-## `JobRoleSales Executive`           -4.887e-02  5.036e-02  -0.970 0.331984
-## `JobRoleSales Representative`              NA         NA      NA       NA
-## JobSatfctn1                         1.201e-01  2.393e-02   5.020 5.84e-07
-## JobSatfctn2                         5.797e-02  2.431e-02   2.385 0.017210
-## JobSatfctn3                         5.360e-02  2.132e-02   2.514 0.012037
-## JobSatfctn4                                NA         NA      NA       NA
-## MaritalStatDivorced                -3.610e-02  3.673e-02  -0.983 0.325873
-## MaritalStatMarried                 -2.866e-02  2.966e-02  -0.966 0.334119
-## MaritalStatSingle                          NA         NA      NA       NA
-## MonthlyIncm                        -9.972e-06  7.913e-06  -1.260 0.207824
-## MonthlyRate                         7.034e-07  1.173e-06   0.600 0.548803
-## NumCmpWorked                        1.850e-02  3.742e-03   4.944 8.58e-07
-## OverTimeNo                         -2.099e-01  1.859e-02 -11.291  < 2e-16
-## OverTimeYes                                NA         NA      NA       NA
-## PrcntSalHike                       -6.310e-04  3.610e-03  -0.175 0.861264
-## PerfRating3                        -9.834e-03  3.637e-02  -0.270 0.786910
-## PerfRating4                                NA         NA      NA       NA
-## RlnSatfctn1                         9.118e-02  2.466e-02   3.698 0.000226
-## RlnSatfctn2                         2.191e-02  2.407e-02   0.910 0.362988
-## RlnSatfctn3                         1.611e-02  2.158e-02   0.746 0.455507
-## RlnSatfctn4                                NA         NA      NA       NA
-## StockOptLvl0                        4.542e-02  4.451e-02   1.020 0.307780
-## StockOptLvl1                       -5.806e-02  3.748e-02  -1.549 0.121574
-## StockOptLvl2                       -5.689e-02  4.317e-02  -1.318 0.187708
-## StockOptLvl3                               NA         NA      NA       NA
-## TtlWrkngYrs                        -3.505e-03  2.407e-03  -1.456 0.145576
-## TrngTmsLstYr                       -1.098e-02  6.515e-03  -1.685 0.092201
-## WrkLifeBal1                         1.066e-01  4.434e-02   2.403 0.016369
-## WrkLifeBal2                        -1.054e-02  3.121e-02  -0.338 0.735709
-## WrkLifeBal3                        -5.113e-02  2.803e-02  -1.824 0.068337
-## WrkLifeBal4                                NA         NA      NA       NA
-## YrsAtCompany                        5.286e-03  2.941e-03   1.797 0.072517
-## YrsInCrntRl                        -7.403e-03  3.835e-03  -1.931 0.053718
-## YrsSncLstPrn                        9.218e-03  3.362e-03   2.742 0.006191
-## YrsWthCurMgr                       -7.785e-03  3.918e-03  -1.987 0.047089
-##                                       
-## (Intercept)                        ***
-## Age                                *  
-## `BusinessTrvlNon-Travel`           *  
-## BusinessTrvlTravel_Frequently      ***
-## BusinessTrvlTravel_Rarely             
-## DailyRate                             
-## `DepartmentHuman Resources`           
-## `DepartmentResearch & Development`    
-## DepartmentSales                       
-## DistFromHome                       ***
-## YrsOfEdu                              
-## `EduFieldHuman Resources`             
-## `EduFieldLife Sciences`            ** 
-## EduFieldMarketing                     
-## EduFieldMedical                    ***
-## EduFieldOther                      *  
-## `EduFieldTechnical Degree`            
-## EmployeeNum                           
-## EnvSatfctn1                        ***
-## EnvSatfctn2                           
-## EnvSatfctn3                           
-## EnvSatfctn4                           
-## GenderFemale                          
-## GenderMale                            
-## HourlyRate                            
-## JobInvolmnt1                       ***
-## JobInvolmnt2                       *  
-## JobInvolmnt3                          
-## JobInvolmnt4                          
-## JobLevel1                             
-## JobLevel2                          *  
-## JobLevel3                          .  
-## JobLevel4                          *  
-## JobLevel5                             
-## `JobRoleHealthcare Representative` .  
-## `JobRoleHuman Resources`              
-## `JobRoleLaboratory Technician`        
-## JobRoleManager                     .  
-## `JobRoleManufacturing Director`    .  
-## `JobRoleResearch Director`         *  
-## `JobRoleResearch Scientist`        ** 
-## `JobRoleSales Executive`              
-## `JobRoleSales Representative`         
-## JobSatfctn1                        ***
-## JobSatfctn2                        *  
-## JobSatfctn3                        *  
-## JobSatfctn4                           
-## MaritalStatDivorced                   
-## MaritalStatMarried                    
-## MaritalStatSingle                     
-## MonthlyIncm                           
-## MonthlyRate                           
-## NumCmpWorked                       ***
-## OverTimeNo                         ***
-## OverTimeYes                           
-## PrcntSalHike                          
-## PerfRating3                           
-## PerfRating4                           
-## RlnSatfctn1                        ***
-## RlnSatfctn2                           
-## RlnSatfctn3                           
-## RlnSatfctn4                           
-## StockOptLvl0                          
-## StockOptLvl1                          
-## StockOptLvl2                          
-## StockOptLvl3                          
-## TtlWrkngYrs                           
-## TrngTmsLstYr                       .  
-## WrkLifeBal1                        *  
-## WrkLifeBal2                           
-## WrkLifeBal3                        .  
-## WrkLifeBal4                           
-## YrsAtCompany                       .  
-## YrsInCrntRl                        .  
-## YrsSncLstPrn                       ** 
-## YrsWthCurMgr                       *  
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## (Dispersion parameter for gaussian family taken to be 0.09833113)
-## 
-##     Null deviance: 195.87  on 1461  degrees of freedom
-## Residual deviance: 137.76  on 1401  degrees of freedom
-## AIC: 819.68
-## 
-## Number of Fisher Scoring iterations: 2
-```
-
-Based on a 0.05 level of significance the top factors contributing to Attrition in the data set are listed in the table below
-
-| Significant Variables at 0.05 Alpha           | P-value  | 95% ConfidenceInterval |
-|-----------------------------------------------|----------|------------------------|
-| BusinessTrvlTravel_Frequently                 | 5.41e-05 | None As it is a Factor |
-| DistFromHome                                  | 6.12e-05 | 2.13 to 6.16           |
-| EduFieldMedical                               | 0.000605 | None As it is a Factor |
-| EnvSatfctn1                                   | 2.49e-07 | None As it is a Factor |
-| JobInvolmnt1                                  | 3.64e-07 | None As it is a Factor |
-| JobSatfctn1                                   | 5.84e-07 | None As it is a Factor |
-| NumCmpWorked                                  | 8.58e-07 | 1.1 to 2.6             |
-| OverTimeNo                                    | < 2e-16  | None As it is a Factor |
-| RlnSatfctn1                                   | 0.000226 | None As it is a Factor |
-
-
-
-
-The AIC of the Model is 819.68
-
-## 4D. Attrition influential factors##
 Let's use stepwise selection method to come up with the model which has only significat variables.
+
 
 ```r
 library(MASS)
@@ -1333,16 +1029,11 @@ Finally, logistic regression typically requires a large sample size - Assamtion 
 
 #####Interpretation of Stepwise Model
 We definitely see that Stepwise Model is more predictive. Let's pick the most significant variables that may effect on attrition (positive slope will indicate icreasing of attrition chance additively):
+
 - Increasing of Overtime by 1 hour may predict that average attrition posibility will increase by 2.16
 - BusinessTrvlTravel_Frequently may predict that average attrition posibility will increase by 2.22
 - BusinessTrvlTravel_Rarely may predict that average attrition posibility will increase by 1.19
 - Increasing of DistFromHome for 1 mile (assuming that distance were given in miles) may predict that average attrition posibility will increase by 0.06
-- If employee has Technical Degree we may predict that average attrition posibility will increase by 0.35
-- If employee's gender is Male we may predict that average attrition posibility will increase by 0.37
-- If employee has Job level 5 (very hard)  we may predict that average attrition posibility will increase by 0.74
-- If employee has Job role Technician we may predict that average attrition posibility will increase by 0.73
-- If employee has Job role Human Resources we may predict that average attrition posibility will increase by 0.53
-- If employee has Job role Manufacturing Director we may predict that average attrition posibility will increase by 0.44
 - If employee has Job role Sales Executive we may predict that average attrition posibility will increase by 1.32
 - If employee has Job role Sales Representative we may predict that average attrition posibility will increase by 1.34
 - If number of companies where an employee worked increaes by 1, we may predict that average attrition posibility will increase by 0.2
@@ -1350,17 +1041,365 @@ We definitely see that Stepwise Model is more predictive. Let's pick the most si
 
 
 ```r
-variables<-c("Overtime","BusinessTrvlTravel_Frequently", "BusinessTrvlTravel_Rarely", "DistFromHome", "Technical Degree", "gender Male", "Job level 5", "Job role Technician", "Job role Human Resources", "Job role Manufacturing Director", "Job role Sales Executive", "Job role Sales Representative", "NumCmpWorked", "YrsSncLstPrn")
-Effect<-c(2.16, 2.22, 1.19, 0.06, 0.35, 0.37, 0.74, 0.73, 0.53, 0.44, 1.32, 1.34, 0.2,0.16)
+variables<-c("Overtime","BusinessTrvlTravel_Frequently", "BusinessTrvlTravel_Rarely", "DistFromHome", "NumCmpWorked", "YrsSncLstPrn")
+Effect<-c(2.16, 2.22, 1.19, 0.06, 0.2,0.16)
 df <- data.frame(variables,Effect)
 mytheme <- theme(plot.title = element_text(face = "bold.italic",size= 14, color = "black"), axis.text.x = element_text(face ="bold.italic"), axis.text.y = element_text(face = "bold.italic", size = 7))
 df$variables <- factor(variables, levels = df$variables[order(df$Effect)])
-ggplot(data = df, aes(x = df$variables, y = df$Effect), horis=TRUE)+geom_bar(stat = "identity")+labs(title = "Attrition influential factors", x="Variables",y="Influential Percent")+mytheme+coord_flip()
+ggplot(data = df, aes(x = df$variables, y = df$Effect), horis=TRUE)+geom_bar(stat = "identity", fill="#FF9999")+labs(title = "Attrition influential factors", x="Variables",y="Influential Percent")+mytheme+coord_flip()
 ```
 
-![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-22-1.png)<!-- -->
-As we can see from the histogram above, the most influential factor for Attrition is BusinessTrvlTravel_Frequently and Overtime. In order to reduce Attrition level at the company we need to advise review of business travel frequency and reducing overtime for some employees.
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-16-1.png)<!-- -->
 
+As we can see from the histogram above, the most influential factors for Attrition are Business Travels and Overtime. Let's see Overtime and Business Travels by Attrition factors on histograms and confirm this conclusion with actual percentage.
+
+
+```r
+ggplot(talentData,aes(x=OverTime,fill = Attrition))+geom_bar()+ggtitle("Overtime by Attrition factors")
+```
+
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
+
+```r
+library(kableExtra)
+mytable1 <- xtabs(~OverTime+Attrition, data = talentData)
+tabl1<- data.frame(ftable(mytable1))
+percent11<- tabl1[3,3]/tabl1[1,3]*100
+percent12<- tabl1[4,3]/tabl1[2,3]*100
+Attrition_Percent <-round(c(0,0,percent11,percent12),2)
+df1 <- data.frame(tabl1,Attrition_Percent)
+df1 %>%
+  kable("html") %>%
+  kable_styling() %>%
+  row_spec(4, bold = T, color = "white", background = "#D7261E")
+```
+
+<table class="table" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> OverTime </th>
+   <th style="text-align:left;"> Attrition </th>
+   <th style="text-align:right;"> Freq </th>
+   <th style="text-align:right;"> Attrition_Percent </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> No </td>
+   <td style="text-align:left;"> No </td>
+   <td style="text-align:right;"> 940 </td>
+   <td style="text-align:right;"> 0.00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Yes </td>
+   <td style="text-align:left;"> No </td>
+   <td style="text-align:right;"> 289 </td>
+   <td style="text-align:right;"> 0.00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> No </td>
+   <td style="text-align:left;"> Yes </td>
+   <td style="text-align:right;"> 108 </td>
+   <td style="text-align:right;"> 11.49 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;color: white;background-color: #D7261E;"> Yes </td>
+   <td style="text-align:left;font-weight: bold;color: white;background-color: #D7261E;"> Yes </td>
+   <td style="text-align:right;font-weight: bold;color: white;background-color: #D7261E;"> 125 </td>
+   <td style="text-align:right;font-weight: bold;color: white;background-color: #D7261E;"> 43.25 </td>
+  </tr>
+</tbody>
+</table>
+Attrition rate within employees with OverTime is 43.25%. It is 276% higher then attrition rate within employees without Overtime working hours.
+
+
+```r
+ggplot(talentData,aes(x=BusinessTrvl,fill = Attrition))+geom_bar()+ggtitle("Business Travels by Attrition factors")
+```
+
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
+
+```r
+mytable2 <- xtabs(~BusinessTrvl+Attrition, data = talentData)
+tabl2<- data.frame(ftable(mytable2))
+percent21<- tabl2[4,3]/tabl2[1,3]*100
+percent22<- tabl2[5,3]/tabl2[2,3]*100
+percent23<- tabl2[6,3]/tabl2[3,3]*100
+Attrition_Percent <-round(c(0,0,0,percent21,percent22,percent23),2)
+df2 <- data.frame(tabl2,Attrition_Percent)
+df2 %>%
+  kable("html") %>%
+  kable_styling() %>%
+  row_spec(5:6, bold = T, color = "white", background = "#D7261E")
+```
+
+<table class="table" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> BusinessTrvl </th>
+   <th style="text-align:left;"> Attrition </th>
+   <th style="text-align:right;"> Freq </th>
+   <th style="text-align:right;"> Attrition_Percent </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> Non-Travel </td>
+   <td style="text-align:left;"> No </td>
+   <td style="text-align:right;"> 135 </td>
+   <td style="text-align:right;"> 0.00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Travel_Frequently </td>
+   <td style="text-align:left;"> No </td>
+   <td style="text-align:right;"> 208 </td>
+   <td style="text-align:right;"> 0.00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Travel_Rarely </td>
+   <td style="text-align:left;"> No </td>
+   <td style="text-align:right;"> 886 </td>
+   <td style="text-align:right;"> 0.00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Non-Travel </td>
+   <td style="text-align:left;"> Yes </td>
+   <td style="text-align:right;"> 11 </td>
+   <td style="text-align:right;"> 8.15 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;color: white;background-color: #D7261E;"> Travel_Frequently </td>
+   <td style="text-align:left;font-weight: bold;color: white;background-color: #D7261E;"> Yes </td>
+   <td style="text-align:right;font-weight: bold;color: white;background-color: #D7261E;"> 67 </td>
+   <td style="text-align:right;font-weight: bold;color: white;background-color: #D7261E;"> 32.21 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;color: white;background-color: #D7261E;"> Travel_Rarely </td>
+   <td style="text-align:left;font-weight: bold;color: white;background-color: #D7261E;"> Yes </td>
+   <td style="text-align:right;font-weight: bold;color: white;background-color: #D7261E;"> 155 </td>
+   <td style="text-align:right;font-weight: bold;color: white;background-color: #D7261E;"> 17.49 </td>
+  </tr>
+</tbody>
+</table>
+Attrition rate within employees who has Frequent Business Travels is 32.21%, and 17.49% for those who has Rarely Business Travels. It is 295% and 114% higher then the attrition rate within NON travel emploees, in respect to Frequent and Rarely Business Travels.
+
+Please see below a histogram with variables that may have a good affect for "Long stay" employees, those who are satisfied with their working position and do not want to quit.
+
+
+```r
+variables<-c("EnvSatfctn2","EnvSatfctn3", "EnvSatfctn4", "JobInvolmnt2", "JobInvolmnt3", "JobInvolmnt4",
+             "JobSatfctn3","JobSatfctn4", "RlnSatfctn2", "RlnSatfctn3", "RlnSatfctn4", "StockOptLvl1",
+             "StockOptLvl2","WrkLifeBal3", "YrsWthCurMgr", "TrngTmsLstYr")
+Effect<-c(-1.10, -1.24, -1.37,  -1.19, -1.54,-2.11, -0.67, -1.29,  -0.98,  -1.03,  -1.03,  -1.46,  -1.45, -1.5, -0.14, -0.17)
+df <- data.frame(variables,Effect)
+mytheme <- theme(plot.title = element_text(face = "bold.italic",size= 14, color = "black"), axis.text.x = element_text(face ="bold.italic"), axis.text.y = element_text(face = "bold.italic", size = 7))
+df$variables <- factor(variables, levels = df$variables[order(df$Effect)])
+ggplot(data = df, aes(x = df$variables, y = df$Effect), horis=TRUE)+geom_bar(stat = "identity", fill="#66CC99")+labs(title = "'Long stay' influential factors", x="Variables",y="Influential Percent")+mytheme+coord_flip()
+```
+
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-19-1.png)<!-- -->
+
+Lets confirm our findings with actual numbers.
+
+
+```r
+ggplot(talentData,aes(x=JobInvolmnt,fill = Attrition))+geom_bar()+ggtitle("Job Involment by Attrition factors")
+```
+
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-20-1.png)<!-- -->
+
+```r
+mytable3 <- xtabs(~JobInvolmnt+Attrition, data = talentData)
+tabl3<- data.frame(ftable(mytable3))
+tabl3
+```
+
+```
+##   JobInvolmnt Attrition Freq
+## 1           1        No   55
+## 2           2        No  303
+## 3           3        No  740
+## 4           4        No  131
+## 5           1       Yes   28
+## 6           2       Yes   71
+## 7           3       Yes  121
+## 8           4       Yes   13
+```
+
+```r
+percent31<- tabl3[5,3]/tabl3[1,3]*100
+percent32<- tabl3[6,3]/tabl3[2,3]*100
+percent33<- tabl3[7,3]/tabl3[3,3]*100
+percent34<- tabl3[8,3]/tabl3[4,3]*100
+Attrition_Percent <-round(c(0,0,0,0,percent31,percent32,percent33,percent34),2)
+df3 <- data.frame(tabl3,Attrition_Percent)
+df3 %>%
+  kable("html") %>%
+  kable_styling() %>%
+  row_spec(7:8, bold = T, color = "white", background = "#66CC99")
+```
+
+<table class="table" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> JobInvolmnt </th>
+   <th style="text-align:left;"> Attrition </th>
+   <th style="text-align:right;"> Freq </th>
+   <th style="text-align:right;"> Attrition_Percent </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> No </td>
+   <td style="text-align:right;"> 55 </td>
+   <td style="text-align:right;"> 0.00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:left;"> No </td>
+   <td style="text-align:right;"> 303 </td>
+   <td style="text-align:right;"> 0.00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:left;"> No </td>
+   <td style="text-align:right;"> 740 </td>
+   <td style="text-align:right;"> 0.00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 4 </td>
+   <td style="text-align:left;"> No </td>
+   <td style="text-align:right;"> 131 </td>
+   <td style="text-align:right;"> 0.00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> Yes </td>
+   <td style="text-align:right;"> 28 </td>
+   <td style="text-align:right;"> 50.91 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:left;"> Yes </td>
+   <td style="text-align:right;"> 71 </td>
+   <td style="text-align:right;"> 23.43 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;color: white;background-color: #66CC99;"> 3 </td>
+   <td style="text-align:left;font-weight: bold;color: white;background-color: #66CC99;"> Yes </td>
+   <td style="text-align:right;font-weight: bold;color: white;background-color: #66CC99;"> 121 </td>
+   <td style="text-align:right;font-weight: bold;color: white;background-color: #66CC99;"> 16.35 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;color: white;background-color: #66CC99;"> 4 </td>
+   <td style="text-align:left;font-weight: bold;color: white;background-color: #66CC99;"> Yes </td>
+   <td style="text-align:right;font-weight: bold;color: white;background-color: #66CC99;"> 13 </td>
+   <td style="text-align:right;font-weight: bold;color: white;background-color: #66CC99;"> 9.92 </td>
+  </tr>
+</tbody>
+</table>
+Average Attrition rate for those who has Job Involment level "high" and "very high" is smoller by 50% comparing with those who has Job Involment level "low" and "medium". 
+
+
+```r
+ggplot(talentData,aes(x=StockOptLvl,fill = Attrition))+geom_bar()+ggtitle("Job Involment by Attrition factors")
+```
+
+![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-21-1.png)<!-- -->
+
+```r
+mytable4 <- xtabs(~StockOptLvl+Attrition, data = talentData)
+tabl4<- data.frame(ftable(mytable4))
+tabl4
+```
+
+```
+##   StockOptLvl Attrition Freq
+## 1           0        No  473
+## 2           1        No  540
+## 3           2        No  146
+## 4           3        No   70
+## 5           0       Yes  150
+## 6           1       Yes   56
+## 7           2       Yes   12
+## 8           3       Yes   15
+```
+
+```r
+percent41<- tabl4[5,3]/tabl4[1,3]*100
+percent42<- tabl4[6,3]/tabl4[2,3]*100
+percent43<- tabl4[7,3]/tabl4[3,3]*100
+percent44<- tabl4[8,3]/tabl4[4,3]*100
+Attrition_Percent <-round(c(0,0,0,0,percent41,percent42,percent43,percent44),2)
+df4 <- data.frame(tabl4,Attrition_Percent)
+df4 %>%
+  kable("html") %>%
+  kable_styling() %>%
+  row_spec(6:7, bold = T, color = "white", background = "#66CC99")
+```
+
+<table class="table" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> StockOptLvl </th>
+   <th style="text-align:left;"> Attrition </th>
+   <th style="text-align:right;"> Freq </th>
+   <th style="text-align:right;"> Attrition_Percent </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> 0 </td>
+   <td style="text-align:left;"> No </td>
+   <td style="text-align:right;"> 473 </td>
+   <td style="text-align:right;"> 0.00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> No </td>
+   <td style="text-align:right;"> 540 </td>
+   <td style="text-align:right;"> 0.00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:left;"> No </td>
+   <td style="text-align:right;"> 146 </td>
+   <td style="text-align:right;"> 0.00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:left;"> No </td>
+   <td style="text-align:right;"> 70 </td>
+   <td style="text-align:right;"> 0.00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 0 </td>
+   <td style="text-align:left;"> Yes </td>
+   <td style="text-align:right;"> 150 </td>
+   <td style="text-align:right;"> 31.71 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;color: white;background-color: #66CC99;"> 1 </td>
+   <td style="text-align:left;font-weight: bold;color: white;background-color: #66CC99;"> Yes </td>
+   <td style="text-align:right;font-weight: bold;color: white;background-color: #66CC99;"> 56 </td>
+   <td style="text-align:right;font-weight: bold;color: white;background-color: #66CC99;"> 10.37 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;color: white;background-color: #66CC99;"> 2 </td>
+   <td style="text-align:left;font-weight: bold;color: white;background-color: #66CC99;"> Yes </td>
+   <td style="text-align:right;font-weight: bold;color: white;background-color: #66CC99;"> 12 </td>
+   <td style="text-align:right;font-weight: bold;color: white;background-color: #66CC99;"> 8.22 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:left;"> Yes </td>
+   <td style="text-align:right;"> 15 </td>
+   <td style="text-align:right;"> 21.43 </td>
+  </tr>
+</tbody>
+</table>
+It is very interesting that employees prefer Stock Opt Level 1 and 2 verses Stock Opt Level 0 and 3. Average attrition rate is smoller by 67.5% for those who has Stock Opt Level 1 and 2.
 
 ## V. Discussion And Conclusions
 
@@ -1369,6 +1408,10 @@ After extensive statistical analysis we have been able to conclude that there ar
 #### Limit Business Travel
 
 We found that Frequent business travel was a major contributor to churn in the dataset. If a company wants to reduce the the chances of someone wanting to leave a specific job they should make sure that worker has a reduced responsiblity to travel as it could make all the difference in deciding whether to change companies.
+
+#### Understand How workers feel about Overtime
+
+We found that Not having overtime was very significant in determining employee attrition. This might indicate that management should limit the amount of times they ask employees to pick up extra hours, or only consider asking those that need the extra hours for personal reasons. This can go a long way into contributing to employee attrition.
 
 #### Consider Remote Work
 
@@ -1380,15 +1423,11 @@ After studying the data we found that the ideal number of companies worked for t
 
 #### Satisfaction Indicators
 
-We found that Environment Satisfaction Level 1, Job Invovlment Level 1, and Job Satisfaction Level 1 all contributed to employee churn in a major way. This indicates that management should consider doing things to make the work environment more comfortable so that the employees feel great about going to work every day. Employees also need to feel heavily involved in their job in as well as be satisfied doing it. It is important to conduct reviews and surveys to find out how employees feel in these areas so that an overall general pulse can be gathered on how the company is performing here.
-
-#### Understand How workers feel about Overtime
-
-We found that Not having overtime was very significant in determining employee attrition. This might indicate that management should limit the amount of times they ask employees to pick up extra hours, or only consider asking those that need the extra hours for personal reasons. This can go a long way into contributing to employee attrition.
+We found that Job Invovlment Level 4 ("very high") and 3 ("high"), Environment Satisfaction, Job Satisfaction Level 4 ("very high"), Stock Option Levels 1 and 2 are all contributed to employee churn in a major way. This indicates that management should consider doing things to make the work environment more comfortable so that the employees feel great about going to work every day. Employees also need to feel heavily involved in their job in as well as be satisfied doing it. It is important to conduct reviews and surveys to find out how employees feel in these areas so that an overall general pulse can be gathered on how the company is performing here.
 
 #### Work relationships must be maintained
 
-Employees consider work relationships to be an extremeley important factor and it also contributes to employee attrition. It makes sense to have relationship building events that improves ties within employee to employee relationships. People generally have to like who they work with, and management can improve this by tracking how their employees are relating to each other on the job. Management should consider improving situations that cause bad relationships between workers.
+Employees consider work relationships to be an extremeley important factor and it also contributes to employee "long stay" position. It makes sense to have relationship building events that improves ties within employee to employee relationships. People generally have to like who they work with, and management can improve this by tracking how their employees are relating to each other on the job. Management should consider improving situations that cause bad relationships between workers.
 
 ## References
 

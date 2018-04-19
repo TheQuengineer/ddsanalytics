@@ -469,6 +469,7 @@ mytheme <- theme(plot.title = element_text(face = "bold.italic",size= 14, color 
 df$variables <- factor(variables, levels = df$variables[order(df$Effect)])
 ggplot(data = df, aes(x = df$variables, y = df$Effect), horis=TRUE)+geom_bar(stat = "identity", fill="#66CC99")+labs(title = "'Long stay' influential factors", x="Variables",y="Influential Percent")+mytheme+coord_flip()
 ```
+
 Lets confirm our findings with actual numbers.
 
 ```{r}
