@@ -503,31 +503,71 @@ Finally, logistic regression typically requires a large sample size - Assamtion 
 
 #####Interpretation of Stepwise Model
 We definitely see that Stepwise Model is more predictive. Let's pick the most significant variables that may effect on attrition (positive slope will indicate icreasing of attrition chance additively):
+
 - Increasing of Overtime by 1 hour may predict that average attrition posibility will increase by 2.16
 - BusinessTrvlTravel_Frequently may predict that average attrition posibility will increase by 2.22
 - BusinessTrvlTravel_Rarely may predict that average attrition posibility will increase by 1.19
 - Increasing of DistFromHome for 1 mile (assuming that distance were given in miles) may predict that average attrition posibility will increase by 0.06
-- If employee has Technical Degree we may predict that average attrition posibility will increase by 0.35
-- If employee's gender is Male we may predict that average attrition posibility will increase by 0.37
-- If employee has Job level 5 (very hard)  we may predict that average attrition posibility will increase by 0.74
-- If employee has Job role Technician we may predict that average attrition posibility will increase by 0.73
-- If employee has Job role Human Resources we may predict that average attrition posibility will increase by 0.53
-- If employee has Job role Manufacturing Director we may predict that average attrition posibility will increase by 0.44
 - If employee has Job role Sales Executive we may predict that average attrition posibility will increase by 1.32
 - If employee has Job role Sales Representative we may predict that average attrition posibility will increase by 1.34
 - If number of companies where an employee worked increaes by 1, we may predict that average attrition posibility will increase by 0.2
 - Increasing of Years after last Promotion by 1 year may predict that average attrition posibility will increase by 0.16
 
 ```{r}
-variables<-c("Overtime","BusinessTrvlTravel_Frequently", "BusinessTrvlTravel_Rarely", "DistFromHome", "Technical Degree", "gender Male", "Job level 5", "Job role Technician", "Job role Human Resources", "Job role Manufacturing Director", "Job role Sales Executive", "Job role Sales Representative", "NumCmpWorked", "YrsSncLstPrn")
-Effect<-c(2.16, 2.22, 1.19, 0.06, 0.35, 0.37, 0.74, 0.73, 0.53, 0.44, 1.32, 1.34, 0.2,0.16)
+variables<-c("Overtime","BusinessTrvlTravel_Frequently", "BusinessTrvlTravel_Rarely", "DistFromHome", "NumCmpWorked", "YrsSncLstPrn")
+Effect<-c(2.16, 2.22, 1.19, 0.06, 0.2,0.16)
 df <- data.frame(variables,Effect)
 mytheme <- theme(plot.title = element_text(face = "bold.italic",size= 14, color = "black"), axis.text.x = element_text(face ="bold.italic"), axis.text.y = element_text(face = "bold.italic", size = 7))
 df$variables <- factor(variables, levels = df$variables[order(df$Effect)])
 ggplot(data = df, aes(x = df$variables, y = df$Effect), horis=TRUE)+geom_bar(stat = "identity")+labs(title = "Attrition influential factors", x="Variables",y="Influential Percent")+mytheme+coord_flip()
 ```
-As we can see from the histogram above, the most influential factor for Attrition is BusinessTrvlTravel_Frequently and Overtime. In order to reduce Attrition level at the company we need to advise review of business travel frequency and reducing overtime for some employees.
 
+As we can see from the histogram above, the most influential factors for Attrition are Business Travels and Overtime. Let's see Overtime and Business Travels by Attrition factors on histograms and confirm this conclusion with actual percentage.
+
+```{r}
+ggplot(talentData,aes(x=OverTime,fill = Attrition))+geom_bar()+ggtitle("Overtime by Attrition factors")
+library(kableExtra)
+mytable1 <- xtabs(~OverTime+Attrition, data = talentData)
+tabl1<- data.frame(ftable(mytable1))
+percent11<- tabl1[3,3]/tabl1[1,3]*100
+percent12<- tabl1[4,3]/tabl1[2,3]*100
+Attrition_Percent <-round(c(0,0,percent11,percent12),2)
+df1 <- data.frame(tabl1,Attrition_Percent)
+df1 %>%
+  kable("html") %>%
+  kable_styling() %>%
+  row_spec(4, bold = T, color = "white", background = "#D7261E")
+```
+Attrition rate within employees with OverTime is 43.25%. It is 276% higher then attrition rate within employees without Overtime working hours.
+
+```{r}
+ggplot(talentData,aes(x=BusinessTrvl,fill = Attrition))+geom_bar()+ggtitle("Business Travels by Attrition factors")
+mytable2 <- xtabs(~BusinessTrvl+Attrition, data = talentData)
+tabl2<- data.frame(ftable(mytable2))
+percent21<- tabl2[4,3]/tabl2[1,3]*100
+percent22<- tabl2[5,3]/tabl2[2,3]*100
+percent23<- tabl2[6,3]/tabl2[3,3]*100
+Attrition_Percent <-round(c(0,0,0,percent21,percent22,percent23),2)
+df2 <- data.frame(tabl2,Attrition_Percent)
+df2 %>%
+  kable("html") %>%
+  kable_styling() %>%
+  row_spec(5:6, bold = T, color = "white", background = "#D7261E")
+```
+Attrition rate within employees who has Frequent Business Travels is 32.21%, and 17.49% for those who has Rarely Business Travels. It is 295% and 114% higher then the attrition rate within NON travel emploees, in respect to Frequent and Rarely Business Travels.
+
+Please see below a histogram with variables that may have a good affect for "Long stay" employees, those who are satisfied with their working position and do not want to quit.
+
+```{r}
+variables<-c("EnvSatfctn2","EnvSatfctn3", "EnvSatfctn4", "JobInvolmnt2", "JobInvolmnt3", "JobInvolmnt4",
+             "JobSatfctn3","JobSatfctn4", "RlnSatfctn2", "RlnSatfctn3", "RlnSatfctn4", "StockOptLvl1",
+             "StockOptLvl2","WrkLifeBal3", "YrsWthCurMgr", "TrngTmsLstYr")
+Effect<-c(-1.10, -1.24, -1.37,  -1.19, -1.54,-2.11, -0.67, -1.29,  -0.98,  -1.03,  -1.03,  -1.46,  -1.45, -1.5, -0.14, -0.17)
+df <- data.frame(variables,Effect)
+mytheme <- theme(plot.title = element_text(face = "bold.italic",size= 14, color = "black"), axis.text.x = element_text(face ="bold.italic"), axis.text.y = element_text(face = "bold.italic", size = 7))
+df$variables <- factor(variables, levels = df$variables[order(df$Effect)])
+ggplot(data = df, aes(x = df$variables, y = df$Effect), horis=TRUE)+geom_bar(stat = "identity", fill="#FF9999")+labs(title = "'Long stay' influential factors", x="Variables",y="Influential Percent")+mytheme+coord_flip()
+```
 
 ## V. Discussion And Conclusions
 
@@ -536,6 +576,10 @@ After extensive statistical analysis we have been able to conclude that there ar
 #### Limit Business Travel
 
 We found that Frequent business travel was a major contributor to churn in the dataset. If a company wants to reduce the the chances of someone wanting to leave a specific job they should make sure that worker has a reduced responsiblity to travel as it could make all the difference in deciding whether to change companies.
+
+#### Understand How workers feel about Overtime
+
+We found that Not having overtime was very significant in determining employee attrition. This might indicate that management should limit the amount of times they ask employees to pick up extra hours, or only consider asking those that need the extra hours for personal reasons. This can go a long way into contributing to employee attrition.
 
 #### Consider Remote Work
 
@@ -547,15 +591,11 @@ After studying the data we found that the ideal number of companies worked for t
 
 #### Satisfaction Indicators
 
-We found that Environment Satisfaction Level 1, Job Invovlment Level 1, and Job Satisfaction Level 1 all contributed to employee churn in a major way. This indicates that management should consider doing things to make the work environment more comfortable so that the employees feel great about going to work every day. Employees also need to feel heavily involved in their job in as well as be satisfied doing it. It is important to conduct reviews and surveys to find out how employees feel in these areas so that an overall general pulse can be gathered on how the company is performing here.
-
-#### Understand How workers feel about Overtime
-
-We found that Not having overtime was very significant in determining employee attrition. This might indicate that management should limit the amount of times they ask employees to pick up extra hours, or only consider asking those that need the extra hours for personal reasons. This can go a long way into contributing to employee attrition.
+We found that Job Invovlment Level 4 ("very high") and 3 ("high"), Environment Satisfaction, Job Satisfaction Level 4 ("very high"), Stock Options are all contributed to employee churn in a major way. This indicates that management should consider doing things to make the work environment more comfortable so that the employees feel great about going to work every day. Employees also need to feel heavily involved in their job in as well as be satisfied doing it. It is important to conduct reviews and surveys to find out how employees feel in these areas so that an overall general pulse can be gathered on how the company is performing here.
 
 #### Work relationships must be maintained
 
-Employees consider work relationships to be an extremeley important factor and it also contributes to employee attrition. It makes sense to have relationship building events that improves ties within employee to employee relationships. People generally have to like who they work with, and management can improve this by tracking how their employees are relating to each other on the job. Management should consider improving situations that cause bad relationships between workers.
+Employees consider work relationships to be an extremeley important factor and it also contributes to employee "long stay" position. It makes sense to have relationship building events that improves ties within employee to employee relationships. People generally have to like who they work with, and management can improve this by tracking how their employees are relating to each other on the job. Management should consider improving situations that cause bad relationships between workers.
 
 ## References
 
