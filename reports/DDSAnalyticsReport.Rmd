@@ -353,8 +353,7 @@ ggcorrplot(correlations, hc.order = TRUE,
 
 The chart above shows us that there are no negative linear relationships in our data between our variables. We can also see that there are some positive relationships between variables that are linearly correlated and we have now been able to narrow these down so they can be examined in depth.
 
-###4.C###
-Let's check if there is any relationship between Age and Income. Does Gender makes any effect on the Monthly income?
+### 4.C Let's check if there is any relationship between Age and Income. Does Gender makes any effect on the Monthly income?
 
 ```{r}
 MonthlyIncm <- talentData$MonthlyIncm
