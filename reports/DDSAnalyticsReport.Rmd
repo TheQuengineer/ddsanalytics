@@ -529,7 +529,7 @@ After studying the data we found that the ideal number of companies worked for t
 
 #### Satisfaction Indicators
 
-We found that Job Invovlment Level 4 ("very high") and 3 ("high"), Environment Satisfaction, Job Satisfaction Level 4 ("very high"), Stock Options are all contributed to employee churn in a major way. This indicates that management should consider doing things to make the work environment more comfortable so that the employees feel great about going to work every day. Employees also need to feel heavily involved in their job in as well as be satisfied doing it. It is important to conduct reviews and surveys to find out how employees feel in these areas so that an overall general pulse can be gathered on how the company is performing here.
+We found that Job Invovlment Level 4 ("very high") and 3 ("high"), Environment Satisfaction, Job Satisfaction Level 4 ("very high"), Stock Option Levels 1 and 2 are all contributed to employee churn in a major way. This indicates that management should consider doing things to make the work environment more comfortable so that the employees feel great about going to work every day. Employees also need to feel heavily involved in their job in as well as be satisfied doing it. It is important to conduct reviews and surveys to find out how employees feel in these areas so that an overall general pulse can be gathered on how the company is performing here.
 
 #### Work relationships must be maintained
 
