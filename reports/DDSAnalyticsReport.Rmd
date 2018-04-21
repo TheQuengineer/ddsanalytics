@@ -426,7 +426,7 @@ ggplot(data = df, aes(x = df$variables, y = df$Effect), horis=TRUE)+geom_bar(sta
 As we can see from the histogram above, the most influential factors for Attrition are Business Travels and Overtime. Let's see Overtime and Business Travels by Attrition factors on histograms and confirm this conclusion with actual percentage.
 
 ```{r}
-ggplot(talentData,aes(x=OverTime,fill = Attrition))+geom_bar()+ggtitle("Overtime by Attrition factors")
+ggplot(talentData,aes(x=OverTime,fill = Attrition))+geom_bar()+ggtitle("Attrition based on Overtime factors")  +labs(x = "OverTime", y = "Count")
 library(kableExtra)
 mytable1 <- xtabs(~OverTime+Attrition, data = talentData)
 tabl1<- data.frame(ftable(mytable1))
@@ -442,7 +442,7 @@ df1 %>%
 Attrition rate within employees with OverTime is 43.25%. It is 276% higher then attrition rate within employees without Overtime working hours.
 
 ```{r}
-ggplot(talentData,aes(x=BusinessTrvl,fill = Attrition))+geom_bar()+ggtitle("Business Travels by Attrition factors")
+ggplot(talentData,aes(x=BusinessTrvl,fill = Attrition))+geom_bar()+ggtitle("Attrition based on Business Travel factors")  +labs(x = "Business Travel", y = "Count")
 mytable2 <- xtabs(~BusinessTrvl+Attrition, data = talentData)
 tabl2<- data.frame(ftable(mytable2))
 percent21<- tabl2[4,3]/tabl2[1,3]*100
@@ -473,7 +473,7 @@ ggplot(data = df, aes(x = df$variables, y = df$Effect), horis=TRUE)+geom_bar(sta
 Lets confirm our findings with actual numbers.
 
 ```{r}
-ggplot(talentData,aes(x=JobInvolmnt,fill = Attrition))+geom_bar()+ggtitle("Job Involment by Attrition factors")
+ggplot(talentData,aes(x=JobInvolmnt,fill = Attrition))+geom_bar()+ggtitle("Attrition based on Job Involvement factors") +labs(x = "Job Involvement level", y = "Count")
 mytable3 <- xtabs(~JobInvolmnt+Attrition, data = talentData)
 tabl3<- data.frame(ftable(mytable3))
 tabl3
@@ -491,7 +491,7 @@ df3 %>%
 Average Attrition rate for those who has Job Involment level "high" and "very high" is smoller by 50% comparing with those who has Job Involment level "low" and "medium". 
 
 ```{r}
-ggplot(talentData,aes(x=StockOptLvl,fill = Attrition))+geom_bar()+ggtitle("Job Involment by Attrition factors")
+ggplot(talentData,aes(x=StockOptLvl,fill = Attrition))+geom_bar()+ggtitle("Attrition based on Stock Option factors") +labs(x = "Stock Option Level", y = "Count")
 mytable4 <- xtabs(~StockOptLvl+Attrition, data = talentData)
 tabl4<- data.frame(ftable(mytable4))
 tabl4
