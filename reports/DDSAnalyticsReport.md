@@ -11,7 +11,7 @@ output:
 
 ## Abstract
 
-DDS Analytics is a analytics company that specializes in talent management solutions for Fortune 1000 companies. Talent management is defined as the iterative process of developing and retaining employees. It may include workforce planning, employee training programs, identifying high-potential employees and reducing/preventing voluntary employee turnover (attrition). To gain a competitive edge over its competition, DDS Analytics is planning to leverage data science for talent management. The executive leadership has identified predicting employee turnover as its first application of data science for talent management. This repo is the full data analysis of our findings after exploring the many facets of the data.
+DDS Analytics is a analytics company that specializes in talent management solutions for Fortune 1000 companies. Talent management is defined as the iterative process of developing and retaining employees. It may include workforce planning, employee training programs, identifying high-potential employees and reducing/preventing voluntary employee turnover (attrition). To gain a competitive edge over its competition, DDS Analytics is planning to leverage data science for talent management. The executive leadership has identified predicting employee turnover as its first application of data science for talent management. This report is the full data analysis of our findings after exploring the many facets of the data.
 
 ## I. Introduction
 
@@ -21,7 +21,7 @@ Talent is a precious commodity, especially in the corporate sector. Every organi
 
 ## II. Background
 
-As a Talent Management organization we set out to leverage the strength of Data Science in order to maintain the best employees at our organization DDS Analytics. In order for the organization to move forward in this endeavor it was neccessary to study the key factors in maintaining the best employees. As a result this study was launched by the management team in order to gain more insight into this arena.
+As a Talent Management organization we set out to leverage the strength of Data Science in order to maintain the best employees at our organization DDS Analytics. In order for the organization to move forward in this endeavor it was necessary to study the key factors in maintaining the best employees. As a result this study was launched by the management team in order to gain more insight into this arena.
 
 
 ## III.  Methodology
@@ -32,22 +32,22 @@ In order to make sure our data was ready for proper analysis we had to go throug
 
 1. Data Import
 2. Data Type Conversion
-3. Factorization For Catagorical Variables
+3. Factorization For Categorical Variables
 4. Handling of Missing or Inaccurate Values
 
 We will discuss the process of each step below.
 
 #### Data Import
 
-We have obtained a dataset which incldudes 35 variables with 1470 observations. The dataset is will be referred to as `talentMgmtData`. In order to better understand our data we needed to proceed with cleaning it appropriately.
+We have obtained a dataset which includes 35 variables with 1470 observations. The dataset is will be referred to as `talentMgmtData`. In order to better understand our data we needed to proceed with cleaning it appropriately.
 
 #### Data Type Conversion
 
-Analysis could not be done properly if our variables are not in the correct type. Several of the numerical based variables showed up as doubles which was not neccessarily appropriate for research and analysis. For example, the years of experience for specfic employees needed to be converted to integer types, and Standard Working hours had no reason to show as a double, so it to was converted to an integer. This process was followed for each one of the 35 variables on order to ensure each columns assigned data type made sense for the context of the study.
+Analysis could not be done properly if our variables are not in the correct type. Several of the numerical based variables showed up as doubles which was not necessarily appropriate for research and analysis. For example, the years of experience for specific employees needed to be converted to integer types, and Standard Working hours had no reason to show as a double, so it to was converted to an integer. This process was followed for each one of the 35 variables on order to ensure each columns assigned data type made sense for the context of the study.
 
 #### Factorization For Catagorical Variables
 
-Within our `talentMgmtData` we noticed that there were several columns that were improperly listed as integers when they were simply catagories. In order for us to be able to do factor analysis we picked out the columns that would be better suited to be catagories instead of integers so that we could get a better understanding of how our talent was spread out over different situations. For example, Columns like Department, BusinessTravel, Over18, & Jobsatisfaction to name a few, are all better suited to be treated as catagorical variables for our research purposes. As a result, we have converted the appropriate columns that explained how our data points were separated by making them factors instead of numerical values.
+Within our `talentMgmtData` we noticed that there were several columns that were improperly listed as integers when they were simply categories. In order for us to be able to do factor analysis we picked out the columns that would be better suited to be categories instead of integers so that we could get a better understanding of how our talent was spread out over different situations. For example, Columns like Department, BusinessTravel, Over18, & Job satisfaction to name a few, are all better suited to be treated as categorical variables for our research purposes. As a result, we have converted the appropriate columns that explained how our data points were separated by making them factors instead of numerical values.
 
 #### Handling of Missing or Inaccurate Values
 
@@ -56,7 +56,7 @@ In order for our mathematical calculations to work we had to convert many of our
 #### DATA CLEANING
 
 ```r
-#a.	Read the csv into R and take a look at the data set.  Output how many rows and columns the data.frame is.
+#2a.	Read the csv into R and take a look at the data set.  Output how many rows and columns the data.frame is.
 library(readxl)
 talentMgmtData <- read_excel("datasets/CaseStudy2-data.xlsx")
 dim(talentMgmtData)
@@ -67,10 +67,36 @@ dim(talentMgmtData)
 ```
 
 ```r
-#b	The column names are either too much or not enough.  Change the column names so that they do not have spaces, underscores, slashes, and the like. All column names should be under 12 characters. TODO: Make sure you're updating your codebook with information on the tidied data set as well.
+names(talentMgmtData)
+```
+
+```
+##  [1] "Age"                      "Attrition"               
+##  [3] "BusinessTravel"           "DailyRate"               
+##  [5] "Department"               "DistanceFromHome"        
+##  [7] "Education"                "EducationField"          
+##  [9] "EmployeeCount"            "EmployeeNumber"          
+## [11] "EnvironmentSatisfaction"  "Gender"                  
+## [13] "HourlyRate"               "JobInvolvement"          
+## [15] "JobLevel"                 "JobRole"                 
+## [17] "JobSatisfaction"          "MaritalStatus"           
+## [19] "MonthlyIncome"            "MonthlyRate"             
+## [21] "NumCompaniesWorked"       "Over18"                  
+## [23] "OverTime"                 "PercentSalaryHike"       
+## [25] "PerformanceRating"        "RelationshipSatisfaction"
+## [27] "StandardHours"            "StockOptionLevel"        
+## [29] "TotalWorkingYears"        "TrainingTimesLastYear"   
+## [31] "WorkLifeBalance"          "YearsAtCompany"          
+## [33] "YearsInCurrentRole"       "YearsSinceLastPromotion" 
+## [35] "YearsWithCurrManager"
+```
+
+```r
+#2b	The column names are either too much or not enough.  Change the column names so that they do not have spaces, underscores, slashes, and the like. All column names should be under 12 characters. Make sure you're updating your codebook with information on the tidied data set as well.
 
 names(talentMgmtData) <- c("Age","Attrition","BusinessTrvl","DailyRate","Department","DistFromHome","YrsOfEdu","EduField","EmployeeCnt","EmployeeNum","EnvSatfctn","Gender","HourlyRate","JobInvolmnt","JobLevel","JobRole","JobSatfctn","MaritalStat","MonthlyIncm","MonthlyRate","NumCmpWorked","Over18","OverTime","PrcntSalHike","PerfRating","RlnSatfctn","StandardHrs","StockOptLvl","TtlWrkngYrs","TrngTmsLstYr","WrkLifeBal","YrsAtCompany","YrsInCrntRl","YrsSncLstPrn","YrsWthCurMgr")
 
+#changed variable names
 names(talentMgmtData)
 ```
 
@@ -87,55 +113,86 @@ names(talentMgmtData)
 ```
 
 ```r
-# c	Some columns are, due to Qualtrics, malfunctioning.
+# 2c	Some columns are, due to Qualtrics, malfunctioning.
 
-# TODO: Discuss with team, delete Over18 and StandardHrs(80hrs) columns
-talentMgmtData$Over18 <- NULL
-talentMgmtData <- subset(talentMgmtData, select = -c(StandardHrs))
+# deleting Over18, EmployeeCount, EmployeeNumber and StandardHrs(80hrs) columns that doesn't have much impact on the analysis we are doing
 
-# d	Make sure your columns are the proper data types (i.e., numeric, character, etc.).  If they are incorrect, convert them. 
-str(talentMgmtData)
+talentMgmtData <- subset(talentMgmtData, select = -c(Over18,EmployeeCnt,EmployeeNum,StandardHrs))
+
+# 2d	Make sure your columns are the proper data types (i.e., numeric, character, etc.).  If they are incorrect, convert them. 
+
+library(dplyr)
 ```
 
 ```
-## Classes 'tbl_df', 'tbl' and 'data.frame':	1470 obs. of  33 variables:
-##  $ Age         : num  41 49 37 33 27 32 59 30 38 36 ...
-##  $ Attrition   : chr  "Yes" "No" "Yes" "No" ...
-##  $ BusinessTrvl: chr  "Travel_Rarely" "Travel_Frequently" "Travel_Rarely" "Travel_Frequently" ...
-##  $ DailyRate   : num  1102 279 1373 1392 591 ...
-##  $ Department  : chr  "Sales" "Research & Development" "Research & Development" "Research & Development" ...
-##  $ DistFromHome: num  1 8 2 3 2 2 3 24 23 27 ...
-##  $ YrsOfEdu    : num  2 1 2 4 1 2 3 1 3 3 ...
-##  $ EduField    : chr  "Life Sciences" "Life Sciences" "Other" "Life Sciences" ...
-##  $ EmployeeCnt : num  1 1 1 1 1 1 1 1 1 1 ...
-##  $ EmployeeNum : num  1 2 4 5 7 8 10 11 12 13 ...
-##  $ EnvSatfctn  : num  2 3 4 4 1 4 3 4 4 3 ...
-##  $ Gender      : chr  "Female" "Male" "Male" "Female" ...
-##  $ HourlyRate  : num  94 61 92 56 40 79 81 67 44 94 ...
-##  $ JobInvolmnt : num  3 2 2 3 3 3 4 3 2 3 ...
-##  $ JobLevel    : num  2 2 1 1 1 1 1 1 3 2 ...
-##  $ JobRole     : chr  "Sales Executive" "Research Scientist" "Laboratory Technician" "Research Scientist" ...
-##  $ JobSatfctn  : num  4 2 3 3 2 4 1 3 3 3 ...
-##  $ MaritalStat : chr  "Single" "Married" "Single" "Married" ...
-##  $ MonthlyIncm : num  5993 5130 2090 2909 3468 ...
-##  $ MonthlyRate : num  19479 24907 2396 23159 16632 ...
-##  $ NumCmpWorked: num  8 1 6 1 9 0 4 1 0 6 ...
-##  $ OverTime    : chr  "Yes" "No" "Yes" "Yes" ...
-##  $ PrcntSalHike: num  11 23 15 11 12 13 20 22 21 13 ...
-##  $ PerfRating  : num  3 4 3 3 3 3 4 4 4 3 ...
-##  $ RlnSatfctn  : num  1 4 2 3 4 3 1 2 2 2 ...
-##  $ StockOptLvl : num  0 1 0 0 1 0 3 1 0 2 ...
-##  $ TtlWrkngYrs : num  8 10 7 8 6 8 12 1 10 17 ...
-##  $ TrngTmsLstYr: num  0 3 3 3 3 2 3 2 2 3 ...
-##  $ WrkLifeBal  : num  1 3 3 3 3 2 2 3 3 2 ...
-##  $ YrsAtCompany: num  6 10 0 8 2 7 1 1 9 7 ...
-##  $ YrsInCrntRl : num  4 7 0 7 2 7 0 0 7 7 ...
-##  $ YrsSncLstPrn: num  0 1 0 3 2 3 0 0 1 7 ...
-##  $ YrsWthCurMgr: num  5 7 0 0 2 6 0 0 8 7 ...
+## 
+## Attaching package: 'dplyr'
+```
+
+```
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
 ```
 
 ```r
-#TODO: Discuss with team foll. factor levels of dataset
+#Get an Idea of the current format of the colums we are currently using.
+glimpse(talentMgmtData)
+```
+
+```
+## Observations: 1,470
+## Variables: 31
+## $ Age          <dbl> 41, 49, 37, 33, 27, 32, 59, 30, 38, 36, 35, 29, 3...
+## $ Attrition    <chr> "Yes", "No", "Yes", "No", "No", "No", "No", "No",...
+## $ BusinessTrvl <chr> "Travel_Rarely", "Travel_Frequently", "Travel_Rar...
+## $ DailyRate    <dbl> 1102, 279, 1373, 1392, 591, 1005, 1324, 1358, 216...
+## $ Department   <chr> "Sales", "Research & Development", "Research & De...
+## $ DistFromHome <dbl> 1, 8, 2, 3, 2, 2, 3, 24, 23, 27, 16, 15, 26, 19, ...
+## $ YrsOfEdu     <dbl> 2, 1, 2, 4, 1, 2, 3, 1, 3, 3, 3, 2, 1, 2, 3, 4, 2...
+## $ EduField     <chr> "Life Sciences", "Life Sciences", "Other", "Life ...
+## $ EnvSatfctn   <dbl> 2, 3, 4, 4, 1, 4, 3, 4, 4, 3, 1, 4, 1, 2, 3, 2, 1...
+## $ Gender       <chr> "Female", "Male", "Male", "Female", "Male", "Male...
+## $ HourlyRate   <dbl> 94, 61, 92, 56, 40, 79, 81, 67, 44, 94, 84, 49, 3...
+## $ JobInvolmnt  <dbl> 3, 2, 2, 3, 3, 3, 4, 3, 2, 3, 4, 2, 3, 3, 2, 4, 4...
+## $ JobLevel     <dbl> 2, 2, 1, 1, 1, 1, 1, 1, 3, 2, 1, 2, 1, 1, 1, 3, 1...
+## $ JobRole      <chr> "Sales Executive", "Research Scientist", "Laborat...
+## $ JobSatfctn   <dbl> 4, 2, 3, 3, 2, 4, 1, 3, 3, 3, 2, 3, 3, 4, 3, 1, 2...
+## $ MaritalStat  <chr> "Single", "Married", "Single", "Married", "Marrie...
+## $ MonthlyIncm  <dbl> 5993, 5130, 2090, 2909, 3468, 3068, 2670, 2693, 9...
+## $ MonthlyRate  <dbl> 19479, 24907, 2396, 23159, 16632, 11864, 9964, 13...
+## $ NumCmpWorked <dbl> 8, 1, 6, 1, 9, 0, 4, 1, 0, 6, 0, 0, 1, 0, 5, 1, 0...
+## $ OverTime     <chr> "Yes", "No", "Yes", "Yes", "No", "No", "Yes", "No...
+## $ PrcntSalHike <dbl> 11, 23, 15, 11, 12, 13, 20, 22, 21, 13, 13, 12, 1...
+## $ PerfRating   <dbl> 3, 4, 3, 3, 3, 3, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3...
+## $ RlnSatfctn   <dbl> 1, 4, 2, 3, 4, 3, 1, 2, 2, 2, 3, 4, 4, 3, 2, 3, 4...
+## $ StockOptLvl  <dbl> 0, 1, 0, 0, 1, 0, 3, 1, 0, 2, 1, 0, 1, 1, 0, 1, 2...
+## $ TtlWrkngYrs  <dbl> 8, 10, 7, 8, 6, 8, 12, 1, 10, 17, 6, 10, 5, 3, 6,...
+## $ TrngTmsLstYr <dbl> 0, 3, 3, 3, 3, 2, 3, 2, 2, 3, 5, 3, 1, 2, 4, 1, 5...
+## $ WrkLifeBal   <dbl> 1, 3, 3, 3, 3, 2, 2, 3, 3, 2, 3, 3, 2, 3, 3, 3, 2...
+## $ YrsAtCompany <dbl> 6, 10, 0, 8, 2, 7, 1, 1, 9, 7, 5, 9, 5, 2, 4, 10,...
+## $ YrsInCrntRl  <dbl> 4, 7, 0, 7, 2, 7, 0, 0, 7, 7, 4, 5, 2, 2, 2, 9, 2...
+## $ YrsSncLstPrn <dbl> 0, 1, 0, 3, 2, 3, 0, 0, 1, 7, 0, 0, 4, 1, 0, 8, 0...
+## $ YrsWthCurMgr <dbl> 5, 7, 0, 0, 2, 6, 0, 0, 8, 7, 3, 8, 3, 2, 3, 8, 5...
+```
+
+```r
+#check for NAs
+any(is.na(talentMgmtData))
+```
+
+```
+## [1] FALSE
+```
+
+```r
+#inspecting the different factor levels of variables of interest
 unique(talentMgmtData$BusinessTrvl)
 ```
 
@@ -153,6 +210,30 @@ unique(talentMgmtData$JobRole)
 ## [5] "Healthcare Representative" "Manager"                  
 ## [7] "Sales Representative"      "Research Director"        
 ## [9] "Human Resources"
+```
+
+```r
+unique(talentMgmtData$OverTime)
+```
+
+```
+## [1] "Yes" "No"
+```
+
+```r
+unique(talentMgmtData$Gender)
+```
+
+```
+## [1] "Female" "Male"
+```
+
+```r
+unique(talentMgmtData$MaritalStat)
+```
+
+```
+## [1] "Single"   "Married"  "Divorced"
 ```
 
 ```r
@@ -182,70 +263,6 @@ unique(talentMgmtData$EduField)
 ```
 
 ```r
-library(dplyr)
-```
-
-```
-## 
-## Attaching package: 'dplyr'
-```
-
-```
-## The following objects are masked from 'package:stats':
-## 
-##     filter, lag
-```
-
-```
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union
-```
-
-```r
-#Get an Idea of the current format of the colums we are currently using.
-glimpse(talentMgmtData)
-```
-
-```
-## Observations: 1,470
-## Variables: 33
-## $ Age          <dbl> 41, 49, 37, 33, 27, 32, 59, 30, 38, 36, 35, 29, 3...
-## $ Attrition    <chr> "Yes", "No", "Yes", "No", "No", "No", "No", "No",...
-## $ BusinessTrvl <chr> "Travel_Rarely", "Travel_Frequently", "Travel_Rar...
-## $ DailyRate    <dbl> 1102, 279, 1373, 1392, 591, 1005, 1324, 1358, 216...
-## $ Department   <chr> "Sales", "Research & Development", "Research & De...
-## $ DistFromHome <dbl> 1, 8, 2, 3, 2, 2, 3, 24, 23, 27, 16, 15, 26, 19, ...
-## $ YrsOfEdu     <dbl> 2, 1, 2, 4, 1, 2, 3, 1, 3, 3, 3, 2, 1, 2, 3, 4, 2...
-## $ EduField     <chr> "Life Sciences", "Life Sciences", "Other", "Life ...
-## $ EmployeeCnt  <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1...
-## $ EmployeeNum  <dbl> 1, 2, 4, 5, 7, 8, 10, 11, 12, 13, 14, 15, 16, 18,...
-## $ EnvSatfctn   <dbl> 2, 3, 4, 4, 1, 4, 3, 4, 4, 3, 1, 4, 1, 2, 3, 2, 1...
-## $ Gender       <chr> "Female", "Male", "Male", "Female", "Male", "Male...
-## $ HourlyRate   <dbl> 94, 61, 92, 56, 40, 79, 81, 67, 44, 94, 84, 49, 3...
-## $ JobInvolmnt  <dbl> 3, 2, 2, 3, 3, 3, 4, 3, 2, 3, 4, 2, 3, 3, 2, 4, 4...
-## $ JobLevel     <dbl> 2, 2, 1, 1, 1, 1, 1, 1, 3, 2, 1, 2, 1, 1, 1, 3, 1...
-## $ JobRole      <chr> "Sales Executive", "Research Scientist", "Laborat...
-## $ JobSatfctn   <dbl> 4, 2, 3, 3, 2, 4, 1, 3, 3, 3, 2, 3, 3, 4, 3, 1, 2...
-## $ MaritalStat  <chr> "Single", "Married", "Single", "Married", "Marrie...
-## $ MonthlyIncm  <dbl> 5993, 5130, 2090, 2909, 3468, 3068, 2670, 2693, 9...
-## $ MonthlyRate  <dbl> 19479, 24907, 2396, 23159, 16632, 11864, 9964, 13...
-## $ NumCmpWorked <dbl> 8, 1, 6, 1, 9, 0, 4, 1, 0, 6, 0, 0, 1, 0, 5, 1, 0...
-## $ OverTime     <chr> "Yes", "No", "Yes", "Yes", "No", "No", "Yes", "No...
-## $ PrcntSalHike <dbl> 11, 23, 15, 11, 12, 13, 20, 22, 21, 13, 13, 12, 1...
-## $ PerfRating   <dbl> 3, 4, 3, 3, 3, 3, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3...
-## $ RlnSatfctn   <dbl> 1, 4, 2, 3, 4, 3, 1, 2, 2, 2, 3, 4, 4, 3, 2, 3, 4...
-## $ StockOptLvl  <dbl> 0, 1, 0, 0, 1, 0, 3, 1, 0, 2, 1, 0, 1, 1, 0, 1, 2...
-## $ TtlWrkngYrs  <dbl> 8, 10, 7, 8, 6, 8, 12, 1, 10, 17, 6, 10, 5, 3, 6,...
-## $ TrngTmsLstYr <dbl> 0, 3, 3, 3, 3, 2, 3, 2, 2, 3, 5, 3, 1, 2, 4, 1, 5...
-## $ WrkLifeBal   <dbl> 1, 3, 3, 3, 3, 2, 2, 3, 3, 2, 3, 3, 2, 3, 3, 3, 2...
-## $ YrsAtCompany <dbl> 6, 10, 0, 8, 2, 7, 1, 1, 9, 7, 5, 9, 5, 2, 4, 10,...
-## $ YrsInCrntRl  <dbl> 4, 7, 0, 7, 2, 7, 0, 0, 7, 7, 4, 5, 2, 2, 2, 9, 2...
-## $ YrsSncLstPrn <dbl> 0, 1, 0, 3, 2, 3, 0, 0, 1, 7, 0, 0, 4, 1, 0, 8, 0...
-## $ YrsWthCurMgr <dbl> 5, 7, 0, 0, 2, 6, 0, 0, 8, 7, 3, 8, 3, 2, 3, 8, 5...
-```
-
-```r
 # Factor appropriate columns 
 talentMgmtData$Department <- as.factor(talentMgmtData$Department)
 talentMgmtData$BusinessTrvl <- as.factor(talentMgmtData$BusinessTrvl)
@@ -259,14 +276,12 @@ talentMgmtData$EnvSatfctn <- as.factor(talentMgmtData$EnvSatfctn)
 talentMgmtData$JobLevel <- as.factor(talentMgmtData$JobLevel)
 talentMgmtData$StockOptLvl <- as.factor(talentMgmtData$StockOptLvl)
 talentMgmtData$PerfRating <- as.factor(talentMgmtData$PerfRating)
-talentMgmtData$EmployeeCnt <- as.factor(talentMgmtData$EmployeeCnt)
 talentMgmtData$JobInvolmnt <- as.factor(talentMgmtData$JobInvolmnt)
 talentMgmtData$RlnSatfctn <- as.factor(talentMgmtData$RlnSatfctn)
 talentMgmtData$WrkLifeBal <- as.factor(talentMgmtData$WrkLifeBal)
 talentMgmtData$JobSatfctn <- as.factor(talentMgmtData$JobSatfctn)
 # handle numeric based columns to show as double or integer if need be.
 talentMgmtData$Age <- as.integer(talentMgmtData$Age)
-talentMgmtData$EmployeeNum <- as.integer(talentMgmtData$EmployeeNum)
 talentMgmtData$DistFromHome <- as.integer(talentMgmtData$DistFromHome)
 talentMgmtData$YrsOfEdu <- as.integer(talentMgmtData$YrsOfEdu)
 talentMgmtData$DailyRate <- as.numeric(talentMgmtData$DailyRate)
@@ -283,7 +298,7 @@ glimpse(talentMgmtData)
 
 ```
 ## Observations: 1,470
-## Variables: 33
+## Variables: 31
 ## $ Age          <int> 41, 49, 37, 33, 27, 32, 59, 30, 38, 36, 35, 29, 3...
 ## $ Attrition    <fct> Yes, No, Yes, No, No, No, No, No, No, No, No, No,...
 ## $ BusinessTrvl <fct> Travel_Rarely, Travel_Frequently, Travel_Rarely, ...
@@ -292,8 +307,6 @@ glimpse(talentMgmtData)
 ## $ DistFromHome <int> 1, 8, 2, 3, 2, 2, 3, 24, 23, 27, 16, 15, 26, 19, ...
 ## $ YrsOfEdu     <int> 2, 1, 2, 4, 1, 2, 3, 1, 3, 3, 3, 2, 1, 2, 3, 4, 2...
 ## $ EduField     <fct> Life Sciences, Life Sciences, Other, Life Science...
-## $ EmployeeCnt  <fct> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1...
-## $ EmployeeNum  <int> 1, 2, 4, 5, 7, 8, 10, 11, 12, 13, 14, 15, 16, 18,...
 ## $ EnvSatfctn   <fct> 2, 3, 4, 4, 1, 4, 3, 4, 4, 3, 1, 4, 1, 2, 3, 2, 1...
 ## $ Gender       <fct> Female, Male, Male, Female, Male, Male, Female, M...
 ## $ HourlyRate   <dbl> 94, 61, 92, 56, 40, 79, 81, 67, 44, 94, 84, 49, 3...
@@ -339,7 +352,7 @@ range(talentData$Age)
 
 As we can see above, only Ages 19 to 60 exists within our dataset.
 
-Now that the data has been prepared and formatted accordingly it is neccessary to explore it to its depths.
+Now that the data has been prepared and formatted accordingly it is necessary to explore it to its depths.
 
 ####3.B Descriptive statistics####
 
@@ -442,13 +455,13 @@ hist(talentData$MonthlyIncm, col = "darkgreen", xlab="Monthly Income", main="His
 
 ![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-4-2.png)<!-- -->
 
-On the histograms we can see almost equal spread of hourly rates within the company, but we can not say the same about monthly income, it means that employees work different amount of hours (some of them are part time, and some of them work with overtime (more then 40hours), we do not have information if any bonuses were paid in the company, so it does not make sense to continue analize working hours). Histigram of income shows a right skewed distribution for our Monthly Income in our dataset. It is also clear that the majority of the population in this dataset makes between \$1000 and $6000 per month. The higher we go out in income the more the distribution becomes narrower.
+On the histograms we can see almost equal spread of hourly rates within the company, but we can not say the same about monthly income, it means that employees work different amount of hours (some of them are part time, and some of them work with overtime (more then 40hours), we do not have information if any bonuses were paid in the company, so it does not make sense to continue analyze working hours). Histogram of income shows a right skewed distribution for our Monthly Income in our dataset. It is also clear that the majority of the population in this dataset makes between \$1000 and $6000 per month. The higher we go out in income the more the distribution becomes narrower.
 
 #### 3.C####
 
 ##### Understanding Gender, Education, & Occupations
 
-Next we explore how Gender, Education and Job Role is broken down within our dataset. Below are frequency tables of our findings for these three catagories...
+Next we explore how Gender, Education and Job Role is broken down within our dataset. Below are frequency tables of our findings for these three categories...
 
 
 ```r
@@ -594,7 +607,7 @@ ggplot(demographics, aes(demographics$JobRole)) +
 
 ![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
 
-Our chart shows a bimodal distribution of our job roles. What is interesting here is we can see that sales executive is the most commonly occuring job in our dataset with more than 300 people represented in that category. It is also interesting to note that the spread between male and female in that job catagory looks almost equally represented. Our Lowest category is Human Resources Which has partitioned of mostly males even though there are just under 50 people in this catagory as a whole.
+Our chart shows a bimodal distribution of our job roles. What is interesting here is we can see that sales executive is the most commonly occurring job in our dataset with more than 300 people represented in that category. It is also interesting to note that the spread between male and female in that job category looks almost equally represented. Our Lowest category is Human Resources Which has partitioned of mostly males even though there are just under 50 people in this category as a whole.
 
 What about Education? How is education represented across the genders. We take a look at that distribution next.
 
@@ -613,7 +626,7 @@ ggplot(demographics, aes(demographics$EduField)) +
 
 ![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
 
-We can see from this chart that Human Resources has the lowest participation in terms of education which actually makes sense given that it is our lowest filled job role. Life Science seems to be the most popular field of study between all the listed education choices with 600 different people in our dataset who studied in this field. This does not neccesarily match with our discovery regarding our popular job role. Life Science skills can translate into making great Sales Executives, but this educational field of study does not seem to be directly related to the Sales Executive.
+We can see from this chart that Human Resources has the lowest participation in terms of education which actually makes sense given that it is our lowest filled job role. Life Science seems to be the most popular field of study between all the listed education choices with 600 different people in our dataset who studied in this field. This does not necessarily match with our discovery regarding our popular job role. Life Science skills can translate into making great Sales Executives, but this educational field of study does not seem to be directly related to the Sales Executive.
 
 #### 3.D####
 
@@ -660,7 +673,7 @@ Our next section will use all of our recent discoveries about the `talentData` t
 ## IV. Deeper Analysis and Visualization
 
 
-When it comes to jobs the first thing that we want to look at is our age distribution. This is an imporatant step in our EDA process as we would like to get an idea of how old or young our these individuals in our entire dataset as it might give us a good place to start. We are only interested in exploring individuals in the workforce that are older than 18, so all of the forward analysis will take this constraint into consideration.
+When it comes to jobs the first thing that we want to look at is our age distribution. This is an important step in our EDA process as we would like to get an idea of how old or young our these individuals in our entire dataset as it might give us a good place to start. We are only interested in exploring individuals in the workforce that are older than 18, so all of the forward analysis will take this constraint into consideration.
 
 
 ```r
@@ -691,7 +704,7 @@ ggplot(talentData, aes(x=Age, y=YrsAtCompany)) +
 
 ![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
 
-Our findings here are not surprising. We notice that visually there might be evidence of a positive linear relationship between age and years at a specific company. This finding suggests that the older you are the more likely you are to have a greater number of years at a specific company. To know for sure we examine pearson correlation between `YrsAtCompany` and `Age`.
+Our findings here are not surprising. We notice that visually there might be evidence of a positive linear relationship between age and years at a specific company. This finding suggests that the older you are the more likely you are to have a greater number of years at a specific company. To know for sure we examine Pearson correlation between `YrsAtCompany` and `Age`.
 
 
 ```r
@@ -716,7 +729,7 @@ cor.test(x=talentData$Age, y=talentData$YrsAtCompany,
 ## 0.302989
 ```
 
-Based on the results of our correlation test we have a pearsons correlation value of `0.302989` (95% CI: 0.25 to 0.34) which is more evidence of a positive linear relationship between Age and Years at a specific company. It is important for us to keep this relationship in mind moving forward for the rest of the study.
+Based on the results of our correlation test we have a Pearsons correlation value of `0.302989` (95% CI: 0.25 to 0.34) which is more evidence of a positive linear relationship between Age and Years at a specific company. It is important for us to keep this relationship in mind moving forward for the rest of the study.
 
 #### Exploring the Relationship between Years At a the company and Satisfaction
 
@@ -734,7 +747,7 @@ ggplot(talentData, aes(YrsAtCompany)) +
 
 ![](DDSAnalyticsReport_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
 
-The Chart above is very telling. We take a look at our probability distribution across different Job Satisfaction levels. 1 indicates that there is low employee job satisfaction, and 4 represents that there is really high employee job satisfaction. If we examine the probability of each within the context of the years an individual stays at a company it becomes clear that lower job satisfaction indicates that this catagory has the lowest number of years spent at a company. This is no surprise, but it does give us more infomration regarding negative factors to employee attrition.
+The Chart above is very telling. We take a look at our probability distribution across different Job Satisfaction levels. 1 indicates that there is low employee job satisfaction, and 4 represents that there is really high employee job satisfaction. If we examine the probability of each within the context of the years an individual stays at a company it becomes clear that lower job satisfaction indicates that this category has the lowest number of years spent at a company. This is no surprise, but it does give us more information regarding negative factors to employee attrition.
 
 ##### Correlation Plot of TalentData
 
@@ -825,7 +838,7 @@ From regression analysis above we can say that Gender does not make significant 
 
 Our goal is to determine which indicators might lead to employee attrition. The best way for us to find those is to create a regression model for Attrition prediction.
 
-Let's use stepwise selection method to come up with the model which has only significat variables.
+Let's use stepwise selection method to come up with the model which has only significant variables.
 
 
 ```r
@@ -1032,25 +1045,25 @@ summary(CustomModel_Attrition)
 AIC of the StepwiseModel is 874.95 and R is 1 - (Residual Deviance/Null Deviance)= 1 - 774.95/1285.54 = 0.4. 
 AIC of the CustomModel is 996.9 and R is 1 - (Residual Deviance/Null Deviance)= 1 - 944.9/1285.54 = 0.26.
 
-Model assamptions:
-Logistic regression does not make many of the key assumptions of linear regression and general linear models that are based on ordinary least squares algorithms – particularly regarding linearity, normality, homoscedasticity, and measurement level.
-First, binary logistic regression requires the dependent variable to be binary - Assamtion is met.
-Second, logistic regression requires the observations to be independent of each other.  In other words, the observations should not come from repeated measurements or matched data - Assamtion is met.
-Third, logistic regression requires there to be little or no multicollinearity among the independent variables.  This means that the independent variables should not be too highly correlated with each other - Assamtion is met.
-Fourth, logistic regression assumes linearity of independent variables - Assamtion is met.
-Finally, logistic regression typically requires a large sample size - Assamtion is met (1470 observations).
+Model assumptions:
+Logistic regression does not make many of the key assumptions of linear regression and general linear models that are based on ordinary least squares algorithms particularly regarding linearity, normality, homoscedasticity, and measurement level.
+First, binary logistic regression requires the dependent variable to be binary - Assumption is met.
+Second, logistic regression requires the observations to be independent of each other.  In other words, the observations should not come from repeated measurements or matched data - Assumption is met.
+Third, logistic regression requires there to be little or no multicollinearity among the independent variables.  This means that the independent variables should not be too highly correlated with each other - Assumption is met.
+Fourth, logistic regression assumes linearity of independent variables - Assumption is met.
+Finally, logistic regression typically requires a large sample size - Assumption is met (1470 observations).
 
 #####Interpretation of Stepwise Model
-We definitely see that Stepwise Model is more predictive. Let's pick the most significant variables that may effect on attrition (positive slope will indicate icreasing of attrition chance additively):
+We definitely see that Stepwise Model is more predictive. Let's pick the most significant variables that may effect on attrition (positive slope will indicate increasing of attrition chance additively):
 
-- Increasing of Overtime by 1 hour may predict that average attrition posibility will increase by 2.16
-- BusinessTrvlTravel_Frequently may predict that average attrition posibility will increase by 2.22
-- BusinessTrvlTravel_Rarely may predict that average attrition posibility will increase by 1.19
-- Increasing of DistFromHome for 1 mile (assuming that distance were given in miles) may predict that average attrition posibility will increase by 0.06
-- If employee has Job role Sales Executive we may predict that average attrition posibility will increase by 1.32
-- If employee has Job role Sales Representative we may predict that average attrition posibility will increase by 1.34
-- If number of companies where an employee worked increaes by 1, we may predict that average attrition posibility will increase by 0.2
-- Increasing of Years after last Promotion by 1 year may predict that average attrition posibility will increase by 0.16
+- Increasing of Overtime by 1 hour may predict that average attrition possibility will increase by 2.16
+- BusinessTrvlTravel_Frequently may predict that average attrition possibility will increase by 2.22
+- BusinessTrvlTravel_Rarely may predict that average attrition possibility will increase by 1.19
+- Increasing of DistFromHome for 1 mile (assuming that distance were given in miles) may predict that average attrition possibility will increase by 0.06
+- If employee has Job role Sales Executive we may predict that average attrition possibility will increase by 1.32
+- If employee has Job role Sales Representative we may predict that average attrition possibility will increase by 1.34
+- If number of companies where an employee worked increases by 1, we may predict that average attrition possibility will increase by 0.2
+- Increasing of Years after last Promotion by 1 year may predict that average attrition possibility will increase by 0.16
 
 
 ```r
@@ -1194,7 +1207,7 @@ df2 %>%
   </tr>
 </tbody>
 </table>
-Attrition rate within employees who has Frequent Business Travels is 32.21%, and 17.49% for those who has Rarely Business Travels. It is 295% and 114% higher then the attrition rate within NON travel emploees, in respect to Frequent and Rarely Business Travels.
+Attrition rate within employees who has Frequent Business Travels is 32.21%, and 17.49% for those who has Rarely Business Travels. It is 295% and 114% higher then the attrition rate within NON travel employees, in respect to Frequent and Rarely Business Travels.
 
 Please see below a histogram with variables that may have a good affect for "Long stay" employees, those who are satisfied with their working position and do not want to quit.
 
@@ -1312,7 +1325,7 @@ df3 %>%
   </tr>
 </tbody>
 </table>
-Average Attrition rate for those who has Job Involment level "high" and "very high" is smoller by 50% comparing with those who has Job Involment level "low" and "medium". 
+Average Attrition rate for those who has Job Involvement level "high" and "very high" is smaller by 50% comparing with those who has Job Involvement level "low" and "medium". 
 
 
 ```r
@@ -1412,7 +1425,7 @@ df4 %>%
   </tr>
 </tbody>
 </table>
-It is very interesting that employees prefer Stock Opt Level 1 and 2 verses Stock Opt Level 0 and 3. Average attrition rate is smoller by 67.5% for those who has Stock Opt Level 1 and 2.
+It is very interesting that employees prefer Stock Opt Level 1 and 2 verses Stock Opt Level 0 and 3. Average attrition rate is smaller by 67.5% for those who has Stock Opt Level 1 and 2.
 
 ## V. Discussion And Conclusions
 
@@ -1420,7 +1433,7 @@ After extensive statistical analysis we have been able to conclude that there ar
 
 #### Limit Business Travel
 
-We found that Frequent business travel was a major contributor to churn in the dataset. If a company wants to reduce the the chances of someone wanting to leave a specific job they should make sure that worker has a reduced responsiblity to travel as it could make all the difference in deciding whether to change companies.
+We found that Frequent business travel was a major contributor to churn in the dataset. If a company wants to reduce the the chances of someone wanting to leave a specific job they should make sure that worker has a reduced responsibility to travel as it could make all the difference in deciding whether to change companies.
 
 #### Understand How workers feel about Overtime
 
@@ -1430,17 +1443,17 @@ We found that Not having overtime was very significant in determining employee a
 
 Based on studying the significance of the distance traveled from home to get to work i.e. commuting we found that this is an extremely significant factor. Based on a 95% confidence Interval the optimal distance is somewhere between 2 miles to 6 miles. If an employee has to travel more than that one should consider offering a remote option in order to limit attrition due to the Distance from Home.
 
-#### Consider Hiring people that worked for less Companies
+#### Consider Hiring people that worked for less number of Companies
 
 After studying the data we found that the ideal number of companies worked for those that did experience  attrition was 1 to 3 companies on a 95% confidence interval. This indicates that people that work for multiple companies are more likely to contribute to the Attrition rate. This is an extreme solution, but one should consider the amount of companies a potential employee worked before hiring them, as it might be a key predictor as to whether or not that individual will stay or leave.
 
 #### Satisfaction Indicators
 
-We found that Job Invovlment Level 4 ("very high") and 3 ("high"), Environment Satisfaction, Job Satisfaction Level 4 ("very high"), Stock Option Levels 1 and 2 are all contributed to employee churn in a major way. This indicates that management should consider doing things to make the work environment more comfortable so that the employees feel great about going to work every day. Employees also need to feel heavily involved in their job in as well as be satisfied doing it. It is important to conduct reviews and surveys to find out how employees feel in these areas so that an overall general pulse can be gathered on how the company is performing here.
+We found that Job Involvement Level 4 ("very high") and 3 ("high"), Environment Satisfaction, Job Satisfaction Level 4 ("very high"), Stock Option Levels 1 and 2 are all contributed to employee churn in a major way. This indicates that management should consider doing things to make the work environment more comfortable so that the employees feel great about going to work every day. Employees also need to feel heavily involved in their job in as well as be satisfied doing it. It is important to conduct reviews and surveys to find out how employees feel in these areas so that an overall general pulse can be gathered on how the company is performing here.
 
 #### Work relationships must be maintained
 
-Employees consider work relationships to be an extremeley important factor and it also contributes to employee "long stay" position. It makes sense to have relationship building events that improves ties within employee to employee relationships. People generally have to like who they work with, and management can improve this by tracking how their employees are relating to each other on the job. Management should consider improving situations that cause bad relationships between workers.
+Employees consider work relationships to be an extremely important factor and it also contributes to employee "long stay" position. It makes sense to have relationship building events that improves ties within employee to employee relationships. People generally have to like who they work with, and management can improve this by tracking how their employees are relating to each other on the job. Management should consider improving situations that cause bad relationships between workers.
 
 ## References
 

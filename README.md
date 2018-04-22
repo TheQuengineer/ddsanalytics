@@ -12,87 +12,112 @@ DDS Analytics is a analytics company that specializes in talent management solut
 
 ### The Data
 
-CaseStudy2-data.xlsx
+Fle imported: CaseStudy2-data.xlsx
 
-### BusinessTrvl
-
-"Travel_Rarely" "Travel_Frequently" "Non-Travel"   
-
-### JobRole
-
-"Sales Executive"           "Research Scientist"       
-"Laboratory Technician"     "Manufacturing Director"   
-"Healthcare Representative" "Manager"                  
-"Sales Representative"      "Research Director"        
-"Human Resources"   
-
-### Attrition
-
-"Yes" "No"   
-
-### Department
-
-"Sales"  "Research & Development" "Human Resources"   
-
-### EduField
-
-"Life Sciences"    "Other"            "Medical"         
-"Marketing"        "Technical Degree" "Human Resources"   
+### Variable Name Change :
 
 
-| FEATURE      | DESCRIPTION                                                       |
-|:------------:|:-----------------------------------------------------------------:|
-|Age           | Employee Age                                                      |
-|Attrition     | Attrition, Yes/No                                                 |
-|BusinessTrvl  | Business Travel thats indicates if its Rare,Frequent or no travel |
-|DailyRate     | Daily Rate(Pay)                                                   |
-|Department    | Department                                                        |
-|DistFromHome  | Distance From Home for Work                                       |
-|YrsOfEdu      | Years Of Education of employee                                    |
-|EduField      | Employee's Field of Education                                     |
-|EmployeeCnt   | Employee Count                                                    |
-|EmployeeNum   | Employee Number                                                   |
-|EnvSatfctn    | Environment Satisfaction                                          |
-|Gender        | Gender, Male/Female                                               |
-|HourlyRate    | Hourly Rate                                                       |
-|JobInvolmnt   | Job Involvement                                                   |
-|JobLevel      | Job Level                                                         |
-|JobRole       | Job Role                                                          |
-|JobSatfctn    | Job Satisfaction                                                  |
-|MaritalStat   | Marital Satisfaction                                              |
-|MonthlyIncm   | Monthly Income(Salary)                                            |
-|MonthlyRate   | Monthly Rate(Pay)                                                 |
-|NumCmpWorked  | Number of Companies worked                                        |
-|Over18        | Over 18 years of Age                                              |
-|OverTime      | OverTime required or not, Yes/No                                  |
-|PrcntSalHike  | Percent Salary Hike received from date of employment              |
-|PerfRating    | Performance Rating                                                |
-|RlnSatfctn    | Relationship Satisfaction within the company                      |
-|StandardHrs   | Standard Hours of work                                            |
-|StockOptLvl   | Current Stock option level of the employee                        |
-|TtlWrkngYrs   | Total Number of Years worked                                      |
-|TrngTmsLstYr  | Training times since last year                                    |
-|WrkLifeBal    | Work Life Balance                                                 |
-|YrsAtCompany  | Number of Years at the Company                                    |
-|YrsInCrntRl   | Number of years in the current Job Role                           |
-|YrsSncLstPrn  | Years Since last promotion                                        |
-|YrsWthCurMgr  | Years With Current Manager                                        |
+| ORIGINAL                | NEW                                                     |
+|:-----------------------:|:-------------------------------------------------------:|
+| Age                      | Age                                                    |
+| Attrition                | Attrition                                              |
+| BusinessTravel           | BusinessTrvl                                           | 
+| DailyRate                | DailyRate                                              | 
+| Department               | Department                                             |
+| DistanceFromHome         | DistFromHome                                           | 
+| Education                | YrsOfEdu                                               | 
+| EducationField           | EduField                                               | 
+| EmployeeCount            | EmployeeCnt                                            | 
+| EmployeeNumber           | EmployeeNum                                            | 
+| EnvironmentSatisfaction  | EnvSatfctn                                             | 
+| Gender                   | Gender                                                 | 
+| HourlyRate               | HourlyRate                                             | 
+| JobInvolvement           | JobInvolmnt                                            | 
+| JobLevel                 | JobLevel                                               | 
+| JobRole                  | JobRole                                                | 
+| JobSatisfaction          | JobSatfctn                                             | 
+| MaritalStatus            | MaritalStat                                            | 
+| MonthlyIncome            | MonthlyIncm                                            | 
+| MonthlyRate              | MonthlyRate                                            | 
+| NumCompaniesWorked       | NumCmpWorked                                           | 
+| Over18                   | Over18                                                 | 
+| OverTime                 | OverTime                                               | 
+| PercentSalaryHike        | PrcntSalHike                                           | 
+| PerformanceRating        | PerfRating                                             | 
+| RelationshipSatisfaction | RlnSatfctn                                             | 
+| StandardHours            | StandardHrs                                            | 
+| StockOptionLevel         | StockOptLvl                                            | 
+| TotalWorkingYears        | TtlWrkngYrs                                            | 
+| TrainingTimesLastYear    | TrngTmsLstYr                                           | 
+| WorkLifeBalance          | WrkLifeBal                                             | 
+| YearsAtCompany           | YrsAtCompany                                           | 
+| YearsInCurrentRole       | YrsInCrntRl                                            | 
+| YearsSinceLastPromotion  | YrsSncLstPrn                                           | 
+| YearsWithCurrManager     | YrsWthCurMgr                                           | 
 
+
+### Variable Description:
+
+- **Age**           : Employee Age                                                      
+- **Attrition**     : Attrition, Yes/No                                                 
+- **BusinessTrvl**  : Business Travel thats indicates if its Rare,Frequent or no travel 
+- **DailyRate**     : Daily Rate(Pay)                                                   
+- **Department**    : Department                                                        
+- **DistFromHome**  : Distance From Home for Work                                       
+- **YrsOfEdu**      : Years Of Education of employee                                    
+- **EduField**      : Employee's Field of Education                                     
+- **EmployeeCnt**   : Employee Count                                                    
+- **EmployeeNum**   : Employee Number                                                   
+- **EnvSatfctn**    : Environment Satisfaction                                          
+- **Gender**        : Gender, Male/Female                                               
+- **HourlyRate**    : Hourly Rate                                                       
+- **JobInvolmnt**   : Job Involvement                                                   
+- **JobLevel**      : Job Level                                                        
+- **JobRole**       : Job Role                                                          
+- **JobSatfctn**    : Job Satisfaction                                                  
+- **MaritalStat**   : Marital Satisfaction                                              
+- **MonthlyIncm**   : Monthly Income(Salary)                                            
+- **MonthlyRate**   : Monthly Rate(Pay)                                                 
+- **NumCmpWorked**  : Number of Companies worked                                        
+- **Over18**        : Over 18 years of Age                                              
+- **OverTime**      : OverTime required or not, Yes/No                                  
+- **PrcntSalHike**  : Percent Salary Hike received from date of employment              
+- **PerfRating**    : Performance Rating                                                
+- **RlnSatfctn**    : Relationship Satisfaction within the company                      
+- **StandardHrs**   : Standard Hours of work                                           
+- **StockOptLvl**   : Current Stock option level of the employee                        
+- **TtlWrkngYrs**   : Total Number of Years worked                                      
+- **TrngTmsLstYr**  : Training times since last year                                    
+- **WrkLifeBal**    : Work Life Balance                                                 
+- **YrsAtCompany**  : Number of Years at the Company                                    
+- **YrsInCrntRl**   : Number of years in the current Job Role                           
+- **YrsSncLstPrn**  : Years Since last promotion                                        
+- **YrsWthCurMgr**  : Years With Current Manager                                        
+
+- **talentMgmtData** : It's the dataframe created by importing the CaseStudy2-data excel file
+- **talentData** : It's the data that contains employees of Age over18 
+- **DescriptiveStatistics** : Is the min, max, mean and sd of the variables under analysis
+- **demographics** : frequency of "JobRole", "Gender" and  "Education" specific for task 3c
+- **continuous_vars** : a subset data to check the correlations of talent data
+- **StepwiseModel_Attrition** : 
+- **CustomModel_Attrition** :
+- **AIC** : is an estimator of the relative quality of statistical models for a given set of data. 
+- **Attrition_Percent**: Attrition rate of employees in percentages
 
 
 ### Folder & File Information
 
-- `ddsanalytics/` This folder contains case_study_info, reports and readme.
+- **ddsanalytics/** This folder contains case_study_info, reports and readme.
 
-- `case_study_info` Contains all the background information important for understanding
+- **case_study_info** Contains all the background information important for understanding
 the purpose of the study.
-  + `CaseStudy2.pdf` The entire case study file that shows the list of questions being answered in the study.
+  + `CaseStudy2.pdf` A Presentation file that communicates the findings of the project in a clear, concise and scientific manner..
   + `CaseStudy02Updated.docx` The list of requirements that the study must contain
   upon submission.
 
-- `report`This has the r markdown file , html and dataset
+- **report/** This folder has the r markdown file , html and dataset
 
-- `dataset/` This folder contains all the data files that is used in the study.
+- **dataset/** This folder contains all the data files that is used in the study.
 
   + `CaseStudy2-data.xlsx` 
 
@@ -143,8 +168,6 @@ the purpose of the study.
 
 
 ### Researcher Information & Responsibilities
-
-
 
 | Researcher | Questions of Interest |
 |:-----------:|:---------------------:|
