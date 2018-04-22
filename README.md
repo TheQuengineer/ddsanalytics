@@ -121,8 +121,7 @@ the purpose of the study.
 
   + `CaseStudy2-data.xlsx` 
 
-- `report.html` The html page of the entire report of the study 
-- `report.Rmd` Is the Rmarkdown version of the entire report. Contains all the code as well as a complete insights found during the research in an effort to answer the questions in the study.
+- `DDSAnalyticsReport.Rmd` Is the Rmarkdown version of the entire report. Contains all the code as well as a complete insights found during the research in an effort to answer the questions in the study.
 
 - `README.md` The codebook summarizing the purpose of the entire project and how it is organized.
 
