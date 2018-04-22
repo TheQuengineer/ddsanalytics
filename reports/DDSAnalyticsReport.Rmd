@@ -3,17 +3,25 @@ title: "DDSAnalyticsReport"
 author: "Quentin,Sita,Olha,Tosin"
 date: "4/4/2018"
 output: 
-  html_document:
-    keep_md: true
+  pdf_document:
+    df_print: kable
+    toc: true
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
 ## Abstract
 
 DDS Analytics is a analytics company that specializes in talent management solutions for Fortune 1000 companies. Talent management is defined as the iterative process of developing and retaining employees. It may include workforce planning, employee training programs, identifying high-potential employees and reducing/preventing voluntary employee turnover (attrition). To gain a competitive edge over its competition, DDS Analytics is planning to leverage data science for talent management. The executive leadership has identified predicting employee turnover as its first application of data science for talent management. This report is the full data analysis of our findings after exploring the many facets of the data.
+
+## Executive Summary
+
+DDS Analytics' primary task is investigation of the drivers of employee attrition using a data-driven analytics approach. From our descriptive analysis, the top drivers of employee attrition were identified. Besides drivers of attrition, the employee database provided for the analysis reveals trends that could be harnessed by the Human Resources Department for talent retention.
+This analysis is based on 35 factors that Human Resources track annually for all the company’s 1470 employees. Some of these factors include personal information, satisfaction indices and typical human resources employee records.
+Insights gathered from statistical analysis of the data suggest that the top drivers of attrition are business travel, overtime, employee commute distance, employee tendency for job-hopping as well as job and relationship satisfaction. These factors are discussed in details in this report and recommendations provided for managing these causes of attrition.
+
 
 ## I. Introduction
 
@@ -33,7 +41,7 @@ As a Talent Management organization we set out to leverage the strength of Data 
 In order to make sure our data was ready for proper analysis we had to go through a series of steps in order to prepare the data. These steps include the following...
 
 1. Data Import
-2. Data Type Conversion
+2. Data Type Conversion for quantitative variables
 3. Factorization For Categorical Variables
 4. Handling of Missing or Inaccurate Values
 
@@ -43,7 +51,7 @@ We will discuss the process of each step below.
 
 We have obtained a dataset which includes 35 variables with 1470 observations. The dataset is will be referred to as `talentMgmtData`. In order to better understand our data we needed to proceed with cleaning it appropriately.
 
-#### Data Type Conversion
+#### Data Type Conversion for quantitative variables
 
 Analysis could not be done properly if our variables are not in the correct type. Several of the numerical based variables showed up as doubles which was not necessarily appropriate for research and analysis. For example, the years of experience for specific employees needed to be converted to integer types, and Standard Working hours had no reason to show as a double, so it to was converted to an integer. This process was followed for each one of the 35 variables on order to ensure each columns assigned data type made sense for the context of the study.
 
@@ -163,15 +171,20 @@ MonthlyRate <- c(min(talentData$MonthlyRate), max(talentData$MonthlyRate), mean(
 YrsOfEdu <- c(min(talentData$YrsOfEdu), max(talentData$YrsOfEdu), mean(talentData$YrsOfEdu), sd(talentData$YrsOfEdu))
 table <- data.frame(DescriptiveStatistics, HourlyRate, MonthlyRate, MonthlyIncome, TotalWorkYears, YearsAtCompany, Age,  YrsOfEdu)
 table %>%
-  kable("html") %>%
-  kable_styling()
+  kable("latex") %>%
+  kable_styling(position= "center", latex_options= "scale_down")
 ```
+
 The average Hourly rate is $65.88/hour, the average Monthly Rate is $14,312.21/month, the average Monthly Income is $6,530.21/month, average Total Worked Years is 11.34 years, average Worked years at the company is 7.04 years, average Age of the employees is 37 years and average Years of Education of the employees is 2.9 years ('Bachelor' degree).
 
 Lets check histograms of Hourly Rate and Monthly income.
 
 ```{r}
 hist(talentData$HourlyRate, col = "darkred", xlab="Hourly Rate", main="Histogram of Hourly Rate")
+
+```
+
+```{r}
 hist(talentData$MonthlyIncm, col = "darkgreen", xlab="Monthly Income", main="Histogram of Monthly Income")
 ```
 
@@ -192,7 +205,7 @@ build_table <- function(column_name, title) {
   
    t <- as.data.frame(table(column_name))
     names(t) <- c(title, "Frequency")
-      t %>% kable("html") %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) 
+      t %>% kable("latex") %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) 
 
 }
 
@@ -430,12 +443,12 @@ ggplot(talentData,aes(x=OverTime,fill = Attrition))+geom_bar()+ggtitle("Attritio
 library(kableExtra)
 mytable1 <- xtabs(~OverTime+Attrition, data = talentData)
 tabl1<- data.frame(ftable(mytable1))
-percent11<- tabl1[3,3]/tabl1[1,3]*100
-percent12<- tabl1[4,3]/tabl1[2,3]*100
+percent11<- tabl1[3,3]/ (tabl1[3,3] + tabl1[1,3])*100
+percent12<- tabl1[4,3]/ (tabl1[4,3] + tabl1[2,3])*100
 Attrition_Percent <-round(c(0,0,percent11,percent12),2)
 df1 <- data.frame(tabl1,Attrition_Percent)
 df1 %>%
-  kable("html") %>%
+  kable("latex") %>%
   kable_styling() %>%
   row_spec(4, bold = T, color = "white", background = "#D7261E")
 ```
@@ -445,13 +458,13 @@ Attrition rate within employees with OverTime is 43.25%. It is 276% higher then 
 ggplot(talentData,aes(x=BusinessTrvl,fill = Attrition))+geom_bar()+ggtitle("Attrition based on Business Travel factors")  +labs(x = "Business Travel", y = "Count")
 mytable2 <- xtabs(~BusinessTrvl+Attrition, data = talentData)
 tabl2<- data.frame(ftable(mytable2))
-percent21<- tabl2[4,3]/tabl2[1,3]*100
-percent22<- tabl2[5,3]/tabl2[2,3]*100
-percent23<- tabl2[6,3]/tabl2[3,3]*100
+percent21<- tabl2[4,3]/(tabl2[4,3] + tabl2[1,3])*100
+percent22<- tabl2[5,3]/(tabl2[5,3] + tabl2[2,3])*100
+percent23<- tabl2[6,3]/(tabl2[6,3] + tabl2[3,3])*100
 Attrition_Percent <-round(c(0,0,0,percent21,percent22,percent23),2)
 df2 <- data.frame(tabl2,Attrition_Percent)
 df2 %>%
-  kable("html") %>%
+  kable("latex") %>%
   kable_styling() %>%
   row_spec(5:6, bold = T, color = "white", background = "#D7261E")
 ```
@@ -477,14 +490,14 @@ ggplot(talentData,aes(x=JobInvolmnt,fill = Attrition))+geom_bar()+ggtitle("Attri
 mytable3 <- xtabs(~JobInvolmnt+Attrition, data = talentData)
 tabl3<- data.frame(ftable(mytable3))
 tabl3
-percent31<- tabl3[5,3]/tabl3[1,3]*100
-percent32<- tabl3[6,3]/tabl3[2,3]*100
-percent33<- tabl3[7,3]/tabl3[3,3]*100
-percent34<- tabl3[8,3]/tabl3[4,3]*100
+percent31<- tabl3[5,3]/ (tabl3[5,3] + tabl3[1,3])*100
+percent32<- tabl3[6,3]/ (tabl3[6,3] + tabl3[2,3])*100
+percent33<- tabl3[7,3]/ (tabl3[7,3] + tabl3[3,3])*100
+percent34<- tabl3[8,3]/ (tabl3[8,3] + tabl3[4,3])*100
 Attrition_Percent <-round(c(0,0,0,0,percent31,percent32,percent33,percent34),2)
 df3 <- data.frame(tabl3,Attrition_Percent)
 df3 %>%
-  kable("html") %>%
+  kable("latex") %>%
   kable_styling() %>%
   row_spec(7:8, bold = T, color = "white", background = "#66CC99")
 ```
@@ -494,23 +507,24 @@ Average Attrition rate for those who has Job Involvement level "high" and "very 
 ggplot(talentData,aes(x=StockOptLvl,fill = Attrition))+geom_bar()+ggtitle("Attrition based on Stock Option factors") +labs(x = "Stock Option Level", y = "Count")
 mytable4 <- xtabs(~StockOptLvl+Attrition, data = talentData)
 tabl4<- data.frame(ftable(mytable4))
-tabl4
-percent41<- tabl4[5,3]/tabl4[1,3]*100
-percent42<- tabl4[6,3]/tabl4[2,3]*100
-percent43<- tabl4[7,3]/tabl4[3,3]*100
-percent44<- tabl4[8,3]/tabl4[4,3]*100
+
+percent41<- tabl4[5,3]/ (tabl4[5,3] + tabl4[1,3])*100
+percent42<- tabl4[6,3]/ (tabl4[6,3] + tabl4[2,3])*100
+percent43<- tabl4[7,3]/ (tabl4[7,3] + tabl4[3,3])*100
+percent44<- tabl4[8,3]/ (tabl4[8,3] + tabl4[4,3])*100
 Attrition_Percent <-round(c(0,0,0,0,percent41,percent42,percent43,percent44),2)
 df4 <- data.frame(tabl4,Attrition_Percent)
 df4 %>%
-  kable("html") %>%
+  kable("latex") %>%
   kable_styling() %>%
   row_spec(6:7, bold = T, color = "white", background = "#66CC99")
 ```
 It is very interesting that employees prefer Stock Opt Level 1 and 2 verses Stock Opt Level 0 and 3. Average attrition rate is smaller by 67.5% for those who has Stock Opt Level 1 and 2.
 
-## V. Discussion And Conclusions
 
-After extensive statistical analysis we have been able to conclude that there are indeed several factors that lead to the attrition of employees. Based on what these factors are there are things the business can do to make it much harder for someone to decide if they want to leave a company. We have compiled a list of recommendations that DDSAnalytics can follow to help reduce Attrition. It should be stated that the following factors below will not guarantee employee Attrition will stop, but it will increase the chances of slowing Attrition at an organization.
+## Prescriptive Analytics
+The implications of this analysis for the company are crucial to the company’s growth. Average staff replacement cost is about $15,000, comprising primarily recruitment and training cost of new hires. A retention plan of $7,000 per employee, addressing stock options especially for low level staff, improvement of job and relationship satisfaction, management of job-related travels and other perks will save the company an average of $8,000 per person in attrition cost in the long run. To reduce attrition resulting from reasons highlighted above, the must revamp its current pay structure and introduce benefits that motivate employee loyalty and morale . A few recommendations that can be implemented at a low cost are discussed below:
+
 
 #### Limit Business Travel
 
@@ -535,6 +549,10 @@ We found that Job Involvement Level 4 ("very high") and 3 ("high"), Environment 
 #### Work relationships must be maintained
 
 Employees consider work relationships to be an extremely important factor and it also contributes to employee "long stay" position. It makes sense to have relationship building events that improves ties within employee to employee relationships. People generally have to like who they work with, and management can improve this by tracking how their employees are relating to each other on the job. Management should consider improving situations that cause bad relationships between workers.
+
+## Conclusions
+
+After extensive statistical analysis we have been able to conclude that there are indeed several factors that lead to employee attrition. Based on what these factors are, there are things the business can do to make it much harder for someone to decide if they want to leave the company. We have compiled a list of recommendations that Human Resources can implement to help reduce Attrition. It should be stated that the above stated factors will not guarantee employee attrition will stop, but it will increase the chances of slowing the pace of attrition.
 
 ## References
 

@@ -99,8 +99,8 @@ Fle imported: CaseStudy2-data.xlsx
 - **DescriptiveStatistics** : Is the min, max, mean and sd of the variables under analysis
 - **demographics** : frequency of "JobRole", "Gender" and  "Education" specific for task 3c
 - **continuous_vars** : a subset data to check the correlations of talent data
-- **StepwiseModel_Attrition** : 
-- **CustomModel_Attrition** :
+- **StepwiseModel_Attrition** : Regression model was selected via the stepwise algorithm
+- **CustomModel_Attrition** : We chose the top variables with high significance levels
 - **AIC** : is an estimator of the relative quality of statistical models for a given set of data. 
 - **Attrition_Percent**: Attrition rate of employees in percentages
 
@@ -111,7 +111,7 @@ Fle imported: CaseStudy2-data.xlsx
 
 - **case_study_info** Contains all the background information important for understanding
 the purpose of the study.
-  + `CaseStudy2.pdf` A Presentation file that communicates the findings of the project in a clear, concise and scientific manner..
+  + `DDSAnalyticsReport.pdf` A Presentation file that communicates the findings of the project in a clear, concise and scientific manner..
   + `CaseStudy02Updated.docx` The list of requirements that the study must contain
   upon submission.
 
