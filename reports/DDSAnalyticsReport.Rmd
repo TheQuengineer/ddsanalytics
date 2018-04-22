@@ -64,7 +64,7 @@ Within our `talentMgmtData` we noticed that there were several columns that were
 In order for our mathematical calculations to work we had to convert many of our data points into numerical values so that our regression analysis would be more accurate. For example, DailyRate, Total Working Years, Years with Current Manager, are all examples of numerical based data points that can have mathematical operations performed on them. As a result we located variables like these and made sure the data type was appropriate giving us more flexibility during analysis.
 
 #### DATA CLEANING
-```{r}
+```{r echo=FALSE,results='hide',fig.keep='all', warning=FALSE, message=FALSE}
 #2a.	Read the csv into R and take a look at the data set.  Output how many rows and columns the data.frame is.
 library(readxl)
 talentMgmtData <- read_excel("datasets/CaseStudy2-data.xlsx")
@@ -368,7 +368,7 @@ The chart above shows us that there are no negative linear relationships in our 
 
 ### 4.C Let's check if there is any relationship between Age and Income. Does Gender makes any effect on the Monthly income?
 
-```{r}
+```{r echo=FALSE,results='hide',fig.keep='all'}
 MonthlyIncm <- talentData$MonthlyIncm
 Age <- talentData$Age
 Gender <- talentData$Gender
@@ -386,7 +386,7 @@ Our goal is to determine which indicators might lead to employee attrition. The 
 
 Let's use stepwise selection method to come up with the model which has only significant variables.
 
-```{r}
+```{r echo=FALSE,results='hide',fig.keep='all', warning=FALSE,message=FALSE}
 library(MASS)
 full<- glm(Attrition~Age+BusinessTrvl+DailyRate+Department+DistFromHome+YrsOfEdu+EduField	+EnvSatfctn+Gender+HourlyRate+JobInvolmnt+JobLevel+JobRole+JobSatfctn+MaritalStat+MonthlyIncm+MonthlyRate+ NumCmpWorked+OverTime+PrcntSalHike+PerfRating+RlnSatfctn+StockOptLvl+TtlWrkngYrs+TrngTmsLstYr+WrkLifeBal+	YrsAtCompany+YrsInCrntRl+YrsSncLstPrn+YrsWthCurMgr, family = binomial, data=talentData)
 step<- stepAIC(full,trace=FALSE)
