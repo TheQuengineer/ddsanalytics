@@ -111,7 +111,7 @@ File imported: CaseStudy2-data.xlsx
 
 - **case_study_info** Contains all the background information important for understanding
 the purpose of the study.
-  + `DDSAnalyticsReport.pdf` A Presentation file that communicates the findings of the project in a clear, concise and scientific manner..
+
   + `CaseStudy02Updated.docx` The list of requirements that the study must contain
   upon submission.
 
@@ -121,6 +121,8 @@ the purpose of the study.
 
   + `CaseStudy2-data.xlsx` 
 
+- `DDSAnalyticsReport.pdf` A Presentation file that communicates the findings of the project in a clear, concise and scientific manner.
+  
 - `DDSAnalyticsReport.Rmd` Is the Rmarkdown version of the entire report. Contains all the code as well as a complete insights found during the research in an effort to answer the questions in the study.
 
 - `README.md` The codebook summarizing the purpose of the entire project and how it is organized.
