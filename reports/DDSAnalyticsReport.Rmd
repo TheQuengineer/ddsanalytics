@@ -35,7 +35,7 @@ As a Talent Management organization, we set out to leverage the strength of Data
 To make sure our data was ready for proper analysis we had to go through a series of steps to prepare the data. These steps include the following.
 
 1. Data Import
-2. Data Type Conversion
+2. Data Type Conversion for quantitative variables
 3. Factorization For Categorical Variables
 4. Handling of Missing or Inaccurate Values
 
@@ -45,13 +45,13 @@ We will discuss the process of each step below.
 
 We have obtained a dataset which includes 35 variables with 1470 observations. We will be referring to the dataset as `talentMgmtData`. To better understand our data we needed to proceed with cleaning it appropriately.
 
-#### Data Type Conversion
+#### Data Type Conversion for quantitative variables
 
-Our analysis is not appropriate if our variables are not showing as the correct data type. Several of the quantitative variables showed up as doubles which were not necessarily fitting for research and analysis. For example, the years of experience for specific employees needed we convert to integer types, and Standard Working hours had no reason to show as a double, so it to was converted to an integer. The process we follow for each one of the 35 variables to ensure each column assigned data type made sense for the context of the study.
+Our analysis is not appropriate if our variables are not showing as the correct data type. Several of the quantitative variables showed up as doubles which were not necessarily fitting for research and analysis. For example, the Number of Training times since last year, and Number Of Company's worked had no reason to show as a double, so it was converted to an integer. We followed this process for each one of the 35 variables to ensure each column assigned data type made sense for the context of the study.
 
 #### Factorization For Catagorical Variables
 
-Within our `talentMgmtData` we noticed several columns that were improperly listed as integers when they are categories. In order for us to be able to do factor analysis we picked out the columns that would be better suited to be categories instead of integers so that we could get a better understanding of how our talent was spread out over different situations. For example, columns like Department, BusinessTravel, Over18, & Job satisfaction to name a few, are all better suited to be treated as categorical variables for our research purposes. As a result, we have converted the appropriate columns that explained how our data points are organized by making them factors instead of numerical values.
+Within our `talentMgmtData` we noticed several columns that were improperly listed as integers when they are categories. In order for us to be able to do factor analysis we picked out the columns that would be better suited to be categories instead of integers so that we could get a better understanding of how our talent was spread out over different situations. For example, columns like Department, BusinessTravel, Education, & Job satisfaction to name a few, are all better suited to be treated as categorical variables for our research purposes. As a result, we have converted the appropriate columns that explained how our data points are organized by making them factors instead of numerical values.
 
 #### Handling of Missing or Inaccurate Values
 
