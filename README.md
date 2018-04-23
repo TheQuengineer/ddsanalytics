@@ -12,7 +12,7 @@ DDS Analytics is a analytics company that specializes in talent management solut
 
 ### The Data
 
-Fle imported: CaseStudy2-data.xlsx
+File imported: CaseStudy2-data.xlsx
 
 ### Variable Name Change :
 
