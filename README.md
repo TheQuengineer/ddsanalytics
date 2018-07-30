@@ -2,7 +2,7 @@
 
 ### Research Data Scientists
 - Olha Tanyuk
-- Sita Daggubati
+- Sita D
 - Tosin Akinpelu
 - Quentin Thomas
 
@@ -172,7 +172,7 @@ the purpose of the study.
 
 | Researcher | Questions of Interest |
 |:-----------:|:---------------------:|
-|Sita Daggubati | Task 1, 2  & Codebook    |
+|Sita D | Task 1, 2  & Codebook    |
 |Olha Tanyuk  | Task 3B ,4C, 4D & Conclusion|
 |Tosin Akinpelu| Task4D & PDF(Executive Summary, Prescriptive Analysis) |
 |Quentin Thomas | Introduction, Task 1, 3C,3D, 4|
